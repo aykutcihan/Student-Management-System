@@ -1,27 +1,38 @@
 package com.project.schoolmanagment.entity.abstracts;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
-@Entity
-@Data
+@MappedSuperclass
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder(toBuilder = true)
+@SuperBuilder
 public abstract class User {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotEmpty
     private String name;
+
+    @NotEmpty
     private String surname;
+
+    @NotNull
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate birthDay;
+
+    @NotEmpty
     private String ssn;
+
+    @NotEmpty
     private String birthPlace;
 }
