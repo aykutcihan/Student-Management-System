@@ -10,7 +10,9 @@ import java.util.Set;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
+@SuperBuilder
 public class Teacher extends User {
 
     @ManyToMany

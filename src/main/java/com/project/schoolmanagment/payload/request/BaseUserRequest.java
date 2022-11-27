@@ -1,12 +1,14 @@
-package com.project.schoolmanagment.entity.abstracts;
+package com.project.schoolmanagment.payload.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.project.schoolmanagment.entity.concretes.Role;
 import com.project.schoolmanagment.entity.concretes.UserRole;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import javax.persistence.*;
+import javax.persistence.MappedSuperclass;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -16,11 +18,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
-public abstract class User {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public abstract class BaseUserRequest {
 
     @NotEmpty
     private String name;
@@ -40,8 +38,4 @@ public abstract class User {
 
     @NotEmpty
     private String password;
-
-    @OneToOne
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private UserRole userRole;
 }
