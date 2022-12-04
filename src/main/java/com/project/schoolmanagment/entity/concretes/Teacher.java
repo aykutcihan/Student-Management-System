@@ -6,6 +6,7 @@ import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
+import javax.persistence.Transient;
 import java.util.Set;
 
 @Entity
@@ -17,4 +18,8 @@ public class Teacher extends User {
 
     @ManyToMany
     private Set<Lesson> lessons;
+
+    @Transient
+    private boolean isAdvisorTeacher;
+
 }

@@ -34,8 +34,8 @@ public class StudentRequest extends BaseUserRequest{
     @NotNull
     private Long parentId;
 
-    @NotNull
-    private Set<Long> lessonIdList;
+    //@NotNull
+    //private Set<Long> lessonIdList;
 
     @NotNull
     private Long advisorTeacherId;

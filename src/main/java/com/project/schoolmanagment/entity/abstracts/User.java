@@ -39,9 +39,9 @@ public abstract class User {
     private String birthPlace;
 
     @NotEmpty
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @OneToOne
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private UserRole userRole;
 }

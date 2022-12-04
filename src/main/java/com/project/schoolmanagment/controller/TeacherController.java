@@ -19,8 +19,7 @@ public class TeacherController {
     private final TeacherService teacherService;
 
     @PostMapping("/save")
-    public ResponseEntity<ResponseMessage<Teacher>> save(@RequestBody @Valid
-                                                         TeacherRequest teacher) {
+    public ResponseEntity<ResponseMessage<Teacher>> save(@RequestBody @Valid TeacherRequest teacher) {
         return ResponseEntity.ok(teacherService.save(teacher));
     }
 
@@ -30,13 +29,23 @@ public class TeacherController {
     }
 
     @PutMapping("/updateTeacher/{userId}")
-    public ResponseEntity<ResponseMessage<Teacher>> updateTeacher(@RequestBody @Valid Teacher teacher, @PathVariable Long userId) {
+    public ResponseEntity<ResponseMessage<Teacher>> updateTeacher(@RequestBody @Valid TeacherRequest teacher, @PathVariable Long userId) {
         return ResponseEntity.ok(teacherService.updateTeacher(teacher, userId));
+    }
+
+    @GetMapping("/searchTeacherByName")
+    public ResponseEntity<List<Teacher>> getTeacherByName(@RequestParam(name = "name") String teacherName) {
+        return ResponseEntity.ok(teacherService.getTeacherByName(teacherName));
     }
 
     @DeleteMapping("/deleteTeacher/{id}")
     public ResponseEntity<String> deleteTeacher(@PathVariable Long id) {
         return ResponseEntity.ok(teacherService.deleteTeacher(id));
+    }
+
+    @GetMapping("/getSavedTeacherById/{id}")
+    public ResponseEntity<ResponseMessage<Teacher>> getSavedTeacherById(@PathVariable Long id) {
+        return ResponseEntity.ok(teacherService.getSavedTeacherById(id));
     }
 
 }

@@ -14,5 +14,8 @@ import java.util.Set;
 public class TeacherRequest extends BaseUserRequest{
 
     @NotNull
-    Set<Long> lessons;
+    private Set<Long> lessons;
+
+    @NotNull
+    private boolean isAdvisorTeacher;
 }

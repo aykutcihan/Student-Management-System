@@ -27,6 +27,8 @@ public class TeacherService {
     private final TeacherRequestDto teacherRequestDto;
     private final UserRoleService userRoleService;
 
+    private final AdvisorTeacherService advisorTeacherService;
+
     public ResponseMessage<Teacher> save(TeacherRequest teacherRequest) {
         if(teacherRepository.existsBySsn(teacherRequest.getSsn().trim())){
             return ResponseMessage.<Teacher>builder().message("This teacher already register").build();
@@ -38,7 +40,11 @@ public class TeacherService {
 
         Teacher teacher = teacherRequestToDto(teacherRequest, lessons);
         teacher.setUserRole(userRoleService.getUserRole(Role.TEACHER));
-        return ResponseMessage.<Teacher>builder().object(teacherRepository.save(teacher))
+        Teacher savedTeacher = teacherRepository.save(teacher);
+        if(teacherRequest.isAdvisorTeacher()){
+            advisorTeacherService.saveAdvisorTeacher(savedTeacher);
+        }
+        return ResponseMessage.<Teacher>builder().object(savedTeacher)
                 .message("teacher saved successfully").build();
     }
 
@@ -46,12 +52,17 @@ public class TeacherService {
         return teacherRepository.findAll();
     }
 
-    public ResponseMessage<Teacher> updateTeacher(Teacher newTeacher, Long userId) {
+    public ResponseMessage<Teacher> updateTeacher(TeacherRequest newTeacher, Long userId) {
         Optional<Teacher> teacher = teacherRepository.findById(userId);
         if (teacher.isPresent()) {
             Teacher updateTeacher = createUpdatedTeacher(newTeacher, userId);
-            teacherRepository.save(updateTeacher);
-            return ResponseMessage.<Teacher>builder().message("Teacher updated Successful").build();
+            updateTeacher.setLessons(getLessonsByLessonId(newTeacher.getLessons()));
+            updateTeacher.setUserRole(userRoleService.getUserRole(Role.TEACHER));
+            Teacher savedTeacher = teacherRepository.save(updateTeacher);
+            if(newTeacher.isAdvisorTeacher()){
+                advisorTeacherService.saveAdvisorTeacher(savedTeacher);
+            }
+            return ResponseMessage.<Teacher>builder().object(updateTeacher).message("Teacher updated Successful").build();
         }
         return ResponseMessage.<Teacher>builder().message(Messages.NOT_FOUND_USER_MESSAGE).build();
     }
@@ -64,17 +75,26 @@ public class TeacherService {
         }
         return Messages.NOT_FOUND_USER_MESSAGE;
     }
+    public ResponseMessage<Teacher> getSavedTeacherById(Long id){
+        Optional<Teacher> teacher = teacherRepository.findById(id);
+        if (!teacher.isPresent()){
+            return ResponseMessage.<Teacher>builder()
+                    .message(Messages.NOT_FOUND_USER_MESSAGE).build();
+        }
+        return ResponseMessage.<Teacher>builder().object(teacher.get())
+                .message("Teacher successfully found").build();
+    }
 
-    private Teacher createUpdatedTeacher(Teacher teacher, Long id) {
+    private Teacher createUpdatedTeacher(TeacherRequest teacher, Long id) {
         return Teacher.builder().id(id)
                 .name(teacher.getName())
                 .surname(teacher.getSurname())
                 .ssn(teacher.getSsn())
                 .birthDay(teacher.getBirthDay())
                 .birthPlace(teacher.getBirthPlace())
-                .password(teacher.getPassword())
-                .lessons(teacher.getLessons()).build();
+                .password(teacher.getPassword()).build();
     }
+
 
     private Set<Lesson> getLessonsByLessonId(Set<Long> idList) {
         return lessonService.getLessonByLessonNameList(idList);
@@ -82,5 +102,9 @@ public class TeacherService {
 
     private Teacher teacherRequestToDto(TeacherRequest teacherRequest, Set<Lesson> lessons) {
         return teacherRequestDto.dtoTeacher(teacherRequest, lessons);
+    }
+
+    public List<Teacher> getTeacherByName(String teacherName) {
+        return teacherRepository.getTeacherByNameContaining(teacherName);
     }
 }
