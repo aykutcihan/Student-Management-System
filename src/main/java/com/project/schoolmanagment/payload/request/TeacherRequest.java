@@ -1,5 +1,6 @@
 package com.project.schoolmanagment.payload.request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -17,5 +18,6 @@ public class TeacherRequest extends BaseUserRequest{
     private Set<Long> lessons;
 
     @NotNull
+    @JsonProperty("isAdvisorTeacher")
     private boolean isAdvisorTeacher;
 }

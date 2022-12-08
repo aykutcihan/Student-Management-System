@@ -43,5 +43,6 @@ public abstract class User {
     private String password;
 
     @OneToOne
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private UserRole userRole;
 }

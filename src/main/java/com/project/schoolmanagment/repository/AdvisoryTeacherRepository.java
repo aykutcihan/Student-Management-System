@@ -6,5 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface AdvisoryTeacherRepository extends JpaRepository<AdvisorTeacher,Long> {
-    boolean existsById(Long id);
+    boolean existsById(Long advisorTeacherId);
+    Optional<AdvisorTeacher> getAdvisorTeacherByTeacher_Id(Long advisorTeacherId);
 }

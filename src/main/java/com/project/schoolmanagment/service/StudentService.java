@@ -54,7 +54,7 @@ public class StudentService {
         if (student.isPresent()) {
             Student updateStudent = createUpdatedStudent(studentRequest, userId);
             //updateStudent.setLessons(getLessonsByLessonId(studentRequest.getLessonIdList()));
-            updateStudent.setUserRole(userRoleService.getUserRole(Role.TEACHER));
+            updateStudent.setUserRole(userRoleService.getUserRole(Role.STUDENT));
             studentRepository.save(updateStudent);
             return ResponseMessage.<Student>builder().object(updateStudent).message("Teacher updated Successful").build();
         }

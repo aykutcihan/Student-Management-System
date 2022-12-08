@@ -1,6 +1,7 @@
 package com.project.schoolmanagment.controller;
 
 import com.project.schoolmanagment.entity.concretes.AdvisorTeacher;
+import com.project.schoolmanagment.payload.response.AdvisorTeacherResponse;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.service.AdvisorTeacherService;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ public class AdvisorTeacherController {
         return ResponseEntity.ok(advisorTeacherService.deleteAdvisorTeacher(id));
     }
     @GetMapping("/getAllAdvisorTeacher")
-    public ResponseEntity<List<AdvisorTeacher>> getAllAdvisorTeacher(){
+    public ResponseEntity<List<AdvisorTeacherResponse>> getAllAdvisorTeacher(){
         return ResponseEntity.ok(advisorTeacherService.getAllAdvisorTeacher());
     }
 }

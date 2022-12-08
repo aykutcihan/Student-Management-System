@@ -3,6 +3,7 @@ package com.project.schoolmanagment.controller;
 import com.project.schoolmanagment.entity.concretes.Teacher;
 import com.project.schoolmanagment.payload.request.TeacherRequest;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
+import com.project.schoolmanagment.payload.response.TeacherResponse;
 import com.project.schoolmanagment.service.TeacherService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ public class TeacherController {
     private final TeacherService teacherService;
 
     @PostMapping("/save")
-    public ResponseEntity<ResponseMessage<Teacher>> save(@RequestBody @Valid TeacherRequest teacher) {
+    public ResponseEntity<ResponseMessage<TeacherResponse>> save(@RequestBody @Valid TeacherRequest teacher) {
         return ResponseEntity.ok(teacherService.save(teacher));
     }
 
@@ -29,7 +30,7 @@ public class TeacherController {
     }
 
     @PutMapping("/updateTeacher/{userId}")
-    public ResponseEntity<ResponseMessage<Teacher>> updateTeacher(@RequestBody @Valid TeacherRequest teacher, @PathVariable Long userId) {
+    public ResponseEntity<ResponseMessage<TeacherResponse>> updateTeacher(@RequestBody @Valid TeacherRequest teacher, @PathVariable Long userId) {
         return ResponseEntity.ok(teacherService.updateTeacher(teacher, userId));
     }
 
@@ -39,12 +40,12 @@ public class TeacherController {
     }
 
     @DeleteMapping("/deleteTeacher/{id}")
-    public ResponseEntity<String> deleteTeacher(@PathVariable Long id) {
+    public ResponseEntity<ResponseMessage<?>> deleteTeacher(@PathVariable Long id) {
         return ResponseEntity.ok(teacherService.deleteTeacher(id));
     }
 
     @GetMapping("/getSavedTeacherById/{id}")
-    public ResponseEntity<ResponseMessage<Teacher>> getSavedTeacherById(@PathVariable Long id) {
+    public ResponseEntity<ResponseMessage<TeacherResponse>> getSavedTeacherById(@PathVariable Long id) {
         return ResponseEntity.ok(teacherService.getSavedTeacherById(id));
     }
 

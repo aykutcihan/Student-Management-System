@@ -1,20 +1,20 @@
 package com.project.schoolmanagment.service;
 
 import com.project.schoolmanagment.entity.abstracts.User;
-import com.project.schoolmanagment.entity.concretes.Lesson;
-import com.project.schoolmanagment.entity.concretes.Role;
-import com.project.schoolmanagment.entity.concretes.Teacher;
-import com.project.schoolmanagment.entity.concretes.UserRole;
+import com.project.schoolmanagment.entity.concretes.*;
 import com.project.schoolmanagment.payload.Dto.TeacherRequestDto;
 import com.project.schoolmanagment.payload.request.TeacherRequest;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
+import com.project.schoolmanagment.payload.response.TeacherResponse;
 import com.project.schoolmanagment.repository.TeacherRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.project.schoolmanagment.utils.Messages;
 
@@ -29,60 +29,74 @@ public class TeacherService {
 
     private final AdvisorTeacherService advisorTeacherService;
 
-    public ResponseMessage<Teacher> save(TeacherRequest teacherRequest) {
+    public ResponseMessage<TeacherResponse> save(TeacherRequest teacherRequest) {
         if(teacherRepository.existsBySsn(teacherRequest.getSsn().trim())){
-            return ResponseMessage.<Teacher>builder().message("This teacher already register").build();
+            return ResponseMessage.<TeacherResponse>builder().message("This teacher already register").build();
         }
         Set<Lesson> lessons = getLessonsByLessonId(teacherRequest.getLessons());
         if (lessons.size() == 0) {
-            return ResponseMessage.<Teacher>builder().message("lessons must not empty").build();
+            return ResponseMessage.<TeacherResponse>builder().message("lessons must not empty").build();
         }
 
         Teacher teacher = teacherRequestToDto(teacherRequest, lessons);
         teacher.setUserRole(userRoleService.getUserRole(Role.TEACHER));
         Teacher savedTeacher = teacherRepository.save(teacher);
-        if(teacherRequest.isAdvisorTeacher()){
+        if (teacherRequest.isAdvisorTeacher()){
             advisorTeacherService.saveAdvisorTeacher(savedTeacher);
         }
-        return ResponseMessage.<Teacher>builder().object(savedTeacher)
-                .message("teacher saved successfully").build();
+        return ResponseMessage.<TeacherResponse>builder()
+                .object(createTeacherResponse(savedTeacher))
+                .httpStatus(HttpStatus.CREATED)
+                .message("Teacher saved successfully").build();
     }
 
     public List<Teacher> getAllTeacher() {
         return teacherRepository.findAll();
     }
 
-    public ResponseMessage<Teacher> updateTeacher(TeacherRequest newTeacher, Long userId) {
+    public ResponseMessage<TeacherResponse> updateTeacher(TeacherRequest newTeacher, Long userId) {
         Optional<Teacher> teacher = teacherRepository.findById(userId);
         if (teacher.isPresent()) {
             Teacher updateTeacher = createUpdatedTeacher(newTeacher, userId);
             updateTeacher.setLessons(getLessonsByLessonId(newTeacher.getLessons()));
             updateTeacher.setUserRole(userRoleService.getUserRole(Role.TEACHER));
             Teacher savedTeacher = teacherRepository.save(updateTeacher);
-            if(newTeacher.isAdvisorTeacher()){
-                advisorTeacherService.saveAdvisorTeacher(savedTeacher);
-            }
-            return ResponseMessage.<Teacher>builder().object(updateTeacher).message("Teacher updated Successful").build();
+            callAdvisorService(newTeacher.isAdvisorTeacher(),savedTeacher);
+            return ResponseMessage.<TeacherResponse>builder()
+                    .object(createTeacherResponse(updateTeacher))
+                    .httpStatus(HttpStatus.OK)
+                    .message("Teacher updated Successful").build();
         }
-        return ResponseMessage.<Teacher>builder().message(Messages.NOT_FOUND_USER_MESSAGE).build();
+        return ResponseMessage.<TeacherResponse>builder().message(Messages.NOT_FOUND_USER_MESSAGE).httpStatus(HttpStatus.NOT_FOUND).build();
     }
 
-    public String deleteTeacher(Long id) {
+    public ResponseMessage deleteTeacher(Long id) {
         Optional<Teacher> teacher = teacherRepository.findById(id);
+        ResponseMessage.ResponseMessageBuilder responseMessageBuilder = ResponseMessage.builder();
         if (teacher.isPresent()) {
             teacherRepository.deleteById(id);
-            return "Teacher deleted Successful";
+            return responseMessageBuilder.message("Teacher Deleted")
+                    .httpStatus(HttpStatus.OK)
+                    .build();
         }
-        return Messages.NOT_FOUND_USER_MESSAGE;
+        return responseMessageBuilder.message(Messages.NOT_FOUND_USER_MESSAGE)
+                .httpStatus(HttpStatus.NOT_FOUND)
+                .build();
     }
-    public ResponseMessage<Teacher> getSavedTeacherById(Long id){
+    public ResponseMessage<TeacherResponse> getSavedTeacherById(Long id){
         Optional<Teacher> teacher = teacherRepository.findById(id);
-        if (!teacher.isPresent()){
-            return ResponseMessage.<Teacher>builder()
-                    .message(Messages.NOT_FOUND_USER_MESSAGE).build();
+        ResponseMessage.ResponseMessageBuilder<TeacherResponse> responseMessageBuilder = ResponseMessage.builder();
+        if (teacher.isPresent()){
+            return responseMessageBuilder.object(createTeacherResponse(teacher.get()))
+                    .httpStatus(HttpStatus.OK)
+                    .message("Teacher successfully found").build();
         }
-        return ResponseMessage.<Teacher>builder().object(teacher.get())
-                .message("Teacher successfully found").build();
+        return responseMessageBuilder.message(Messages.NOT_FOUND_USER_MESSAGE).httpStatus(HttpStatus.NOT_FOUND).build();
+    }
+
+    public Teacher getTeacherById(Long id){
+        Optional<Teacher> teacher = teacherRepository.findById(id);
+        return teacher.orElse(null);
     }
 
     private Teacher createUpdatedTeacher(TeacherRequest teacher, Long id) {
@@ -106,5 +120,19 @@ public class TeacherService {
 
     public List<Teacher> getTeacherByName(String teacherName) {
         return teacherRepository.getTeacherByNameContaining(teacherName);
+    }
+
+    private void callAdvisorService(boolean status,Teacher teacher){
+        advisorTeacherService.updateAdvisorTeacher(status,teacher);
+    }
+
+    private TeacherResponse createTeacherResponse(Teacher teacher){
+        List<String> lessons = teacher.getLessons().stream().map(Lesson::getLessonName).collect(Collectors.toList());
+        return TeacherResponse.builder().teacherId(teacher.getId())
+                .lessonsName(lessons)
+                .name(teacher.getName())
+                .surname(teacher.getSurname())
+                .ssn(teacher.getSsn())
+                .build();
     }
 }
