@@ -1,5 +1,7 @@
 package com.project.schoolmanagment.config;
 
+import com.project.schoolmanagment.payload.Dto.LessonProgramDto;
+import com.project.schoolmanagment.payload.Dto.ParentRequestDto;
 import com.project.schoolmanagment.payload.Dto.StudentRequestDto;
 import com.project.schoolmanagment.payload.Dto.TeacherRequestDto;
 import com.project.schoolmanagment.payload.request.TeacherRequest;
@@ -16,5 +18,15 @@ public class CreateObjectBean {
     @Bean
     public StudentRequestDto studentRequestDto(){
         return new StudentRequestDto();
+    }
+
+    @Bean
+    public ParentRequestDto parentRequestDto(){
+        return new ParentRequestDto();
+    }
+
+    @Bean
+    public LessonProgramDto lessonProgramRequestDto(){
+        return new LessonProgramDto();
     }
 }

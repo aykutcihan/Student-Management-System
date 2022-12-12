@@ -36,7 +36,7 @@ public class AssistantManagerService {
             AssistantManager updatedAssistantManager = createUpdatedManager(newAssistantManager, managerId);
             assistantManagerRepository.save(updatedAssistantManager);
             return responseMessageBuilder
-                    .message("Teacher updated Successful")
+                    .message("Assistant Manager Updated Successful")
                     .httpStatus(HttpStatus.OK)
                     .object(updatedAssistantManager)
                     .build();
@@ -86,7 +86,9 @@ public class AssistantManagerService {
                 .surname(assistantManager.getSurname())
                 .birthPlace(assistantManager.getBirthPlace())
                 .birthDay(assistantManager.getBirthDay())
-                .password(assistantManager.getPassword()).build();
+                .password(assistantManager.getPassword())
+                .phoneNumber(assistantManager.getPhoneNumber())
+                .build();
 
     }
 

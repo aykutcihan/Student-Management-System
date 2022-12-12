@@ -1,5 +1,6 @@
 package com.project.schoolmanagment.entity.concretes;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -7,7 +8,10 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
-import java.util.List;
+import javax.validation.constraints.NotNull;
+import java.text.DateFormat;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Set;
 
 @Entity
@@ -15,19 +19,18 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Lesson {
+public class LessonProgram {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long lessonId;
+    private Long id;
 
-    @NotEmpty
-    private String lessonName;
+    private LocalDate date;
+
+    private LocalTime startTime;
+
+    private LocalTime stopTime;
 
     @ManyToMany
-    private Set<Teacher> teacherSet;
-
-    @ManyToMany
-    private Set<LessonProgram> lessonProgram;
-
+    private Set<Lesson> lesson;
 }

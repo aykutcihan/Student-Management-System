@@ -1,6 +1,8 @@
 package com.project.schoolmanagment.service;
 
 import com.project.schoolmanagment.entity.concretes.AdvisorTeacher;
+import com.project.schoolmanagment.entity.concretes.Parent;
+import com.project.schoolmanagment.entity.concretes.Student;
 import com.project.schoolmanagment.entity.concretes.Teacher;
 import com.project.schoolmanagment.payload.request.AdvisorTeacherRequest;
 import com.project.schoolmanagment.payload.response.AdvisorTeacherResponse;
@@ -9,6 +11,7 @@ import com.project.schoolmanagment.payload.response.StudentResponse;
 import com.project.schoolmanagment.repository.AdvisoryTeacherRepository;
 import com.project.schoolmanagment.utils.Messages;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,7 +23,6 @@ import java.util.stream.Collectors;
 public class AdvisorTeacherService {
 
     private final AdvisoryTeacherRepository advisoryTeacherRepository;
-
     public void saveAdvisorTeacher(Teacher teacher) {
         AdvisorTeacher advisorTeacherBuilder = AdvisorTeacher.builder().teacher(teacher).build();
         advisoryTeacherRepository.save(advisorTeacherBuilder);
@@ -56,13 +58,18 @@ public class AdvisorTeacherService {
         return advisoryTeacherRepository.existsById(id);
     }
 
-    public String deleteAdvisorTeacher(Long id) {
+    public ResponseMessage deleteAdvisorTeacher(Long id) {
         Optional<AdvisorTeacher> advisorTeacher = advisoryTeacherRepository.findById(id);
         if (advisorTeacher.isPresent()) {
             advisoryTeacherRepository.deleteById(advisorTeacher.get().getId());
-            return "Teacher deleted Successful";
+            return ResponseMessage.<Parent>builder()
+                    .message("Advisor Teacher deleted Successfully")
+                    .httpStatus(HttpStatus.OK).build();
         }
-        return Messages.NOT_FOUND_USER_MESSAGE;
+        return ResponseMessage.<Parent>builder()
+                .message(Messages.NOT_FOUND_USER_MESSAGE)
+                .httpStatus(HttpStatus.NOT_FOUND).build();
+
     }
 
     private AdvisorTeacherResponse createResponseObject(AdvisorTeacher advisorTeacher) {
@@ -75,4 +82,5 @@ public class AdvisorTeacherService {
                 .teacherSSN(advisorTeacher.getTeacher().getSsn())
                 .studentResponses(studentResponse).build();
     }
+
 }

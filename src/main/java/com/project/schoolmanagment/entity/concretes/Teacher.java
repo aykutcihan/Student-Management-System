@@ -17,7 +17,7 @@ import java.util.Set;
 public class Teacher extends User {
 
     @ManyToMany
-    private Set<Lesson> lessons;
+    private Set<LessonProgram> lessons;
 
     @Transient
     private boolean isAdvisorTeacher;

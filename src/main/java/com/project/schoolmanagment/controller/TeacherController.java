@@ -13,40 +13,39 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/teacher")
+@RequestMapping("teacher")
 @RequiredArgsConstructor
 public class TeacherController {
 
     private final TeacherService teacherService;
 
     @PostMapping("/save")
-    public ResponseEntity<ResponseMessage<TeacherResponse>> save(@RequestBody @Valid TeacherRequest teacher) {
-        return ResponseEntity.ok(teacherService.save(teacher));
+    public ResponseMessage<TeacherResponse> save(@RequestBody @Valid TeacherRequest teacher) {
+        return teacherService.save(teacher);
     }
 
-    @GetMapping("/getAllTeacher")
-    public ResponseEntity<List<Teacher>> getAllTeacher() {
-        return ResponseEntity.ok(teacherService.getAllTeacher());
+    @GetMapping("/getAll")
+    public List<Teacher> getAllTeacher() {
+        return teacherService.getAllTeacher();
     }
 
-    @PutMapping("/updateTeacher/{userId}")
-    public ResponseEntity<ResponseMessage<TeacherResponse>> updateTeacher(@RequestBody @Valid TeacherRequest teacher, @PathVariable Long userId) {
-        return ResponseEntity.ok(teacherService.updateTeacher(teacher, userId));
+    @PutMapping("/update/{userId}")
+    public ResponseMessage<TeacherResponse> updateTeacher(@RequestBody @Valid TeacherRequest teacher, @PathVariable Long userId) {
+        return teacherService.updateTeacher(teacher, userId);
     }
 
-    @GetMapping("/searchTeacherByName")
-    public ResponseEntity<List<Teacher>> getTeacherByName(@RequestParam(name = "name") String teacherName) {
-        return ResponseEntity.ok(teacherService.getTeacherByName(teacherName));
+    @GetMapping("/getTeacherByName")
+    public List<Teacher> getTeacherByName(@RequestParam(name = "name") String teacherName) {
+        return teacherService.getTeacherByName(teacherName);
     }
 
-    @DeleteMapping("/deleteTeacher/{id}")
-    public ResponseEntity<ResponseMessage<?>> deleteTeacher(@PathVariable Long id) {
-        return ResponseEntity.ok(teacherService.deleteTeacher(id));
+    @DeleteMapping("/delete/{id}")
+    public ResponseMessage<?> deleteTeacher(@PathVariable Long id) {
+        return teacherService.deleteTeacher(id);
     }
 
     @GetMapping("/getSavedTeacherById/{id}")
-    public ResponseEntity<ResponseMessage<TeacherResponse>> getSavedTeacherById(@PathVariable Long id) {
-        return ResponseEntity.ok(teacherService.getSavedTeacherById(id));
+    public ResponseMessage<TeacherResponse> getSavedTeacherById(@PathVariable Long id) {
+        return teacherService.getSavedTeacherById(id);
     }
-
 }

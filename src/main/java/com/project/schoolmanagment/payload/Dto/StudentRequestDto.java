@@ -20,6 +20,7 @@ public class StudentRequestDto {
                 .password(studentRequest.getPassword())
                 .ssn(studentRequest.getSsn())
                 .birthPlace(studentRequest.getBirthPlace())
+                .phoneNumber(studentRequest.getPhoneNumber())
                 .build();
     }
 }

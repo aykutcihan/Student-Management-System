@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Set;
 
 @Getter
@@ -15,7 +16,8 @@ import java.util.Set;
 public class TeacherRequest extends BaseUserRequest{
 
     @NotNull
-    private Set<Long> lessons;
+    @Size(min = 1, message = "lessons must not empty")
+    private Set<Long> lessonsIdList;
 
     @NotNull
     @JsonProperty("isAdvisorTeacher")

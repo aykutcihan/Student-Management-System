@@ -23,7 +23,7 @@ import com.project.schoolmanagment.utils.Messages;
 public class TeacherService {
 
     private final TeacherRepository teacherRepository;
-    private final LessonService lessonService;
+    private final LessonProgramService lessonProgramService;
     private final TeacherRequestDto teacherRequestDto;
     private final UserRoleService userRoleService;
 
@@ -33,10 +33,7 @@ public class TeacherService {
         if(teacherRepository.existsBySsn(teacherRequest.getSsn().trim())){
             return ResponseMessage.<TeacherResponse>builder().message("This teacher already register").build();
         }
-        Set<Lesson> lessons = getLessonsByLessonId(teacherRequest.getLessons());
-        if (lessons.size() == 0) {
-            return ResponseMessage.<TeacherResponse>builder().message("lessons must not empty").build();
-        }
+        Set<LessonProgram> lessons = lessonProgramService.getLessonProgramById(teacherRequest.getLessonsIdList());
 
         Teacher teacher = teacherRequestToDto(teacherRequest, lessons);
         teacher.setUserRole(userRoleService.getUserRole(Role.TEACHER));
@@ -58,7 +55,7 @@ public class TeacherService {
         Optional<Teacher> teacher = teacherRepository.findById(userId);
         if (teacher.isPresent()) {
             Teacher updateTeacher = createUpdatedTeacher(newTeacher, userId);
-            updateTeacher.setLessons(getLessonsByLessonId(newTeacher.getLessons()));
+            updateTeacher.setLessons(lessonProgramService.getLessonProgramById(newTeacher.getLessonsIdList()));
             updateTeacher.setUserRole(userRoleService.getUserRole(Role.TEACHER));
             Teacher savedTeacher = teacherRepository.save(updateTeacher);
             callAdvisorService(newTeacher.isAdvisorTeacher(),savedTeacher);
@@ -106,16 +103,13 @@ public class TeacherService {
                 .ssn(teacher.getSsn())
                 .birthDay(teacher.getBirthDay())
                 .birthPlace(teacher.getBirthPlace())
-                .password(teacher.getPassword()).build();
+                .password(teacher.getPassword())
+                .phoneNumber(teacher.getPhoneNumber())
+                .build();
     }
 
-
-    private Set<Lesson> getLessonsByLessonId(Set<Long> idList) {
-        return lessonService.getLessonByLessonNameList(idList);
-    }
-
-    private Teacher teacherRequestToDto(TeacherRequest teacherRequest, Set<Lesson> lessons) {
-        return teacherRequestDto.dtoTeacher(teacherRequest, lessons);
+    private Teacher teacherRequestToDto(TeacherRequest teacherRequest, Set<LessonProgram> lessonPrograms) {
+        return teacherRequestDto.dtoTeacher(teacherRequest, lessonPrograms);
     }
 
     public List<Teacher> getTeacherByName(String teacherName) {
@@ -127,12 +121,12 @@ public class TeacherService {
     }
 
     private TeacherResponse createTeacherResponse(Teacher teacher){
-        List<String> lessons = teacher.getLessons().stream().map(Lesson::getLessonName).collect(Collectors.toList());
         return TeacherResponse.builder().teacherId(teacher.getId())
-                .lessonsName(lessons)
+                .lessonPrograms(teacher.getLessons())
                 .name(teacher.getName())
                 .surname(teacher.getSurname())
                 .ssn(teacher.getSsn())
+                .phoneNumber(teacher.getPhoneNumber())
                 .build();
     }
 }

@@ -10,30 +10,34 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/assistantManager")
+@RequestMapping("assistantManager")
 @RequiredArgsConstructor
 public class AssistantManagerController {
 
     private final AssistantManagerService assistantManagerService;
 
     @PostMapping("/save")
-    public ResponseMessage<AssistantManager> save(@RequestBody AssistantManager assistantManager){
+    public ResponseMessage<AssistantManager> save(@RequestBody AssistantManager assistantManager) {
         return assistantManagerService.save(assistantManager);
     }
+
     @PutMapping("/update/{userId}")
-    public ResponseMessage<AssistantManager> update(@RequestBody AssistantManager assistantManager,@PathVariable Long userId){
-        return assistantManagerService.update(assistantManager,userId);
+    public ResponseMessage<AssistantManager> update(@RequestBody AssistantManager assistantManager, @PathVariable Long userId) {
+        return assistantManagerService.update(assistantManager, userId);
     }
-    @DeleteMapping("/deleteAssistantManager/{userId}")
-    public ResponseMessage<?> deleteAssistantManager(@PathVariable Long userId){
+
+    @DeleteMapping("/delete/{userId}")
+    public ResponseMessage<?> deleteAssistantManager(@PathVariable Long userId) {
         return assistantManagerService.deleteAssistantManager(userId);
     }
+
     @GetMapping("/getAssistantManagerById/{userId}")
-    public ResponseMessage<AssistantManager> getAssistantManagerById(@PathVariable Long userId){
+    public ResponseMessage<AssistantManager> getAssistantManagerById(@PathVariable Long userId) {
         return assistantManagerService.getAssistantManagerById(userId);
     }
-    @GetMapping("/getAllAssistantManager")
-    public List<AssistantManager> getAllAssistantManager(){
+
+    @GetMapping("/getAll")
+    public List<AssistantManager> getAllAssistantManager() {
         return assistantManagerService.getAllAssistantManager();
     }
 }

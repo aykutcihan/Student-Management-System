@@ -1,5 +1,6 @@
 package com.project.schoolmanagment.entity.concretes;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,4 +25,8 @@ public class AdvisorTeacher {
 
     @OneToMany
     private List<Student> students;
+
+    @OneToOne
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private UserRole userRole;
 }
