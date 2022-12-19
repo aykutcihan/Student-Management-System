@@ -1,13 +1,18 @@
 package com.project.schoolmanagment.service;
 
+import com.project.schoolmanagment.Exception.BadRequestException;
+import com.project.schoolmanagment.Exception.ResourceNotFoundException;
 import com.project.schoolmanagment.entity.concretes.Lesson;
+import com.project.schoolmanagment.payload.request.LessonRequest;
 import com.project.schoolmanagment.payload.response.LessonResponse;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.repository.LessonRepository;
 import com.project.schoolmanagment.utils.Messages;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import javax.swing.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -19,33 +24,42 @@ public class LessonService {
 
     private final LessonRepository lessonRepository;
 
-    public ResponseMessage<LessonResponse> save(Lesson lesson) {
-        if (existsLessonByLessonName(lesson.getLessonName())) {
-            return ResponseMessage.<LessonResponse>builder().message("this lesson already register").build();
+    public ResponseMessage<LessonResponse> save(LessonRequest lessonRequest) {
+        if (existsLessonByLessonName(lessonRequest.getLessonName())) {
+            throw new BadRequestException(String.format(Messages.ALREADY_REGISTER_LESSON, lessonRequest.getLessonName()));
         }
+        Lesson lesson = createLessonObject(lessonRequest);
         return ResponseMessage.<LessonResponse>builder()
                 .object(createLessonResponse(lessonRepository.save(lesson)))
+                .message("Lesson Created")
+                .httpStatus(HttpStatus.OK)
                 .build();
     }
 
-    public String deleteLesson(Long id) {
+    public ResponseMessage deleteLesson(Long id) {
         Optional<Lesson> teacher = lessonRepository.findById(id);
-        if (teacher.isPresent()) {
-            lessonRepository.deleteById(id);
-            return "Lesson deleted Successful";
+        if (!teacher.isPresent()) {
+            throw new BadRequestException(String.format(Messages.NOT_FOUND_LESSON_MESSAGE, id));
         }
-        return Messages.NOT_FOUND_LESSON_MESSAGE;
+        lessonRepository.deleteById(id);
+        return ResponseMessage.builder()
+                .message("Lesson Deleted")
+                .httpStatus(HttpStatus.OK)
+                .build();
     }
 
     public ResponseMessage<LessonResponse> getLessonByLessonName(String lessonName) {
         Optional<Lesson> lesson = lessonRepository.getLessonByLessonName(lessonName);
-        if (lesson.isPresent()) {
-            return ResponseMessage.<LessonResponse>builder().message("Success")
-                    .object(createLessonResponse(lesson.get())).build();
+        if (!lesson.isPresent()) {
+            throw new BadRequestException(String.format(Messages.NOT_FOUND_LESSON_NAME_MESSAGE, lessonName));
         }
-        return ResponseMessage.<LessonResponse>builder().message("Not found lesson").build();
+        return ResponseMessage.<LessonResponse>builder().message("Lesson successfully found")
+                .object(createLessonResponse(lesson.get())).build();
     }
 
+    public Optional<Lesson> getLessonById(Long lessonId){
+        return lessonRepository.findById(lessonId);
+    }
     public boolean existsLessonByLessonName(String lessonName) {
         return lessonRepository.existsLessonByLessonNameEqualsIgnoreCase(lessonName);
     }
@@ -62,5 +76,8 @@ public class LessonService {
        return LessonResponse.builder().lessonId(lesson.getLessonId()).lessonName(lesson.getLessonName()).build();
     }
 
+    private Lesson createLessonObject(LessonRequest lessonRequest){
+       return Lesson.builder().lessonName(lessonRequest.getLessonName()).build();
+    }
 
 }

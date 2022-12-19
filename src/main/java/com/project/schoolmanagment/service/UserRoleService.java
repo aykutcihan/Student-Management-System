@@ -1,6 +1,6 @@
 package com.project.schoolmanagment.service;
 
-import com.project.schoolmanagment.entity.concretes.Role;
+import com.project.schoolmanagment.entity.enums.Role;
 import com.project.schoolmanagment.entity.concretes.UserRole;
 import com.project.schoolmanagment.repository.UserRoleRepository;
 import lombok.RequiredArgsConstructor;

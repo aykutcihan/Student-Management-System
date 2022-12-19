@@ -3,6 +3,7 @@ package com.project.schoolmanagment.service;
 import com.project.schoolmanagment.Exception.BadRequestException;
 import com.project.schoolmanagment.Exception.ResourceNotFoundException;
 import com.project.schoolmanagment.entity.concretes.*;
+import com.project.schoolmanagment.entity.enums.Role;
 import com.project.schoolmanagment.payload.Dto.StudentRequestDto;
 import com.project.schoolmanagment.payload.request.ChooseLessonRequest;
 import com.project.schoolmanagment.payload.request.StudentRequest;
@@ -10,13 +11,16 @@ import com.project.schoolmanagment.payload.response.*;
 import com.project.schoolmanagment.repository.StudentRepository;
 import com.project.schoolmanagment.utils.Messages;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,53 +35,53 @@ public class StudentService {
     private final AdvisorTeacherService advisorTeacherService;
     private final LessonService lessonService;
 
+    private final CreateResponseObjectService responseObjectService;
     private final LessonProgramService lessonProgramService;
 
-    //Student Response düzenlencek ->DONE
-    //Student number kontrolü -> DONE
+    private final PasswordEncoder passwordEncoder;
+
     //telefon pattern düzenlenecek
     public ResponseMessage<StudentResponse> save(StudentRequest studentRequest) {
-        AdvisorTeacher advisorTeacher = advisorTeacherService.getAdvisorTeacherById(studentRequest.getAdvisorTeacherId());
+        Optional<AdvisorTeacher> advisorTeacher = advisorTeacherService.getAdvisorTeacherById(studentRequest.getAdvisorTeacherId());
         ResponseMessage.ResponseMessageBuilder<StudentResponse> responseMessageBuilder = ResponseMessage.builder();
         if (studentRepository.existsBySsn(studentRequest.getSsn())) {
             throw new BadRequestException(String.format(Messages.ALREADY_REGISTER_MESSAGE_SSN, studentRequest.getSsn()));
-        } else if (advisorTeacher == null) {
+        } else if (!advisorTeacher.isPresent()) {
             throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_ADVISOR_MESSAGE, studentRequest.getAdvisorTeacherId()));
-        }
-        else if(studentRepository.existsByStudentNumber(studentRequest.getStudentNumber())){
+        } else if (studentRepository.existsByStudentNumber(studentRequest.getStudentNumber())) {
             throw new BadRequestException(String.format(Messages.ALREADY_REGISTER_MESSAGE_STUDENT_NUMBER, studentRequest.getStudentNumber()));
         }
         Student student = studentRequestToDto(studentRequest);
         //student.setParent(); from parent service
-        student.setAdvisorTeacher(advisorTeacher);
+        student.setAdvisorTeacher(advisorTeacher.get());
         student.setUserRole(userRoleService.getUserRole(Role.STUDENT));
-        return responseMessageBuilder.object(createStudentResponse(studentRepository.save(student)))
+        student.setPassword(passwordEncoder.encode(studentRequest.getPassword()));
+        return responseMessageBuilder.object(responseObjectService.createStudentResponse(studentRepository.save(student)))
                 .message("Student saved Successfully").build();
     }
 
     public List<StudentResponse> getAllStudent() {
-        return studentRepository.findAll().stream().map(this::createStudentResponse).collect(Collectors.toList());
+        return studentRepository.findAll().stream().map(responseObjectService::createStudentResponse).collect(Collectors.toList());
     }
 
     public ResponseMessage<StudentResponse> updateStudent(Long userId, StudentRequest studentRequest) {
         Optional<Student> student = studentRepository.findById(userId);
-        AdvisorTeacher advisorTeacher = advisorTeacherService.getAdvisorTeacherById(studentRequest.getAdvisorTeacherId());
+        Optional<AdvisorTeacher> advisorTeacher = advisorTeacherService.getAdvisorTeacherById(studentRequest.getAdvisorTeacherId());
         ResponseMessage.ResponseMessageBuilder<StudentResponse> responseMessageBuilder = ResponseMessage.builder();
         if (!student.isPresent()) {
             throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_USER_MESSAGE, userId));
-        }
-        else if (studentRepository.existsBySsn(studentRequest.getSsn())) {
+        } else if (studentRepository.existsBySsn(studentRequest.getSsn())) {
             throw new BadRequestException(String.format(Messages.ALREADY_REGISTER_MESSAGE_SSN, studentRequest.getSsn()));
-        } else if (advisorTeacher == null) {
+        } else if (!advisorTeacher.isPresent()) {
             throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_ADVISOR_MESSAGE, studentRequest.getAdvisorTeacherId()));
-        }
-        else if(studentRepository.existsByStudentNumber(studentRequest.getStudentNumber())){
+        } else if (studentRepository.existsByStudentNumber(studentRequest.getStudentNumber())) {
             throw new BadRequestException(String.format(Messages.ALREADY_REGISTER_MESSAGE_STUDENT_NUMBER, studentRequest.getStudentNumber()));
         }
         Student updateStudent = createUpdatedStudent(studentRequest, userId);
         updateStudent.setUserRole(userRoleService.getUserRole(Role.STUDENT));
         studentRepository.save(updateStudent);
-        return responseMessageBuilder.object(createStudentResponse(updateStudent)).message("Teacher updated Successfully").build();
+        return responseMessageBuilder.object(responseObjectService.createStudentResponse(updateStudent))
+                .message("Teacher updated Successfully").build();
 
     }
 
@@ -124,39 +128,48 @@ public class StudentService {
         } else if (lessonPrograms.size() == 0) {
             throw new ResourceNotFoundException(Messages.LESSON_PROGRAM_NOT_FOUND_MESSAGE);
         }
-        student.get().setLessonProgramList(lessonPrograms);
+        Set<LessonProgram> studentLessonProgram = student.get().getLessonsProgramList();
+
+        CheckSameLessonProgram.checkLessonPrograms(studentLessonProgram,lessonPrograms);
+
+        studentLessonProgram.addAll(lessonPrograms);
+        student.get().setLessonsProgramList(studentLessonProgram);
         Student savedStudent = studentRepository.save(student.get());
         return ResponseMessage.<StudentResponse>builder()
                 .message("Lesson added")
-                .object(createStudentResponse(savedStudent))
+                .object(responseObjectService.createStudentResponse(savedStudent))
                 .httpStatus(HttpStatus.CREATED)
                 .build();
 
     }
+    public Optional<Student> getStudentById(Long studentId){
+        return studentRepository.findById(studentId);
+    }
 
     public List<StudentResponse> getAllStudentByAdvisorId(Long advisorId) {
-        return studentRepository.getStudentByAdvisorTeacher_Id(advisorId).stream().map(this::createStudentResponse).collect(Collectors.toList());
+        return studentRepository.getStudentByAdvisorTeacher_Id(advisorId).stream().map(responseObjectService::createStudentResponse)
+                .collect(Collectors.toList());
     }
 
     public List<StudentResponse> getStudentByName(String studentName) {
-        return studentRepository.getStudentByNameContaining(studentName).stream().map(this::createStudentResponse).collect(Collectors.toList());
+        return studentRepository.getStudentByNameContaining(studentName).stream().map(responseObjectService::createStudentResponse)
+                .collect(Collectors.toList());
     }
 
     public Set<Student> getStudentsByIdList(Set<Long> idList) {
         return studentRepository.getStudentsByStudentIdList(idList);
     }
 
-    public AdvisorTeacher getAdvisorTeacherById(Long userId) {
+    public Optional<AdvisorTeacher> getAdvisorTeacherById(Long userId) {
         return advisorTeacherService.getAdvisorTeacherById(userId);
     }
-    private StudentResponse createStudentResponse(Student student) {
-        return StudentResponse.builder().studentId(student.getId())
-                .name(student.getName())
-                .surname(student.getSurname())
-                .ssn(student.getSsn())
-                .phoneNumber(student.getPhoneNumber())
-                .lessonProgramSet(lessonProgramService.createLessonProgramResponse(student.getLessonProgramList()))
-                .build();
-    }
 
+    public Page<Student> search(int page, int size, String sort, String type) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sort).ascending());
+        if (Objects.equals(type, "desc")) {
+            pageable = PageRequest.of(page, size, Sort.by(sort).descending());
+        }
+
+        return studentRepository.findAll(pageable);
+    }
 }

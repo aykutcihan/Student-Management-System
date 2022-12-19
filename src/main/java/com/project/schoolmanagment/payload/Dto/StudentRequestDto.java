@@ -21,6 +21,7 @@ public class StudentRequestDto {
                 .ssn(studentRequest.getSsn())
                 .birthPlace(studentRequest.getBirthPlace())
                 .phoneNumber(studentRequest.getPhoneNumber())
+                .email(studentRequest.getEmail())
                 .build();
     }
 }

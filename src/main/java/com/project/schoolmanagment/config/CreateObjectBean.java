@@ -1,9 +1,6 @@
 package com.project.schoolmanagment.config;
 
-import com.project.schoolmanagment.payload.Dto.LessonProgramDto;
-import com.project.schoolmanagment.payload.Dto.ParentRequestDto;
-import com.project.schoolmanagment.payload.Dto.StudentRequestDto;
-import com.project.schoolmanagment.payload.Dto.TeacherRequestDto;
+import com.project.schoolmanagment.payload.Dto.*;
 import com.project.schoolmanagment.payload.request.TeacherRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,14 +16,18 @@ public class CreateObjectBean {
     public StudentRequestDto studentRequestDto(){
         return new StudentRequestDto();
     }
-
-    @Bean
-    public ParentRequestDto parentRequestDto(){
-        return new ParentRequestDto();
-    }
-
+    
     @Bean
     public LessonProgramDto lessonProgramRequestDto(){
         return new LessonProgramDto();
+    }
+    @Bean
+    public AssistantManagerDto assistantManagerDto(){
+        return new AssistantManagerDto();
+    }
+
+    @Bean
+    public MeetDto meetDto(){
+        return new MeetDto();
     }
 }

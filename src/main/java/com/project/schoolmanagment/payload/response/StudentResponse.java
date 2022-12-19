@@ -21,5 +21,5 @@ public class StudentResponse {
     private String surname;
     private String ssn;
     private String phoneNumber;
-    private Set<LessonProgramResponse> lessonProgramSet;
+    private Set<LessonProgram> lessonProgramSet;
 }

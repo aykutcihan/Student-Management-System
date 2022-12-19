@@ -4,9 +4,9 @@ import com.project.schoolmanagment.entity.abstracts.User;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.Transient;
+import javax.persistence.*;
+import javax.validation.constraints.Email;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -14,12 +14,25 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @SuperBuilder
+@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
+@ToString(callSuper = true)
 public class Teacher extends User {
 
-    @ManyToMany
-    private Set<LessonProgram> lessons;
+    @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "teacher_lessonprogram",
+            joinColumns = @JoinColumn(name = "teacher_id"),
+            inverseJoinColumns = @JoinColumn(name = "lesson_program_id"))
+    private Set<LessonProgram> lessonsProgramList;
+
+    @OneToOne(mappedBy = "teacher",cascade = CascadeType.ALL,orphanRemoval = true)
+    private AdvisorTeacher advisorTeacher;
 
     @Transient
     private boolean isAdvisorTeacher;
 
+    private String email;
+
+    @OneToMany(mappedBy = "teacherId")
+    private List<StudentInfo> studentInfoList;
 }

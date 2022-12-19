@@ -1,6 +1,8 @@
 package com.project.schoolmanagment.controller;
 
 import com.project.schoolmanagment.entity.concretes.AssistantManager;
+import com.project.schoolmanagment.payload.request.AssistantManagerRequest;
+import com.project.schoolmanagment.payload.response.AssistantManagerResponse;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.service.AssistantManagerService;
 import lombok.RequiredArgsConstructor;
@@ -17,13 +19,13 @@ public class AssistantManagerController {
     private final AssistantManagerService assistantManagerService;
 
     @PostMapping("/save")
-    public ResponseMessage<AssistantManager> save(@RequestBody AssistantManager assistantManager) {
-        return assistantManagerService.save(assistantManager);
+    public ResponseMessage<AssistantManagerResponse> save(@RequestBody AssistantManagerRequest assistantManagerRequest) {
+        return assistantManagerService.save(assistantManagerRequest);
     }
 
     @PutMapping("/update/{userId}")
-    public ResponseMessage<AssistantManager> update(@RequestBody AssistantManager assistantManager, @PathVariable Long userId) {
-        return assistantManagerService.update(assistantManager, userId);
+    public ResponseMessage<AssistantManagerResponse> update(@RequestBody AssistantManagerRequest assistantManagerRequest, @PathVariable Long userId) {
+        return assistantManagerService.update(assistantManagerRequest, userId);
     }
 
     @DeleteMapping("/delete/{userId}")
@@ -32,12 +34,12 @@ public class AssistantManagerController {
     }
 
     @GetMapping("/getAssistantManagerById/{userId}")
-    public ResponseMessage<AssistantManager> getAssistantManagerById(@PathVariable Long userId) {
+    public ResponseMessage<AssistantManagerResponse> getAssistantManagerById(@PathVariable Long userId) {
         return assistantManagerService.getAssistantManagerById(userId);
     }
 
     @GetMapping("/getAll")
-    public List<AssistantManager> getAllAssistantManager() {
+    public List<AssistantManagerResponse> getAllAssistantManager() {
         return assistantManagerService.getAllAssistantManager();
     }
 }

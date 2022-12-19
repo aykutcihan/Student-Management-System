@@ -1,18 +1,13 @@
 package com.project.schoolmanagment.payload.Dto;
 
-import com.project.schoolmanagment.entity.concretes.Lesson;
-import com.project.schoolmanagment.entity.concretes.LessonProgram;
-import com.project.schoolmanagment.entity.concretes.Role;
 import com.project.schoolmanagment.entity.concretes.Teacher;
 import com.project.schoolmanagment.payload.request.TeacherRequest;
 import lombok.*;
 
-import java.util.Set;
-
 @Data
 public class TeacherRequestDto {
 
-    public Teacher dtoTeacher(TeacherRequest teacherRequest, Set<LessonProgram> lessonSet) {
+    public Teacher dtoTeacher(TeacherRequest teacherRequest) {
 
         return Teacher.builder().name(teacherRequest.getName())
                 .surname(teacherRequest.getSurname())
@@ -22,6 +17,7 @@ public class TeacherRequestDto {
                 .birthPlace(teacherRequest.getBirthPlace())
                 .password(teacherRequest.getPassword())
                 .phoneNumber(teacherRequest.getPhoneNumber())
-                .lessons(lessonSet).build();
+                .email(teacherRequest.getEmail())
+                .build();
     }
 }

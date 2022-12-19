@@ -1,7 +1,9 @@
 package com.project.schoolmanagment.payload.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.project.schoolmanagment.entity.concretes.Day;
 import com.project.schoolmanagment.entity.concretes.Lesson;
+import com.project.schoolmanagment.utils.DayType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,6 +13,7 @@ import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Set;
@@ -19,17 +22,15 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
-public class LessonProgramRequest {
+public class LessonProgramRequest implements Serializable {
 
     @NotEmpty
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private LocalDate date;
+    @DayType(message = "Invalid day!")
+    private Day day;
 
-    @NotEmpty
     @JsonFormat(pattern = "hh:mm a")
     private LocalTime startTime;
 
-    @NotEmpty
     @JsonFormat(pattern = "hh:mm a")
     private LocalTime stopTime;
 

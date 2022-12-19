@@ -13,7 +13,7 @@ public class LessonProgramDto {
     public LessonProgram dtoLessonProgram(LessonProgramRequest lessonProgramRequest, Set<Lesson> lessons){
         return LessonProgram.builder().startTime(lessonProgramRequest.getStartTime())
                 .stopTime(lessonProgramRequest.getStopTime())
-                .date(lessonProgramRequest.getDate())
+                .day(lessonProgramRequest.getDay())
                 .lesson(lessons)
                 .build();
     }

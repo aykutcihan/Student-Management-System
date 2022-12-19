@@ -8,13 +8,15 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
+import java.io.Serializable;
 import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
-public class UpdateTeacherRequest {
+public class UpdateTeacherRequest implements Serializable {
 
     @NotEmpty
     private String name;
@@ -24,6 +26,7 @@ public class UpdateTeacherRequest {
 
     @NotNull
     @JsonFormat(pattern = "dd/MM/yyyy")
+    @Past
     private LocalDate birthDay;
 
     @NotEmpty

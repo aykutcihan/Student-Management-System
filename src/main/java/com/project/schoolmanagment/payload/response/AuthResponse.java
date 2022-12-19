@@ -1,5 +1,6 @@
 package com.project.schoolmanagment.payload.response;
 
+import com.project.schoolmanagment.entity.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,12 +10,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
-public class UserResponse {
+public class AuthResponse{
 
-    private Long userId;
-    private String name;
-    private String surname;
-    private String birthDay;
-    private String birthPlace;
     private String ssn;
+    private String role;
+    private String token;
 }

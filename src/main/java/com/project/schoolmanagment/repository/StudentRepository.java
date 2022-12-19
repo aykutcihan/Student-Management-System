@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public interface StudentRepository extends JpaRepository<Student, Long> {
@@ -21,4 +22,6 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     List<Student> getStudentByAdvisorTeacher_Id(Long advisorId);
 
     boolean existsByStudentNumber(String studentNumber);
+
+    Student getStudentBySsn(String ssn);
 }

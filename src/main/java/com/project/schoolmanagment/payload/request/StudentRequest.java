@@ -1,8 +1,5 @@
 package com.project.schoolmanagment.payload.request;
 
-import com.project.schoolmanagment.entity.concretes.AdvisorTeacher;
-import com.project.schoolmanagment.entity.concretes.Lesson;
-import com.project.schoolmanagment.entity.concretes.Parent;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,10 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -31,11 +26,9 @@ public class StudentRequest extends BaseUserRequest{
     @NotEmpty
     private String studentNumber;
 
-    //@NotNull
-    //private Long parentId;
-
-    //@NotNull
-    //private Set<Long> lessonIdList;
+    @NotEmpty
+    @Email
+    private String email;
 
     @NotNull
     private Long advisorTeacherId;

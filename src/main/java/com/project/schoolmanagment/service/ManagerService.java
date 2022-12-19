@@ -1,13 +1,14 @@
 package com.project.schoolmanagment.service;
 
-import com.project.schoolmanagment.entity.concretes.AssistantManager;
 import com.project.schoolmanagment.entity.concretes.Manager;
-import com.project.schoolmanagment.entity.concretes.Role;
+import com.project.schoolmanagment.entity.enums.Role;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.repository.ManagerRepository;
 import com.project.schoolmanagment.utils.Messages;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,8 +21,12 @@ public class ManagerService {
 
     private final UserRoleService userRoleService;
 
+    private final PasswordEncoder passwordEncoder;
+
+
     public ResponseMessage<Manager> save(Manager manager) {
         manager.setUserRole(userRoleService.getUserRole(Role.MANAGER));
+        manager.setPassword(passwordEncoder.encode(manager.getPassword()));
         Manager savedManager = managerRepository.save(manager);
         return ResponseMessage.<Manager>builder()
                 .message("Manager Saved")

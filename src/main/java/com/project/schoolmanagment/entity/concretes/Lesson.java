@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
@@ -15,7 +16,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Lesson {
+public class Lesson implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,11 +24,4 @@ public class Lesson {
 
     @NotEmpty
     private String lessonName;
-
-    @ManyToMany
-    private Set<Teacher> teacherSet;
-
-    @ManyToMany
-    private Set<LessonProgram> lessonProgram;
-
 }

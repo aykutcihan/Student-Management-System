@@ -1,10 +1,8 @@
 package com.project.schoolmanagment.service;
 
 import com.project.schoolmanagment.entity.concretes.AdvisorTeacher;
-import com.project.schoolmanagment.entity.concretes.Parent;
-import com.project.schoolmanagment.entity.concretes.Student;
 import com.project.schoolmanagment.entity.concretes.Teacher;
-import com.project.schoolmanagment.payload.request.AdvisorTeacherRequest;
+import com.project.schoolmanagment.entity.enums.Role;
 import com.project.schoolmanagment.payload.response.AdvisorTeacherResponse;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.payload.response.StudentResponse;
@@ -23,8 +21,10 @@ import java.util.stream.Collectors;
 public class AdvisorTeacherService {
 
     private final AdvisoryTeacherRepository advisoryTeacherRepository;
+    private final UserRoleService userRoleService;
+
     public void saveAdvisorTeacher(Teacher teacher) {
-        AdvisorTeacher advisorTeacherBuilder = AdvisorTeacher.builder().teacher(teacher).build();
+        AdvisorTeacher advisorTeacherBuilder = AdvisorTeacher.builder().teacher(teacher).userRole(userRoleService.getUserRole(Role.ADVISORTEACHER)).build();
         advisoryTeacherRepository.save(advisorTeacherBuilder);
     }
 
@@ -38,8 +38,7 @@ public class AdvisorTeacherService {
             } else {
                 advisoryTeacherRepository.deleteById(advisorTeacher.get().getId());
             }
-        }
-        else {
+        } else {
             advisoryTeacherRepository.save(advisorTeacherBuilder.build());
         }
     }
@@ -49,9 +48,9 @@ public class AdvisorTeacherService {
         return advisoryTeacherRepository.findAll().stream().map(this::createResponseObject).collect(Collectors.toList());
     }
 
-    public AdvisorTeacher getAdvisorTeacherById(Long id) {
-        Optional<AdvisorTeacher> advisorTeacher = advisoryTeacherRepository.findById(id);
-        return advisorTeacher.orElse(null);
+    public Optional<AdvisorTeacher> getAdvisorTeacherById(Long id) {
+        return advisoryTeacherRepository.findById(id);
+
     }
 
     public boolean checkAdvisorTeacher(Long id) {
@@ -62,11 +61,11 @@ public class AdvisorTeacherService {
         Optional<AdvisorTeacher> advisorTeacher = advisoryTeacherRepository.findById(id);
         if (advisorTeacher.isPresent()) {
             advisoryTeacherRepository.deleteById(advisorTeacher.get().getId());
-            return ResponseMessage.<Parent>builder()
+            return ResponseMessage.<AdvisorTeacher>builder()
                     .message("Advisor Teacher deleted Successfully")
                     .httpStatus(HttpStatus.OK).build();
         }
-        return ResponseMessage.<Parent>builder()
+        return ResponseMessage.<AdvisorTeacher>builder()
                 .message(Messages.NOT_FOUND_USER_MESSAGE)
                 .httpStatus(HttpStatus.NOT_FOUND).build();
 

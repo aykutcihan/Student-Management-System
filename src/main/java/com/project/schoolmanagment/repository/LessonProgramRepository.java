@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public interface LessonProgramRepository extends JpaRepository<LessonProgram,Long> {
@@ -15,6 +16,6 @@ public interface LessonProgramRepository extends JpaRepository<LessonProgram,Lon
     Set<LessonProgram> getLessonProgramByLessonProgramIdList(@Param("lessonProgramIdList")
                                                              Set<Long> lessonProgramIdList);
 
-    @Query(value = "SELECT l FROM LessonProgram l WHERE l.id = ?1")
-    List<LessonProgram> findLessonProgramsByStudentSet_s(Long studentId);
+    List<LessonProgram> getLessonProgramByTeachersId(Long teacherId);
+    List<LessonProgram> getLessonProgramByStudentsId(Long studentId);
 }

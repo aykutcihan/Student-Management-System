@@ -8,7 +8,9 @@ import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.payload.response.StudentResponse;
 import com.project.schoolmanagment.service.StudentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -45,13 +47,23 @@ public class StudentController {
     public List<StudentResponse> getStudentByName(@RequestParam(name = "name") String studentName) {
         return studentService.getStudentByName(studentName);
     }
-    @PutMapping("/chooseLesson")
+    @PostMapping("/chooseLesson")
     public ResponseMessage<StudentResponse> chooseLesson(@RequestBody ChooseLessonRequest chooseLessonRequest){
         return studentService.chooseLesson(chooseLessonRequest);
     }
 
+    @PreAuthorize("hasAnyAuthority('TEACHER','ADMIN')")
     @GetMapping("/getAllByAdvisorId/{advisorId}")
     public List<StudentResponse> getAllTeacherByAdvisorId(@PathVariable Long advisorId){
         return studentService.getAllStudentByAdvisorId(advisorId);
+    }
+    @GetMapping("/search")
+    public Page<Student> search(
+            @RequestParam(value = "page") int page,
+            @RequestParam(value = "size") int size,
+            @RequestParam(value = "sort") String sort,
+            @RequestParam(value = "type") String type
+    ) {
+        return studentService.search(page, size, sort, type);
     }
 }

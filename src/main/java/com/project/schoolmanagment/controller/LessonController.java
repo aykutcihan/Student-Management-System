@@ -1,6 +1,7 @@
 package com.project.schoolmanagment.controller;
 
 import com.project.schoolmanagment.entity.concretes.Lesson;
+import com.project.schoolmanagment.payload.request.LessonRequest;
 import com.project.schoolmanagment.payload.response.LessonResponse;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.service.LessonService;
@@ -20,12 +21,12 @@ public class LessonController {
     private final LessonService lessonService;
 
     @PostMapping("/save")
-    public ResponseMessage<LessonResponse> save(@RequestBody @Valid Lesson lesson) {
+    public ResponseMessage<LessonResponse> save(@RequestBody @Valid LessonRequest lesson) {
         return lessonService.save(lesson);
     }
 
     @DeleteMapping("/delete/{id}")
-    public String deleteLesson(@PathVariable Long id) {
+    public ResponseMessage deleteLesson(@PathVariable Long id) {
         return lessonService.deleteLesson(id);
     }
 
