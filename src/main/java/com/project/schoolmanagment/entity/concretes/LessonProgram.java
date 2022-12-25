@@ -34,13 +34,22 @@ public class LessonProgram implements Serializable {
     private Set<Lesson> lesson;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @ManyToMany(mappedBy = "lessonsProgramList")
+    @ManyToMany(mappedBy = "lessonsProgramList", fetch = FetchType.EAGER)
     private Set<Teacher> teachers;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @ManyToMany(mappedBy = "lessonsProgramList")
+    @ManyToMany(mappedBy = "lessonsProgramList", fetch = FetchType.EAGER)
     private Set<Student> students;
 
-    //@OneToMany(mappedBy = "lessonProgram")
-    //private List<StudentInfo> studentInfoList;
+    @PreRemove
+    private void removeLessonProgramFromStudent() {
+        teachers.forEach((t) -> {
+                    t.getLessonsProgramList().remove(this);
+                }
+        );
+        students.forEach((s) -> {
+                    s.getLessonsProgramList().remove(this);
+                }
+        );
+    }
 }

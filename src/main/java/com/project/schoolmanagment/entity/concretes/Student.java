@@ -28,24 +28,24 @@ public class Student extends User {
 
     private String studentNumber;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     private AdvisorTeacher advisorTeacher;
 
 
-    @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(
             name = "student_lessonprogram",
             joinColumns = @JoinColumn(name = "student_id"),
             inverseJoinColumns = @JoinColumn(name = "lesson_program_id"))
     private Set<LessonProgram> lessonsProgramList;
 
-    @OneToMany(mappedBy = "student",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "student",cascade = CascadeType.REMOVE)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<Meet> meets;
 
     private String email;
 
-    //Error
-    @OneToMany(mappedBy = "studentId")
+    @OneToMany(mappedBy = "studentId",cascade = CascadeType.REMOVE)
     private List<StudentInfo> studentInfoList;
+
 }

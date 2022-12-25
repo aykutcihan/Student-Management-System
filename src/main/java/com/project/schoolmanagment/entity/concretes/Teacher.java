@@ -18,14 +18,14 @@ import java.util.Set;
 @ToString(callSuper = true)
 public class Teacher extends User {
 
-    @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(
             name = "teacher_lessonprogram",
             joinColumns = @JoinColumn(name = "teacher_id"),
             inverseJoinColumns = @JoinColumn(name = "lesson_program_id"))
     private Set<LessonProgram> lessonsProgramList;
 
-    @OneToOne(mappedBy = "teacher",cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "teacher",cascade = CascadeType.REMOVE, orphanRemoval = true)
     private AdvisorTeacher advisorTeacher;
 
     @Column(name = "isAdvisor")
@@ -33,7 +33,7 @@ public class Teacher extends User {
 
     private String email;
 
-    @OneToMany(mappedBy = "teacherId")
+    @OneToMany(mappedBy = "teacherId",cascade = CascadeType.REMOVE)
     private List<StudentInfo> studentInfoList;
 
 }

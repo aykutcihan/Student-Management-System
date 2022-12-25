@@ -31,9 +31,8 @@ public class AdvisorTeacherService {
 
     public void updateAdvisorTeacher(boolean status, Teacher teacher) {
         Optional<AdvisorTeacher> advisorTeacher = advisoryTeacherRepository.getAdvisorTeacherByTeacher_Id(teacher.getId());
-        AdvisorTeacher.AdvisorTeacherBuilder advisorTeacherBuilder = AdvisorTeacher.builder().teacher(teacher);
+        AdvisorTeacher.AdvisorTeacherBuilder advisorTeacherBuilder = AdvisorTeacher.builder().teacher(teacher).userRole(userRoleService.getUserRole(Role.ADVISORTEACHER));
         if (advisorTeacher.isPresent()) {
-            advisorTeacher.get().setUserRole(userRoleService.getUserRole(Role.ADVISORTEACHER));
             if (status) {
                 advisorTeacherBuilder.id(advisorTeacher.get().getId());
                 advisoryTeacherRepository.save(advisorTeacherBuilder.build());

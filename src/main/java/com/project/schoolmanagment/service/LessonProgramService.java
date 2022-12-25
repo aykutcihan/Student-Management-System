@@ -4,6 +4,7 @@ import com.project.schoolmanagment.Exception.BadRequestException;
 import com.project.schoolmanagment.Exception.ResourceNotFoundException;
 import com.project.schoolmanagment.entity.concretes.Lesson;
 import com.project.schoolmanagment.entity.concretes.LessonProgram;
+import com.project.schoolmanagment.entity.concretes.Teacher;
 import com.project.schoolmanagment.payload.Dto.LessonProgramDto;
 import com.project.schoolmanagment.payload.request.LessonProgramRequest;
 import com.project.schoolmanagment.payload.response.LessonProgramResponse;
@@ -47,7 +48,7 @@ public class LessonProgramService {
         LessonProgram savedLessonProgram = lessonProgramRepository.save(lessonProgram);
         return ResponseMessage.<LessonProgramResponse>builder()
                 .message("Created Lesson Program")
-                .object(createLessonProgramResponse(savedLessonProgram))
+                .object(createLessonProgramResponseForSaveMethod(savedLessonProgram))
                 .httpStatus(HttpStatus.CREATED).build();
     }
 
@@ -75,8 +76,18 @@ public class LessonProgramService {
         return lessonProgramRepository.getLessonProgramByLessonProgramIdList(lessonProgramIdList);
     }
 
+    public LessonProgramResponse createLessonProgramResponseForSaveMethod(LessonProgram lessonProgram){
+        return LessonProgramResponse.builder()
+                .day(lessonProgram.getDay())
+                .startTime(lessonProgram.getStartTime())
+                .stopTime(lessonProgram.getStopTime())
+                .lessonProgramId(lessonProgram.getId())
+                .lessonName(lessonProgram.getLesson())
+                .build();
+    }
+
     public LessonProgramResponse createLessonProgramResponse(LessonProgram lessonProgram){
-        return  LessonProgramResponse.builder()
+        return LessonProgramResponse.builder()
                 .day(lessonProgram.getDay())
                 .startTime(lessonProgram.getStartTime())
                 .stopTime(lessonProgram.getStopTime())
@@ -115,5 +126,16 @@ public class LessonProgramService {
         }
 
         return lessonProgramRepository.findAll(pageable);
+    }
+
+    public ResponseMessage deleteLessonProgram(Long id) {
+        Optional<LessonProgram> lessonProgram = lessonProgramRepository.findById(id);
+        if (!lessonProgram.isPresent()) {
+            throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_LESSON_MESSAGE, id));
+        }
+        lessonProgramRepository.deleteById(id);
+        return ResponseMessage.builder().message("Lesson Program Deleted")
+                .httpStatus(HttpStatus.OK)
+                .build();
     }
 }

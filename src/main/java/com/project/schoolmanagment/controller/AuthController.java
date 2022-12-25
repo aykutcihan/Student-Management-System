@@ -38,7 +38,7 @@ public class AuthController {
     ) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getSsn(), loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String token = jwtUtils.generateJwtToken(authentication);
+        String token = "Bearer "+jwtUtils.generateJwtToken(authentication);
         UserDetailsImpl user = (UserDetailsImpl) authentication.getPrincipal();
         Set<String> roles = user.getAuthorities().stream().map(item -> item.getAuthority()).collect(Collectors.toSet());
         Optional<String> role = roles.stream().findFirst();

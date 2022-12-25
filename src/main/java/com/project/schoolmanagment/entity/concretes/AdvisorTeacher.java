@@ -24,10 +24,9 @@ public class AdvisorTeacher implements Serializable {
     private Long id;
 
     @OneToOne
-    @MapsId
     private Teacher teacher;
 
-    @OneToMany
+    @OneToMany(mappedBy = "advisorTeacher",orphanRemoval = true, cascade = CascadeType.PERSIST,  fetch = FetchType.EAGER)
     private List<Student> students;
 
     @OneToOne

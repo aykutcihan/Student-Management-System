@@ -35,6 +35,12 @@ public class LessonProgramController {
         return lessonProgramService.getAllLessonProgram();
     }
 
+    @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasAnyAuthority('ASSISTANTMANAGER','ADMIN')")
+    public ResponseMessage delete(@PathVariable Long id){
+        return lessonProgramService.deleteLessonProgram(id);
+    }
+
     @GetMapping("getAllLessonProgramByTeacherId/{teacherId}")
     @PreAuthorize("hasAnyAuthority('ASSISTANTMANAGER','ADMIN','TEACHER')")
     public Set<LessonProgramResponse> getAllLessonProgramByTeacherId(@PathVariable Long teacherId){
