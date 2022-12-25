@@ -30,7 +30,7 @@ public class Meet implements Serializable {
 
     private LocalTime stopTime;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JsonIgnoreProperties({"teacher"})
     private AdvisorTeacher advisorTeacher;
 

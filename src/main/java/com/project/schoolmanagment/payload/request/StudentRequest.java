@@ -1,5 +1,6 @@
 package com.project.schoolmanagment.payload.request;
 
+import com.project.schoolmanagment.payload.request.abstracts.BaseUserRequest;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,10 +13,9 @@ import javax.validation.constraints.NotEmpty;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
-public class StudentRequest extends BaseUserRequest{
+public class StudentRequest extends BaseUserRequest {
 
     @NotEmpty
     private String motherName;

@@ -9,6 +9,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -18,9 +20,11 @@ import javax.validation.constraints.NotNull;
 @Builder(toBuilder = true)
 public class StudentInfoRequest {
 
+    @DecimalMax("100.0") @DecimalMin("0.0")
     @NotNull
     private Double midtermExam;
 
+    @DecimalMax("100.0") @DecimalMin("0.0")
     @NotNull
     private Double finalExam;
 
@@ -30,7 +34,7 @@ public class StudentInfoRequest {
     @NotEmpty
     private String infoNote;
 
-    @NotEmpty
+    @NotNull
     private Long lessonId;
 
     @NotNull

@@ -28,4 +28,8 @@ public class Admin implements Serializable {
     @OneToOne
     private UserRole role;
 
+    public Admin(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
 }

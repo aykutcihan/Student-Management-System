@@ -1,5 +1,6 @@
 package com.project.schoolmanagment.payload.request;
 
+import com.project.schoolmanagment.payload.request.abstracts.BaseUserRequest;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,7 +9,7 @@ import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
-@AllArgsConstructor
+@NoArgsConstructor
 @SuperBuilder
-public class AssistantManagerRequest extends BaseUserRequest{
+public class DeanRequest extends BaseUserRequest {
 }

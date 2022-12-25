@@ -11,5 +11,5 @@ import javax.persistence.Entity;
 @Setter
 @NoArgsConstructor
 @SuperBuilder
-public class Manager extends User {
+public class ViceDean extends User {
 }

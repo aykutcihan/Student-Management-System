@@ -1,6 +1,7 @@
-package com.project.schoolmanagment.payload.request;
+package com.project.schoolmanagment.payload.request.abstracts;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.project.schoolmanagment.entity.enums.Gender;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -28,6 +29,7 @@ public abstract class BaseUserRequest implements Serializable {
     private LocalDate birthDay;
 
     @NotEmpty
+    @Pattern(regexp="^(?!000|666)[0-8][0-9]{2}-(?!00)[0-9]{2}-(?!0000)[0-9]{4}$")
     private String ssn;
 
     @NotEmpty
@@ -42,5 +44,6 @@ public abstract class BaseUserRequest implements Serializable {
     //@Size(min = 10, max = 10, message = "Phone number should be exact 10 characters")
     private String phoneNumber;
 
-
+    @NotNull
+    private Gender gender;
 }

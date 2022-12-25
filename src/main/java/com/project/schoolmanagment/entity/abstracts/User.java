@@ -3,6 +3,7 @@ package com.project.schoolmanagment.entity.abstracts;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.project.schoolmanagment.entity.concretes.UserRole;
+import com.project.schoolmanagment.entity.enums.Gender;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -45,4 +46,7 @@ public abstract class User implements Serializable {
 
 
     private String phoneNumber;
+
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
 }

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.lang.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,11 +24,20 @@ public class UserDetailsImpl implements UserDetails {
     @JsonIgnore
     private String password;
 
+    private Boolean isAdvisor;
     private Collection<? extends GrantedAuthority> authorities;
 
     public UserDetailsImpl(String username, String password, String role) {
         this.username = username;
         this.password = password;
+        List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
+        grantedAuthorities.add(new SimpleGrantedAuthority(role));
+        this.authorities = grantedAuthorities;
+    }
+    public UserDetailsImpl(String username, String password, String role,Boolean isAdvisor) {
+        this.username = username;
+        this.password = password;
+        this.isAdvisor = isAdvisor;
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
         grantedAuthorities.add(new SimpleGrantedAuthority(role));
         this.authorities = grantedAuthorities;

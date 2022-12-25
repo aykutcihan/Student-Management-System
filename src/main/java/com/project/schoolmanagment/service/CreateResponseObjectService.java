@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 public class CreateResponseObjectService {
 
     public TeacherResponse createTeacherResponse(Teacher teacher){
-        return TeacherResponse.builder().teacherId(teacher.getId())
+        return TeacherResponse.builder().userId(teacher.getId())
                 .name(teacher.getName())
                 .surname(teacher.getSurname())
                 .ssn(teacher.getSsn())
@@ -23,7 +23,7 @@ public class CreateResponseObjectService {
     }
 
     public StudentResponse createStudentResponse(Student student) {
-        return StudentResponse.builder().studentId(student.getId())
+        return StudentResponse.builder().userId(student.getId())
                 .name(student.getName())
                 .surname(student.getSurname())
                 .ssn(student.getSsn())

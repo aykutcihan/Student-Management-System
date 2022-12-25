@@ -14,5 +14,4 @@ public class AdvisorTeacherResponse {
     private String teacherName;
     private String teacherSSN;
     private String teacherSurname;
-    private List<StudentResponse> studentResponses;
 }

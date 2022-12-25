@@ -1,11 +1,14 @@
 package com.project.schoolmanagment.controller;
 
+import com.project.schoolmanagment.entity.concretes.Lesson;
 import com.project.schoolmanagment.entity.concretes.LessonProgram;
 import com.project.schoolmanagment.payload.request.LessonProgramRequest;
 import com.project.schoolmanagment.payload.response.LessonProgramResponse;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.service.LessonProgramService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -15,27 +18,43 @@ import java.util.Set;
 @RestController
 @RequestMapping("lessonProgram")
 @RequiredArgsConstructor
+@CrossOrigin
 public class LessonProgramController {
 
     private final LessonProgramService lessonProgramService;
 
     @PostMapping("/save")
-    public ResponseMessage<LessonProgram> save(@RequestBody @Valid LessonProgramRequest lessonProgramRequest) {
+    @PreAuthorize("hasAnyAuthority('ASSISTANTMANAGER','ADMIN')")
+    public ResponseMessage<LessonProgramResponse> save(@RequestBody @Valid LessonProgramRequest lessonProgramRequest) {
         return lessonProgramService.save(lessonProgramRequest);
     }
 
     @GetMapping("/getAll")
-    public List<LessonProgram> getAll(){
+    @PreAuthorize("hasAnyAuthority('ASSISTANTMANAGER','ADMIN')")
+    public List<LessonProgramResponse> getAll(){
         return lessonProgramService.getAllLessonProgram();
     }
 
     @GetMapping("getAllLessonProgramByTeacherId/{teacherId}")
+    @PreAuthorize("hasAnyAuthority('ASSISTANTMANAGER','ADMIN','TEACHER')")
     public Set<LessonProgramResponse> getAllLessonProgramByTeacherId(@PathVariable Long teacherId){
         return lessonProgramService.getLessonProgramByTeacherId(teacherId);
     }
 
+    @PreAuthorize("hasAnyAuthority('ASSISTANTMANAGER','ADMIN','STUDENT')")
     @GetMapping("getAllLessonProgramByStudentId/{studentId}")
     public Set<LessonProgramResponse> getAllLessonProgramByStudentId(@PathVariable Long studentId){
         return lessonProgramService.getLessonProgramByStudentId(studentId);
+    }
+
+    @PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANTMANAGER')")
+    @GetMapping("/search")
+    public Page<LessonProgram> search(
+            @RequestParam(value = "page") int page,
+            @RequestParam(value = "size") int size,
+            @RequestParam(value = "sort") String sort,
+            @RequestParam(value = "type") String type
+    ) {
+        return lessonProgramService.search(page, size, sort, type);
     }
 }

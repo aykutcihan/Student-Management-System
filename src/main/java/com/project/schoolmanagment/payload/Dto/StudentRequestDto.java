@@ -10,7 +10,7 @@ import java.util.Set;
 
 public class StudentRequestDto {
 
-    public Student dtoStudent(StudentRequest studentRequest){
+    public Student dtoStudent(StudentRequest studentRequest) {
         return Student.builder().fatherName(studentRequest.getFatherName())
                 .studentNumber(studentRequest.getStudentNumber())
                 .birthDay(studentRequest.getBirthDay())
@@ -22,6 +22,7 @@ public class StudentRequestDto {
                 .birthPlace(studentRequest.getBirthPlace())
                 .phoneNumber(studentRequest.getPhoneNumber())
                 .email(studentRequest.getEmail())
+                .gender(studentRequest.getGender())
                 .build();
     }
 }

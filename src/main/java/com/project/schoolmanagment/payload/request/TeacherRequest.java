@@ -1,6 +1,7 @@
 package com.project.schoolmanagment.payload.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.project.schoolmanagment.payload.request.abstracts.BaseUserRequest;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -12,10 +13,9 @@ import java.util.Set;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
-public class TeacherRequest extends BaseUserRequest{
+public class TeacherRequest extends BaseUserRequest {
 
     @NotNull
     @Size(min = 1, message = "lessons must not empty")

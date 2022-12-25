@@ -1,25 +1,19 @@
 package com.project.schoolmanagment.payload.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.project.schoolmanagment.entity.concretes.LessonProgram;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.project.schoolmanagment.payload.response.abstracts.BaseUserResponse;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
-import javax.persistence.NamedEntityGraph;
-import java.util.List;
 import java.util.Set;
 
-@Data
-@AllArgsConstructor
+@Getter
+@Setter
 @NoArgsConstructor
-@Builder(toBuilder = true)
-public class TeacherResponse {
+@SuperBuilder
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class TeacherResponse extends BaseUserResponse {
 
-    private Long teacherId;
-    private String name;
-    private String surname;
-    private String ssn;
-    private String phoneNumber;
     private Set<LessonProgram> lessonPrograms;
 }

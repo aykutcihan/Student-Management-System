@@ -13,4 +13,10 @@ public interface TeacherRepository extends JpaRepository<Teacher,Long> {
     List<Teacher> getTeacherByNameContaining(String name);
 
     Teacher getTeacherBySsn(String ssn);
+
+    boolean existsByPhoneNumber(String studentNumber);
+    boolean existsByEmail(String studentNumber);
+
+
+
 }

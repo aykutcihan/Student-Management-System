@@ -4,7 +4,10 @@ import com.project.schoolmanagment.entity.concretes.Admin;
 import com.project.schoolmanagment.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("admin")
@@ -14,12 +17,14 @@ public class AdminController {
     private final AdminService adminService;
 
     @PostMapping("/save")
-    public ResponseEntity<?> save(@RequestBody Admin admin){
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public ResponseEntity<?> save(@RequestBody @Valid Admin admin){
         return ResponseEntity.ok(adminService.save(admin));
     }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity<String> save(@PathVariable Long id){
+    @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public ResponseEntity<String> delete(@PathVariable Long id){
         return ResponseEntity.ok(adminService.deleteAdmin(id));
     }
 

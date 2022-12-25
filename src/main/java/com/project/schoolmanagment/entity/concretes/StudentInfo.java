@@ -1,6 +1,9 @@
 package com.project.schoolmanagment.entity.concretes;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.project.schoolmanagment.entity.enums.Gender;
+import com.project.schoolmanagment.entity.enums.Note;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,6 +31,11 @@ public class StudentInfo {
     private String infoNote;
 
     private String lessonName;
+
+    private Double examAverage;
+
+    @Enumerated(EnumType.STRING)
+    private Note letterGrade;
 
     @ManyToOne
     @JsonIgnoreProperties("lessonsProgramList")

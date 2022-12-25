@@ -27,8 +27,6 @@ public class JwtUtils implements Serializable {
 
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
 
-        System.out.println("UserName {}"+userPrincipal.getUsername());
-        System.out.println("Role {}"+userPrincipal.getAuthorities().stream().findFirst().get().getAuthority());
         return Jwts.builder().setSubject(userPrincipal.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))

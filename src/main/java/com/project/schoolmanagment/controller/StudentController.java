@@ -19,45 +19,53 @@ import java.util.List;
 @RestController
 @RequestMapping("student")
 @RequiredArgsConstructor
+@CrossOrigin
 public class StudentController {
 
     private final StudentService studentService;
 
+    @PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANTMANAGER')")
     @PostMapping("/save")
     public ResponseMessage<StudentResponse> save(@RequestBody @Valid StudentRequest studentRequest) {
         return studentService.save(studentRequest);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANTMANAGER')")
     @GetMapping("/getAll")
     public List<StudentResponse> getAllTeacher() {
         return studentService.getAllStudent();
     }
 
     @PutMapping("/update/{userId}")
-    public ResponseMessage<StudentResponse> updateStudent(@PathVariable Long userId, @RequestBody StudentRequest studentRequest) {
+    @PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANTMANAGER')")
+    public ResponseMessage<StudentResponse> updateStudent(@PathVariable Long userId, @RequestBody @Valid StudentRequest studentRequest) {
         return studentService.updateStudent(userId, studentRequest);
     }
 
     @DeleteMapping("/delete/{studentId}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANTMANAGER')")
     public ResponseMessage deleteStudent(@PathVariable Long studentId) {
         return studentService.deleteStudent(studentId);
     }
 
     @GetMapping("/getStudentByName")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANTMANAGER')")
     public List<StudentResponse> getStudentByName(@RequestParam(name = "name") String studentName) {
         return studentService.getStudentByName(studentName);
     }
     @PostMapping("/chooseLesson")
+    @PreAuthorize("hasAnyAuthority('STUDENT','ADMIN')")
     public ResponseMessage<StudentResponse> chooseLesson(@RequestBody ChooseLessonRequest chooseLessonRequest){
         return studentService.chooseLesson(chooseLessonRequest);
     }
 
     @PreAuthorize("hasAnyAuthority('TEACHER','ADMIN')")
     @GetMapping("/getAllByAdvisorId/{advisorId}")
-    public List<StudentResponse> getAllTeacherByAdvisorId(@PathVariable Long advisorId){
+    public List<StudentResponse> getAllStudentByAdvisorId(@PathVariable Long advisorId){
         return studentService.getAllStudentByAdvisorId(advisorId);
     }
     @GetMapping("/search")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANTMANAGER')")
     public Page<Student> search(
             @RequestParam(value = "page") int page,
             @RequestParam(value = "size") int size,

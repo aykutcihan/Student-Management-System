@@ -18,4 +18,6 @@ public interface LessonProgramRepository extends JpaRepository<LessonProgram,Lon
 
     List<LessonProgram> getLessonProgramByTeachersId(Long teacherId);
     List<LessonProgram> getLessonProgramByStudentsId(Long studentId);
+
+
 }

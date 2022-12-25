@@ -1,6 +1,7 @@
 package com.project.schoolmanagment.service;
 
 import com.project.schoolmanagment.Exception.BadRequestException;
+import com.project.schoolmanagment.Exception.ConflictException;
 import com.project.schoolmanagment.Exception.ResourceNotFoundException;
 import com.project.schoolmanagment.entity.concretes.*;
 import com.project.schoolmanagment.entity.enums.Role;
@@ -9,6 +10,7 @@ import com.project.schoolmanagment.payload.request.ChooseLessonRequest;
 import com.project.schoolmanagment.payload.request.StudentRequest;
 import com.project.schoolmanagment.payload.response.*;
 import com.project.schoolmanagment.repository.StudentRepository;
+import com.project.schoolmanagment.service.util.CheckSameLessonProgram;
 import com.project.schoolmanagment.utils.Messages;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -16,7 +18,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -40,19 +41,22 @@ public class StudentService {
 
     private final PasswordEncoder passwordEncoder;
 
-    //telefon pattern düzenlenecek
     public ResponseMessage<StudentResponse> save(StudentRequest studentRequest) {
         Optional<AdvisorTeacher> advisorTeacher = advisorTeacherService.getAdvisorTeacherById(studentRequest.getAdvisorTeacherId());
         ResponseMessage.ResponseMessageBuilder<StudentResponse> responseMessageBuilder = ResponseMessage.builder();
         if (studentRepository.existsBySsn(studentRequest.getSsn())) {
-            throw new BadRequestException(String.format(Messages.ALREADY_REGISTER_MESSAGE_SSN, studentRequest.getSsn()));
+            throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_SSN, studentRequest.getSsn()));
         } else if (!advisorTeacher.isPresent()) {
             throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_ADVISOR_MESSAGE, studentRequest.getAdvisorTeacherId()));
         } else if (studentRepository.existsByStudentNumber(studentRequest.getStudentNumber())) {
-            throw new BadRequestException(String.format(Messages.ALREADY_REGISTER_MESSAGE_STUDENT_NUMBER, studentRequest.getStudentNumber()));
+            throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_STUDENT_NUMBER, studentRequest.getStudentNumber()));
+        } else if (studentRepository.existsByEmail(studentRequest.getEmail())) {
+            throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_EMAIL, studentRequest.getEmail()));
+        } else if (studentRepository.existsByPhoneNumber(studentRequest.getPhoneNumber())) {
+            throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_PHONE_NUMBER, studentRequest.getPhoneNumber()));
         }
+
         Student student = studentRequestToDto(studentRequest);
-        //student.setParent(); from parent service
         student.setAdvisorTeacher(advisorTeacher.get());
         student.setUserRole(userRoleService.getUserRole(Role.STUDENT));
         student.setPassword(passwordEncoder.encode(studentRequest.getPassword()));
@@ -70,38 +74,38 @@ public class StudentService {
         ResponseMessage.ResponseMessageBuilder<StudentResponse> responseMessageBuilder = ResponseMessage.builder();
         if (!student.isPresent()) {
             throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_USER_MESSAGE, userId));
-        } else if (studentRepository.existsBySsn(studentRequest.getSsn())) {
-            throw new BadRequestException(String.format(Messages.ALREADY_REGISTER_MESSAGE_SSN, studentRequest.getSsn()));
-        } else if (!advisorTeacher.isPresent()) {
-            throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_ADVISOR_MESSAGE, studentRequest.getAdvisorTeacherId()));
-        } else if (studentRepository.existsByStudentNumber(studentRequest.getStudentNumber())) {
-            throw new BadRequestException(String.format(Messages.ALREADY_REGISTER_MESSAGE_STUDENT_NUMBER, studentRequest.getStudentNumber()));
+        } else if (!checkParameterForUpdateMethod(student.get(), studentRequest)) {
+            if (studentRepository.existsBySsn(studentRequest.getSsn())) {
+                throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_SSN, studentRequest.getSsn()));
+            } else if (!advisorTeacher.isPresent()) {
+                throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_ADVISOR_MESSAGE, studentRequest.getAdvisorTeacherId()));
+            } else if (studentRepository.existsByStudentNumber(studentRequest.getStudentNumber())) {
+                throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_STUDENT_NUMBER, studentRequest.getStudentNumber()));
+            } else if (studentRepository.existsByEmail(studentRequest.getEmail())) {
+                throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_EMAIL, studentRequest.getEmail()));
+            }
         }
         Student updateStudent = createUpdatedStudent(studentRequest, userId);
-        updateStudent.setUserRole(userRoleService.getUserRole(Role.STUDENT));
+        updateStudent.setPassword(passwordEncoder.encode(studentRequest.getPassword()));
         studentRepository.save(updateStudent);
         return responseMessageBuilder.object(responseObjectService.createStudentResponse(updateStudent))
-                .message("Teacher updated Successfully").build();
+                .message("Student updated Successfully").build();
 
     }
 
     public ResponseMessage deleteStudent(Long studentId) {
         Optional<Student> student = studentRepository.findById(studentId);
-        if (student.isPresent()) {
-            studentRepository.deleteById(studentId);
-            return ResponseMessage.builder().message("Student Deleted")
-                    .httpStatus(HttpStatus.OK)
-                    .build();
+        if (!student.isPresent()) {
+            throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_USER_MESSAGE, studentId));
         }
-        throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_USER_MESSAGE, studentId));
+        studentRepository.deleteById(studentId);
+        return ResponseMessage.builder().message("Student Deleted")
+                .httpStatus(HttpStatus.OK)
+                .build();
     }
 
     private Student studentRequestToDto(StudentRequest studentRequest) {
         return studentRequestDto.dtoStudent(studentRequest);
-    }
-
-    private Set<Lesson> getLessonsByLessonId(Set<Long> idList) {
-        return lessonService.getLessonByLessonNameList(idList);
     }
 
     private Student createUpdatedStudent(StudentRequest studentRequest, Long userId) {
@@ -111,11 +115,13 @@ public class StudentService {
                 .ssn(studentRequest.getSsn())
                 .birthDay(studentRequest.getBirthDay())
                 .birthPlace(studentRequest.getBirthPlace())
-                .password(studentRequest.getPassword())
                 .motherName(studentRequest.getMotherName())
                 .fatherName(studentRequest.getFatherName())
                 .studentNumber(studentRequest.getStudentNumber())
                 .phoneNumber(studentRequest.getPhoneNumber())
+                .gender(studentRequest.getGender())
+                .email(studentRequest.getEmail())
+                .userRole(userRoleService.getUserRole(Role.STUDENT))
                 .build();
     }
 
@@ -130,19 +136,20 @@ public class StudentService {
         }
         Set<LessonProgram> studentLessonProgram = student.get().getLessonsProgramList();
 
-        CheckSameLessonProgram.checkLessonPrograms(studentLessonProgram,lessonPrograms);
+        CheckSameLessonProgram.checkLessonPrograms(studentLessonProgram, lessonPrograms);
 
         studentLessonProgram.addAll(lessonPrograms);
         student.get().setLessonsProgramList(studentLessonProgram);
         Student savedStudent = studentRepository.save(student.get());
         return ResponseMessage.<StudentResponse>builder()
-                .message("Lesson added")
+                .message("Lesson added to Student")
                 .object(responseObjectService.createStudentResponse(savedStudent))
                 .httpStatus(HttpStatus.CREATED)
                 .build();
 
     }
-    public Optional<Student> getStudentById(Long studentId){
+
+    public Optional<Student> getStudentById(Long studentId) {
         return studentRepository.findById(studentId);
     }
 
@@ -156,14 +163,6 @@ public class StudentService {
                 .collect(Collectors.toList());
     }
 
-    public Set<Student> getStudentsByIdList(Set<Long> idList) {
-        return studentRepository.getStudentsByStudentIdList(idList);
-    }
-
-    public Optional<AdvisorTeacher> getAdvisorTeacherById(Long userId) {
-        return advisorTeacherService.getAdvisorTeacherById(userId);
-    }
-
     public Page<Student> search(int page, int size, String sort, String type) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sort).ascending());
         if (Objects.equals(type, "desc")) {
@@ -171,5 +170,12 @@ public class StudentService {
         }
 
         return studentRepository.findAll(pageable);
+    }
+
+    private boolean checkParameterForUpdateMethod(Student student, StudentRequest newStudentRequest) {
+        return student.getSsn().equalsIgnoreCase(newStudentRequest.getSsn())
+                || student.getPhoneNumber().equalsIgnoreCase(newStudentRequest.getPhoneNumber())
+                || student.getEmail().equalsIgnoreCase(newStudentRequest.getEmail())
+                || student.getStudentNumber().equalsIgnoreCase(newStudentRequest.getStudentNumber());
     }
 }

@@ -34,7 +34,7 @@ public class AdvisorTeacher implements Serializable {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private UserRole userRole;
 
-    @OneToMany
+    @OneToMany(mappedBy = "advisorTeacher",cascade = CascadeType.ALL)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<Meet> meets;
 }

@@ -1,7 +1,6 @@
 package com.project.schoolmanagment.config;
 
 import com.project.schoolmanagment.payload.Dto.*;
-import com.project.schoolmanagment.payload.request.TeacherRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -9,25 +8,32 @@ import org.springframework.context.annotation.Configuration;
 public class CreateObjectBean {
 
     @Bean
-    public TeacherRequestDto teacherRequestDto(){
+    public TeacherRequestDto teacherRequestDto() {
         return new TeacherRequestDto();
-    }
-    @Bean
-    public StudentRequestDto studentRequestDto(){
-        return new StudentRequestDto();
-    }
-    
-    @Bean
-    public LessonProgramDto lessonProgramRequestDto(){
-        return new LessonProgramDto();
-    }
-    @Bean
-    public AssistantManagerDto assistantManagerDto(){
-        return new AssistantManagerDto();
     }
 
     @Bean
-    public MeetDto meetDto(){
+    public StudentRequestDto studentRequestDto() {
+        return new StudentRequestDto();
+    }
+
+    @Bean
+    public LessonProgramDto lessonProgramRequestDto() {
+        return new LessonProgramDto();
+    }
+
+    @Bean
+    public ViceDeanDto viceDeanDto() {
+        return new ViceDeanDto();
+    }
+
+    @Bean
+    public DeanDto DeanDto() {
+        return new DeanDto();
+    }
+
+    @Bean
+    public MeetDto meetDto() {
         return new MeetDto();
     }
 }

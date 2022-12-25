@@ -1,6 +1,6 @@
 package com.project.schoolmanagment.utils;
 
-import com.project.schoolmanagment.entity.concretes.Day;
+import com.project.schoolmanagment.entity.enums.Day;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

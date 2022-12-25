@@ -15,6 +15,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,7 +24,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true,securedEnabled = true)
 @RequiredArgsConstructor
 public class WebSecurityConfig{
 
@@ -47,7 +48,7 @@ public class WebSecurityConfig{
         http.exceptionHandling().authenticationEntryPoint(unauthorizedHandler);
 
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/auth/login").permitAll()
-                .and().authorizeRequests().antMatchers("/**").hasAuthority("ADMIN");
+                .and().authorizeRequests().antMatchers("/**").authenticated();
 
         http.authenticationManager(authenticationManager);
 
@@ -68,10 +69,15 @@ public class WebSecurityConfig{
         return new BCryptPasswordEncoder();
     }
 
-
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers( "/swagger-ui.html", "/v2/api-docs",
-                "/configuration/**", "/swagger-resources/**",  "/webjars/**", "/api-docs/**");
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring()
+                .antMatchers("/api/auth/**")
+                .antMatchers("/v2/api-docs/**")
+                .antMatchers("configuration/**")
+                .antMatchers("/swagger*/**")
+                .antMatchers("/webjars/**")
+                .antMatchers("/swagger-ui/**");
     }
 
 }

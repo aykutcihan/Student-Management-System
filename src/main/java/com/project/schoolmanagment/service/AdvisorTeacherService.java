@@ -1,5 +1,6 @@
 package com.project.schoolmanagment.service;
 
+import com.project.schoolmanagment.Exception.ResourceNotFoundException;
 import com.project.schoolmanagment.entity.concretes.AdvisorTeacher;
 import com.project.schoolmanagment.entity.concretes.Teacher;
 import com.project.schoolmanagment.entity.enums.Role;
@@ -32,6 +33,7 @@ public class AdvisorTeacherService {
         Optional<AdvisorTeacher> advisorTeacher = advisoryTeacherRepository.getAdvisorTeacherByTeacher_Id(teacher.getId());
         AdvisorTeacher.AdvisorTeacherBuilder advisorTeacherBuilder = AdvisorTeacher.builder().teacher(teacher);
         if (advisorTeacher.isPresent()) {
+            advisorTeacher.get().setUserRole(userRoleService.getUserRole(Role.ADVISORTEACHER));
             if (status) {
                 advisorTeacherBuilder.id(advisorTeacher.get().getId());
                 advisoryTeacherRepository.save(advisorTeacherBuilder.build());
@@ -53,33 +55,23 @@ public class AdvisorTeacherService {
 
     }
 
-    public boolean checkAdvisorTeacher(Long id) {
-        return advisoryTeacherRepository.existsById(id);
-    }
-
     public ResponseMessage deleteAdvisorTeacher(Long id) {
         Optional<AdvisorTeacher> advisorTeacher = advisoryTeacherRepository.findById(id);
-        if (advisorTeacher.isPresent()) {
-            advisoryTeacherRepository.deleteById(advisorTeacher.get().getId());
-            return ResponseMessage.<AdvisorTeacher>builder()
-                    .message("Advisor Teacher deleted Successfully")
-                    .httpStatus(HttpStatus.OK).build();
+        if (!advisorTeacher.isPresent()) {
+            throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_ADVISOR_MESSAGE, id));
         }
+        advisoryTeacherRepository.deleteById(advisorTeacher.get().getId());
+        advisoryTeacherRepository.flush();
         return ResponseMessage.<AdvisorTeacher>builder()
-                .message(Messages.NOT_FOUND_USER_MESSAGE)
-                .httpStatus(HttpStatus.NOT_FOUND).build();
-
+                .message("Advisor Teacher deleted Successfully")
+                .httpStatus(HttpStatus.OK).build();
     }
 
     private AdvisorTeacherResponse createResponseObject(AdvisorTeacher advisorTeacher) {
-        List<StudentResponse> studentResponse = advisorTeacher.getStudents().stream().map((e) ->
-                        StudentResponse.builder().ssn(e.getSsn()).surname(e.getSurname()).name(e.getName()).build()).
-                collect(Collectors.toList());
         return AdvisorTeacherResponse.builder().advisorTeacherId(advisorTeacher.getId())
                 .teacherName(advisorTeacher.getTeacher().getName())
                 .teacherSurname(advisorTeacher.getTeacher().getSurname())
-                .teacherSSN(advisorTeacher.getTeacher().getSsn())
-                .studentResponses(studentResponse).build();
+                .teacherSSN(advisorTeacher.getTeacher().getSsn()).build();
     }
 
 }

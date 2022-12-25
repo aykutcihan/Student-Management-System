@@ -1,5 +1,6 @@
 package com.project.schoolmanagment.service;
 
+import com.project.schoolmanagment.Exception.ConflictException;
 import com.project.schoolmanagment.entity.concretes.Admin;
 import com.project.schoolmanagment.entity.concretes.Teacher;
 import com.project.schoolmanagment.entity.enums.Role;
@@ -23,17 +24,16 @@ public class AdminService {
     private final PasswordEncoder passwordEncoder;
 
     public Admin save(Admin admin) {
+        if(adminRepository.existsByUsername(admin.getUsername().trim())){
+            throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_SSN, admin.getUsername()));
+        }
         admin.setRole(userRoleService.getUserRole(Role.ADMIN));
         admin.setPassword(passwordEncoder.encode(admin.getPassword()));
         return adminRepository.save(admin);
     }
 
-    public List<Admin> getAllTeacher() {
+    public List<Admin> getAllAdmin() {
         return adminRepository.findAll();
-    }
-
-    public Admin updateAdmin(Admin admin) {
-        return null;
     }
 
     public String deleteAdmin(Long id) {

@@ -1,4 +1,4 @@
-package com.project.schoolmanagment.service;
+package com.project.schoolmanagment.service.util;
 
 import com.project.schoolmanagment.Exception.BadRequestException;
 import com.project.schoolmanagment.entity.concretes.LessonProgram;

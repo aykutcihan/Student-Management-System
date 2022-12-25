@@ -25,14 +25,15 @@ public class Teacher extends User {
             inverseJoinColumns = @JoinColumn(name = "lesson_program_id"))
     private Set<LessonProgram> lessonsProgramList;
 
-    @OneToOne(mappedBy = "teacher",cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToOne(mappedBy = "teacher",cascade = CascadeType.ALL)
     private AdvisorTeacher advisorTeacher;
 
-    @Transient
-    private boolean isAdvisorTeacher;
+    @Column(name = "isAdvisor")
+    private Boolean isAdvisor;
 
     private String email;
 
     @OneToMany(mappedBy = "teacherId")
     private List<StudentInfo> studentInfoList;
+
 }
