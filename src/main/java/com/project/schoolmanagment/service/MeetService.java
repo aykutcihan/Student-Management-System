@@ -7,8 +7,12 @@ import com.project.schoolmanagment.Exception.ResourceNotFoundException;
 import com.project.schoolmanagment.entity.concretes.AdvisorTeacher;
 import com.project.schoolmanagment.entity.concretes.Meet;
 import com.project.schoolmanagment.entity.concretes.Student;
+import com.project.schoolmanagment.entity.concretes.Teacher;
+import com.project.schoolmanagment.entity.enums.Role;
 import com.project.schoolmanagment.payload.Dto.MeetDto;
 import com.project.schoolmanagment.payload.request.MeetRequest;
+import com.project.schoolmanagment.payload.request.TeacherRequest;
+import com.project.schoolmanagment.payload.request.UpdateRequest.UpdateMeetRequest;
 import com.project.schoolmanagment.payload.response.MeetResponse;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.repository.MeetRepository;
@@ -23,6 +27,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -35,7 +41,7 @@ public class MeetService {
     private final MeetRepository meetRepository;
     private final AdvisorTeacherService advisorTeacherService;
     private final StudentService studentService;
-    private final MeetDto meetDto;
+    private final MeetDto meetDtoObject;
 
     public ResponseMessage<MeetResponse> save(MeetRequest meetRequest) {
         Optional<Student> student = studentService.getStudentById(meetRequest.getStudentId());
@@ -50,7 +56,7 @@ public class MeetService {
         }
         List<Meet> meets = getAllMeetsByStudentId(student.get().getId());
 
-        checkMeetConflict(meets,meetRequest);
+        checkMeetConflict(meets,meetRequest.getDate(),meetRequest.getStartTime());
 
         Meet meet = meetRequestToDto(meetRequest);
         meet.setAdvisorTeacher(advisorTeacher.get());
@@ -62,32 +68,25 @@ public class MeetService {
                 .httpStatus(HttpStatus.CREATED).build();
     }
 
-    public ResponseMessage<MeetResponse> update(MeetRequest meetRequest,Long meetId) {
+    public ResponseMessage<MeetResponse> update(UpdateMeetRequest meetRequest, Long meetId) {
         Optional<Meet> getMeet = meetRepository.findById(meetId);
-        Optional<Student> student = studentService.getStudentById(meetRequest.getStudentId());
-        Optional<AdvisorTeacher> advisorTeacher = advisorTeacherService.getAdvisorTeacherById(meetRequest.getAdvisorTeacherId());
         if(!getMeet.isPresent()){
             throw new ResourceNotFoundException(String.format(Messages.MEET_NOT_FOUND_MESSAGE, meetId));
-        }
-       else if (!student.isPresent()) {
-            throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_USER_MESSAGE, meetRequest.getStudentId()));
-        } else if (!advisorTeacher.isPresent()) {
-            throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_ADVISOR_MESSAGE, meetRequest.getAdvisorTeacherId()));
         }
         else if(TimeControl.check(meetRequest.getStartTime(),meetRequest.getStopTime())){
             throw new BadRequestException(Messages.TIME_NOT_VALID_MESSAGE);
         }
-        List<Meet> meets = getAllMeetsByStudentId(student.get().getId());
-        checkMeetConflict(meets,meetRequest);
+        List<Meet> meets = getAllMeetsByStudentId(getMeet.get().getStudent().getId());
+        checkMeetConflict(meets,meetRequest.getDate(),meetRequest.getStartTime());
 
-        Meet meet = meetRequestToDto(meetRequest);
-        meet.setAdvisorTeacher(advisorTeacher.get());
-        meet.setStudent(student.get());
+        Meet meet = createUpdatedMeet(meetRequest,meetId);
+        meet.setAdvisorTeacher(getMeet.get().getAdvisorTeacher());
+        meet.setStudent(getMeet.get().getStudent());
         Meet updatedMeet = meetRepository.save(meet);
-        sendMailToService(updatedMeet,"updated meet",student.get().getEmail());
+        sendMailToService(updatedMeet,"updated meet",meet.getStudent().getEmail());
         return ResponseMessage.<MeetResponse>builder().message("Meet Updated Successfully")
                 .object(createMeetResponse(updatedMeet))
-                .httpStatus(HttpStatus.CREATED).build();
+                .httpStatus(HttpStatus.OK).build();
     }
 
     public ResponseMessage<MeetResponse> getMeetById(Long meetId) {
@@ -113,7 +112,7 @@ public class MeetService {
     }
 
     private Meet meetRequestToDto(MeetRequest meetRequest) {
-        return meetDto.meetDto(meetRequest);
+        return meetDtoObject.meetDto(meetRequest);
     }
 
     public List<MeetResponse> getAllMeetByStudent(Long studentId) {
@@ -168,10 +167,10 @@ public class MeetService {
         }
     }
 
-    private void checkMeetConflict(List<Meet> meets,MeetRequest meetRequest){
+    private void checkMeetConflict(List<Meet> meets, LocalDate date, LocalTime startTime){
         if(meets.size()>0){
             for(Meet meetOne : meets){
-                if(meetOne.getDate().equals(meetRequest.getDate()) && meetOne.getStartTime().equals(meetRequest.getStartTime())){
+                if(meetOne.getDate().equals(date) && meetOne.getStartTime().equals(startTime)){
                     throw new ConflictException(Messages.MEET_EXIST_MESSAGE);
                 }
             }
@@ -181,12 +180,21 @@ public class MeetService {
        return meetRepository.getAllMeetByStudent_Id(studentId);
     }
 
-    public Page<Meet> search(int page, int size, String sort, String type) {
+    public Page<MeetResponse> search(int page, int size, String sort, String type) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sort).ascending());
         if (Objects.equals(type, "desc")) {
             pageable = PageRequest.of(page, size, Sort.by(sort).descending());
         }
 
-        return meetRepository.findAll(pageable);
+        return meetRepository.findAll(pageable).map(this::createMeetResponse);
+    }
+
+    private Meet createUpdatedMeet(UpdateMeetRequest updateMeetRequest, Long id) {
+        return Meet.builder().id(id)
+                .startTime(updateMeetRequest.getStartTime())
+                .stopTime(updateMeetRequest.getStopTime())
+                .date(updateMeetRequest.getDate())
+                .description(updateMeetRequest.getDescription())
+                .build();
     }
 }

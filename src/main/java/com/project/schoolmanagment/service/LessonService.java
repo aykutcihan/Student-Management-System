@@ -67,6 +67,15 @@ public class LessonService {
     public Optional<Lesson> getLessonById(Long lessonId){
         return lessonRepository.findById(lessonId);
     }
+
+    public Page<LessonResponse> search(int page, int size, String sort, String type) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sort).ascending());
+        if (Objects.equals(type, "desc")) {
+            pageable = PageRequest.of(page, size, Sort.by(sort).descending());
+        }
+
+        return lessonRepository.findAll(pageable).map(this::createLessonResponse);
+    }
     public boolean existsLessonByLessonName(String lessonName) {
         return lessonRepository.existsLessonByLessonNameEqualsIgnoreCase(lessonName);
     }
@@ -87,12 +96,5 @@ public class LessonService {
        return Lesson.builder().lessonName(lessonRequest.getLessonName()).build();
     }
 
-    public Page<Lesson> search(int page, int size, String sort, String type) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sort).ascending());
-        if (Objects.equals(type, "desc")) {
-            pageable = PageRequest.of(page, size, Sort.by(sort).descending());
-        }
 
-        return lessonRepository.findAll(pageable);
-    }
 }

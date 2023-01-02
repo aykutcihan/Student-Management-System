@@ -7,13 +7,19 @@ import com.project.schoolmanagment.entity.enums.Role;
 import com.project.schoolmanagment.payload.response.AdvisorTeacherResponse;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.payload.response.StudentResponse;
+import com.project.schoolmanagment.payload.response.ViceDeanResponse;
 import com.project.schoolmanagment.repository.AdvisoryTeacherRepository;
 import com.project.schoolmanagment.utils.Messages;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -45,7 +51,6 @@ public class AdvisorTeacherService {
     }
 
     public List<AdvisorTeacherResponse> getAllAdvisorTeacher() {
-        //response obje oluşturulacak
         return advisoryTeacherRepository.findAll().stream().map(this::createResponseObject).collect(Collectors.toList());
     }
 
@@ -73,4 +78,12 @@ public class AdvisorTeacherService {
                 .teacherSSN(advisorTeacher.getTeacher().getSsn()).build();
     }
 
+    public Page<AdvisorTeacherResponse> search(int page, int size, String sort, String type) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sort).ascending());
+        if (Objects.equals(type, "desc")) {
+            pageable = PageRequest.of(page, size, Sort.by(sort).descending());
+        }
+
+        return advisoryTeacherRepository.findAll(pageable).map(this::createResponseObject);
+    }
 }

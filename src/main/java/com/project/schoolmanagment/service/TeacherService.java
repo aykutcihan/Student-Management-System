@@ -154,13 +154,13 @@ public class TeacherService {
                 .collect(Collectors.toList());
     }
 
-    public Page<Teacher> search(int page, int size, String sort, String type) {
+    public Page<TeacherResponse> search(int page, int size, String sort, String type) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sort).ascending());
         if (Objects.equals(type, "desc")) {
             pageable = PageRequest.of(page, size, Sort.by(sort).descending());
         }
 
-        return teacherRepository.findAll(pageable);
+        return teacherRepository.findAll(pageable).map(responseObjectService::createTeacherResponse);
     }
 
     public ResponseMessage<TeacherResponse> chooseLesson(ChooseLessonTeacherRequest chooseLessonRequest) {

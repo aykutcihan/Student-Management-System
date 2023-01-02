@@ -125,6 +125,15 @@ public class DeanService {
 
     }
 
+    public Page<DeanResponse> search(int page, int size, String sort, String type) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sort).ascending());
+        if (Objects.equals(type, "desc")) {
+            pageable = PageRequest.of(page, size, Sort.by(sort).descending());
+        }
+
+        return deanRepository.findAll(pageable).map(this::createDeanResponse);
+    }
+
     private DeanResponse createDeanResponse(Dean dean) {
         return DeanResponse.builder().userId(dean.getId())
                 .name(dean.getName())
@@ -138,12 +147,5 @@ public class DeanService {
         return deanDto.dtoDean(deanRequest);
     }
 
-    public Page<Dean> search(int page, int size, String sort, String type) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sort).ascending());
-        if (Objects.equals(type, "desc")) {
-            pageable = PageRequest.of(page, size, Sort.by(sort).descending());
-        }
 
-        return deanRepository.findAll(pageable);
-    }
 }

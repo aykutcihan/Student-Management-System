@@ -55,7 +55,7 @@ public class LessonProgramController {
 
     @PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANTMANAGER')")
     @GetMapping("/search")
-    public Page<LessonProgram> search(
+    public Page<LessonProgramResponse> search(
             @RequestParam(value = "page") int page,
             @RequestParam(value = "size") int size,
             @RequestParam(value = "sort") String sort,

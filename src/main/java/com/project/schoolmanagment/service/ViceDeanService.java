@@ -133,12 +133,12 @@ public class ViceDeanService {
                 .gender(viceDean.getGender())
                 .build();
     }
-    public Page<ViceDean> search(int page, int size, String sort, String type) {
+    public Page<ViceDeanResponse> search(int page, int size, String sort, String type) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sort).ascending());
         if (Objects.equals(type, "desc")) {
             pageable = PageRequest.of(page, size, Sort.by(sort).descending());
         }
 
-        return viceDeanRepository.findAll(pageable);
+        return viceDeanRepository.findAll(pageable).map(this::createViceDeanResponse);
     }
 }

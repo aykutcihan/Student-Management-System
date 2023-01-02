@@ -53,7 +53,7 @@ public class ViceDeanController {
     }
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
     @GetMapping("/search")
-    public Page<ViceDean> search(
+    public Page<ViceDeanResponse> search(
             @RequestParam(value = "page") int page,
             @RequestParam(value = "size") int size,
             @RequestParam(value = "sort") String sort,

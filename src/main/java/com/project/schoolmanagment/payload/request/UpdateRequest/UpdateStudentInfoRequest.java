@@ -1,4 +1,4 @@
-package com.project.schoolmanagment.payload.request;
+package com.project.schoolmanagment.payload.request.UpdateRequest;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

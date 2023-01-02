@@ -163,13 +163,13 @@ public class StudentService {
                 .collect(Collectors.toList());
     }
 
-    public Page<Student> search(int page, int size, String sort, String type) {
+    public Page<StudentResponse> search(int page, int size, String sort, String type) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sort).ascending());
         if (Objects.equals(type, "desc")) {
             pageable = PageRequest.of(page, size, Sort.by(sort).descending());
         }
 
-        return studentRepository.findAll(pageable);
+        return studentRepository.findAll(pageable).map(responseObjectService::createStudentResponse);
     }
 
     private boolean checkParameterForUpdateMethod(Student student, StudentRequest newStudentRequest) {

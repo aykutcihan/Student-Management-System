@@ -3,6 +3,7 @@ package com.project.schoolmanagment.controller;
 import com.project.schoolmanagment.entity.concretes.LessonProgram;
 import com.project.schoolmanagment.entity.concretes.Meet;
 import com.project.schoolmanagment.payload.request.MeetRequest;
+import com.project.schoolmanagment.payload.request.UpdateRequest.UpdateMeetRequest;
 import com.project.schoolmanagment.payload.response.MeetResponse;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.service.MeetService;
@@ -55,7 +56,7 @@ public class MeetController {
 
     @PreAuthorize("hasAnyAuthority('TEACHER','ADMIN')")
     @PutMapping("/update/{meetId}")
-    public ResponseMessage<MeetResponse> update(@RequestBody @Valid MeetRequest meetRequest,@PathVariable Long meetId){
+    public ResponseMessage<MeetResponse> update(@RequestBody @Valid UpdateMeetRequest meetRequest, @PathVariable Long meetId){
         return meetService.update(meetRequest,meetId);
     }
 
@@ -66,7 +67,7 @@ public class MeetController {
     }
     @PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANTMANAGER','TEACHER')")
     @GetMapping("/search")
-    public Page<Meet> search(
+    public Page<MeetResponse> search(
             @RequestParam(value = "page") int page,
             @RequestParam(value = "size") int size,
             @RequestParam(value = "sort") String sort,

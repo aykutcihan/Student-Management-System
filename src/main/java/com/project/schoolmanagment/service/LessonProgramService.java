@@ -119,13 +119,13 @@ public class LessonProgramService {
                 .build();
     }
 
-    public Page<LessonProgram> search(int page, int size, String sort, String type) {
+    public Page<LessonProgramResponse> search(int page, int size, String sort, String type) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sort).ascending());
         if (Objects.equals(type, "desc")) {
             pageable = PageRequest.of(page, size, Sort.by(sort).descending());
         }
 
-        return lessonProgramRepository.findAll(pageable);
+        return lessonProgramRepository.findAll(pageable).map(this::createLessonProgramResponse);
     }
 
     public ResponseMessage deleteLessonProgram(Long id) {

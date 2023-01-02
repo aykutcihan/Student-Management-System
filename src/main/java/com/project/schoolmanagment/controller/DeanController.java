@@ -53,7 +53,7 @@ public class DeanController {
 
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     @GetMapping("/search")
-    public Page<Dean> search(
+    public Page<DeanResponse> search(
             @RequestParam(value = "page") int page,
             @RequestParam(value = "size") int size,
             @RequestParam(value = "sort") String sort,

@@ -66,7 +66,7 @@ public class StudentController {
     }
     @GetMapping("/search")
     @PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANTMANAGER')")
-    public Page<Student> search(
+    public Page<StudentResponse> search(
             @RequestParam(value = "page") int page,
             @RequestParam(value = "size") int size,
             @RequestParam(value = "sort") String sort,

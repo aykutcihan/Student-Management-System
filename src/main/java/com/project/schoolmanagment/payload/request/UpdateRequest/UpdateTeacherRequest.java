@@ -1,4 +1,4 @@
-package com.project.schoolmanagment.payload.request;
+package com.project.schoolmanagment.payload.request.UpdateRequest;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;

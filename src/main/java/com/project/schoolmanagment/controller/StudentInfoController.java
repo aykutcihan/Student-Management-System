@@ -1,9 +1,7 @@
 package com.project.schoolmanagment.controller;
 
-import com.project.schoolmanagment.entity.concretes.Student;
-import com.project.schoolmanagment.entity.concretes.StudentInfo;
 import com.project.schoolmanagment.payload.request.StudentInfoRequest;
-import com.project.schoolmanagment.payload.request.UpdateStudentInfoRequest;
+import com.project.schoolmanagment.payload.request.UpdateRequest.UpdateStudentInfoRequest;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.payload.response.StudentInfoResponse;
 import com.project.schoolmanagment.service.StudentInfoService;
@@ -55,7 +53,7 @@ public class StudentInfoController {
 
     @GetMapping("/search")
     @PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANTMANAGER')")
-    public Page<StudentInfo> search(
+    public Page<StudentInfoResponse> search(
             @RequestParam(value = "page") int page,
             @RequestParam(value = "size") int size,
             @RequestParam(value = "sort") String sort,

@@ -5,7 +5,7 @@ import com.project.schoolmanagment.Exception.ResourceNotFoundException;
 import com.project.schoolmanagment.entity.concretes.*;
 import com.project.schoolmanagment.entity.enums.Note;
 import com.project.schoolmanagment.payload.request.StudentInfoRequest;
-import com.project.schoolmanagment.payload.request.UpdateStudentInfoRequest;
+import com.project.schoolmanagment.payload.request.UpdateRequest.UpdateStudentInfoRequest;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.payload.response.StudentInfoResponse;
 import com.project.schoolmanagment.repository.StudentInfoRepository;
@@ -120,6 +120,15 @@ public class StudentInfoService {
         return studentInfoRepository.getAllByStudentId_Id(studentId).stream().map(this::createResponse).collect(Collectors.toList());
     }
 
+    public Page<StudentInfoResponse> search(int page, int size, String sort, String type) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sort).ascending());
+        if (Objects.equals(type, "desc")) {
+            pageable = PageRequest.of(page, size, Sort.by(sort).descending());
+        }
+
+        return studentInfoRepository.findAll(pageable).map(this::createResponse);
+    }
+
     private StudentInfo createDto(StudentInfoRequest studentInfoRequest, Note note, Double average) {
         return StudentInfo.builder().infoNote(studentInfoRequest.getInfoNote())
                 .absentee(studentInfoRequest.getAbsentee())
@@ -188,12 +197,4 @@ public class StudentInfoService {
         return studentInfoRepository.getAllByStudentId_Id(studentId).stream().anyMatch((e) -> e.getLessonName().equalsIgnoreCase(lessonName));
     }
 
-    public Page<StudentInfo> search(int page, int size, String sort, String type) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sort).ascending());
-        if (Objects.equals(type, "desc")) {
-            pageable = PageRequest.of(page, size, Sort.by(sort).descending());
-        }
-
-        return studentInfoRepository.findAll(pageable);
-    }
 }
