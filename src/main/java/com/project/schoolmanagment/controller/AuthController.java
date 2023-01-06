@@ -45,6 +45,7 @@ public class AuthController {
         AuthResponse.AuthResponseBuilder authResponse = AuthResponse.builder();
         authResponse.ssn(user.getUsername());
         authResponse.token(token);
+        authResponse.name(user.getName());
         if(role.isPresent()){
             authResponse.role(role.get());
             if(role.get().equalsIgnoreCase(Role.TEACHER.name())){

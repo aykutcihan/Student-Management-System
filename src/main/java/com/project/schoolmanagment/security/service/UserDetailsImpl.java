@@ -1,6 +1,7 @@
 package com.project.schoolmanagment.security.service;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.project.schoolmanagment.entity.abstracts.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -25,19 +26,22 @@ public class UserDetailsImpl implements UserDetails {
     private String password;
 
     private Boolean isAdvisor;
+    private String name;
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserDetailsImpl(String username, String password, String role) {
+    public UserDetailsImpl(String username, String password, String role,String name) {
         this.username = username;
         this.password = password;
+        this.name = name;
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
         grantedAuthorities.add(new SimpleGrantedAuthority(role));
         this.authorities = grantedAuthorities;
     }
-    public UserDetailsImpl(String username, String password, String role,Boolean isAdvisor) {
+    public UserDetailsImpl(String username, String password, String role,Boolean isAdvisor,String name) {
         this.username = username;
         this.password = password;
         this.isAdvisor = isAdvisor;
+        this.name = name;
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
         grantedAuthorities.add(new SimpleGrantedAuthority(role));
         this.authorities = grantedAuthorities;

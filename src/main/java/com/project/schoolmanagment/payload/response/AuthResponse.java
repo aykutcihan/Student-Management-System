@@ -17,6 +17,6 @@ public class AuthResponse{
     private String ssn;
     private String role;
     private String token;
-
+    private String name;
     private String isAdvisor;
 }
