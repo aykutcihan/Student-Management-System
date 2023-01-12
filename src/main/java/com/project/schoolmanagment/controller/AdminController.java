@@ -30,7 +30,6 @@ public class AdminController {
     @GetMapping("/all")
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<Page<Admin>> getAll() {
-
         Pageable pageable = PageRequest.of(0, 10, Sort.by("username"));
         Page<Admin> author = adminService.getAllAdmin(pageable);
         return new ResponseEntity<>(author, HttpStatus.OK);
