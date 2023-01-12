@@ -2,16 +2,15 @@ package com.project.schoolmanagment.service;
 
 import com.project.schoolmanagment.Exception.ConflictException;
 import com.project.schoolmanagment.entity.concretes.Admin;
-import com.project.schoolmanagment.entity.concretes.Teacher;
 import com.project.schoolmanagment.entity.enums.Role;
-import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.repository.AdminRepository;
 import com.project.schoolmanagment.utils.Messages;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -24,7 +23,7 @@ public class AdminService {
     private final PasswordEncoder passwordEncoder;
 
     public Admin save(Admin admin) {
-        if(adminRepository.existsByUsername(admin.getUsername().trim())){
+        if (adminRepository.existsByUsername(admin.getUsername().trim())) {
             throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_SSN, admin.getUsername()));
         }
         admin.setRole(userRoleService.getUserRole(Role.ADMIN));
@@ -32,8 +31,12 @@ public class AdminService {
         return adminRepository.save(admin);
     }
 
-    public List<Admin> getAllAdmin() {
-        return adminRepository.findAll();
+    public long countAllAdmin() {
+        return adminRepository.count();
+    }
+
+    public Page<Admin> getAllAdmin(Pageable pageable) {
+        return adminRepository.findAll(pageable);
     }
 
     public String deleteAdmin(Long id) {
