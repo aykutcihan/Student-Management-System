@@ -34,7 +34,7 @@ public class SchoolManagementApplication implements CommandLineRunner {
             userRoleService.save(Role.STUDENT);
             userRoleService.save(Role.ADVISORTEACHER);
         }
-        if (adminService.getAllAdmin().size() == 0) {
+        if (adminService.countAllAdmin() == 0) {
             adminService.save(new Admin("Admin", "Admin123"));
         }
     }
