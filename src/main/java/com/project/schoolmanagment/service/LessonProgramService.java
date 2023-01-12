@@ -4,7 +4,6 @@ import com.project.schoolmanagment.Exception.BadRequestException;
 import com.project.schoolmanagment.Exception.ResourceNotFoundException;
 import com.project.schoolmanagment.entity.concretes.Lesson;
 import com.project.schoolmanagment.entity.concretes.LessonProgram;
-import com.project.schoolmanagment.entity.concretes.Teacher;
 import com.project.schoolmanagment.payload.Dto.LessonProgramDto;
 import com.project.schoolmanagment.payload.request.LessonProgramRequest;
 import com.project.schoolmanagment.payload.response.LessonProgramResponse;
@@ -38,13 +37,12 @@ public class LessonProgramService {
 
     public ResponseMessage<LessonProgramResponse> save(LessonProgramRequest lessonProgramRequest) {
         Set<Lesson> lessons = lessonService.getLessonByLessonNameList(lessonProgramRequest.getLessonIdList());
-        if(lessons.size()==0){
+        if (lessons.size() == 0) {
             throw new ResourceNotFoundException(Messages.NOT_FOUND_LESSON_IN_LIST);
-        }
-        else if(TimeControl.check(lessonProgramRequest.getStartTime(),lessonProgramRequest.getStopTime()) ){
+        } else if (TimeControl.check(lessonProgramRequest.getStartTime(), lessonProgramRequest.getStopTime())) {
             throw new BadRequestException(Messages.TIME_NOT_VALID_MESSAGE);
         }
-        LessonProgram lessonProgram = lessonProgramRequestToDto(lessonProgramRequest,lessons);
+        LessonProgram lessonProgram = lessonProgramRequestToDto(lessonProgramRequest, lessons);
         LessonProgram savedLessonProgram = lessonProgramRepository.save(lessonProgram);
         return ResponseMessage.<LessonProgramResponse>builder()
                 .message("Created Lesson Program")
@@ -52,31 +50,36 @@ public class LessonProgramService {
                 .httpStatus(HttpStatus.CREATED).build();
     }
 
-    public List<LessonProgramResponse> getAllLessonProgram(){
-        return lessonProgramRepository.findAll().stream().map(this::createLessonProgramResponse).collect(Collectors.toList());
+    public List<LessonProgramResponse> getAllLessonProgram() {
+        return lessonProgramRepository.findAll()
+                .stream()
+                .map(this::createLessonProgramResponse)
+                .collect(Collectors.toList());
     }
 
-    public Set<LessonProgramResponse> getLessonProgramByTeacherId(Long teacherId){
-        return lessonProgramRepository.getLessonProgramByTeachersId(teacherId).stream()
+    public Set<LessonProgramResponse> getLessonProgramByTeacherSsn(String ssn) {
+        return lessonProgramRepository.getLessonProgramByTeacherSsn(ssn)
+                .stream()
                 .map(this::createLessonProgramResponseForTeacher)
                 .collect(Collectors.toSet());
     }
 
-    public Set<LessonProgramResponse> getLessonProgramByStudentId(Long studentId){
-        return lessonProgramRepository.getLessonProgramByTeachersId(studentId).stream()
+    public Set<LessonProgramResponse> getLessonProgramByStudentSsn(String ssn) {
+        return lessonProgramRepository.getLessonProgramByStudentSsn(ssn)
+                .stream()
                 .map(this::createLessonProgramResponseForStudent)
                 .collect(Collectors.toSet());
     }
 
-    private LessonProgram lessonProgramRequestToDto(LessonProgramRequest lessonProgramRequest,Set<Lesson> lessons) {
-        return lessonProgramDto.dtoLessonProgram(lessonProgramRequest,lessons);
+    private LessonProgram lessonProgramRequestToDto(LessonProgramRequest lessonProgramRequest, Set<Lesson> lessons) {
+        return lessonProgramDto.dtoLessonProgram(lessonProgramRequest, lessons);
     }
 
-    public Set<LessonProgram> getLessonProgramById(Set<Long> lessonProgramIdList){
+    public Set<LessonProgram> getLessonProgramById(Set<Long> lessonProgramIdList) {
         return lessonProgramRepository.getLessonProgramByLessonProgramIdList(lessonProgramIdList);
     }
 
-    public LessonProgramResponse createLessonProgramResponseForSaveMethod(LessonProgram lessonProgram){
+    public LessonProgramResponse createLessonProgramResponseForSaveMethod(LessonProgram lessonProgram) {
         return LessonProgramResponse.builder()
                 .day(lessonProgram.getDay())
                 .startTime(lessonProgram.getStartTime())
@@ -86,7 +89,7 @@ public class LessonProgramService {
                 .build();
     }
 
-    public LessonProgramResponse createLessonProgramResponse(LessonProgram lessonProgram){
+    public LessonProgramResponse createLessonProgramResponse(LessonProgram lessonProgram) {
         return LessonProgramResponse.builder()
                 .day(lessonProgram.getDay())
                 .startTime(lessonProgram.getStartTime())
@@ -97,8 +100,9 @@ public class LessonProgramService {
                 .teachers(lessonProgram.getTeachers().stream().map(createResponseObjectService::createTeacherResponse).collect(Collectors.toSet()))
                 .build();
     }
-    public LessonProgramResponse createLessonProgramResponseForTeacher(LessonProgram lessonProgram){
-        return  LessonProgramResponse.builder()
+
+    public LessonProgramResponse createLessonProgramResponseForTeacher(LessonProgram lessonProgram) {
+        return LessonProgramResponse.builder()
                 .day(lessonProgram.getDay())
                 .startTime(lessonProgram.getStartTime())
                 .stopTime(lessonProgram.getStopTime())
@@ -108,7 +112,7 @@ public class LessonProgramService {
                 .build();
     }
 
-    public LessonProgramResponse createLessonProgramResponseForStudent(LessonProgram lessonProgram){
+    public LessonProgramResponse createLessonProgramResponseForStudent(LessonProgram lessonProgram) {
         return LessonProgramResponse.builder()
                 .day(lessonProgram.getDay())
                 .startTime(lessonProgram.getStartTime())
