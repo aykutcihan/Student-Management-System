@@ -1,7 +1,5 @@
 package com.project.schoolmanagment.controller;
 
-import com.project.schoolmanagment.entity.concretes.Lesson;
-import com.project.schoolmanagment.entity.concretes.LessonProgram;
 import com.project.schoolmanagment.payload.request.LessonProgramRequest;
 import com.project.schoolmanagment.payload.response.LessonProgramResponse;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
@@ -11,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Set;
@@ -31,26 +30,33 @@ public class LessonProgramController {
 
     @GetMapping("/getAll")
     @PreAuthorize("hasAnyAuthority('ASSISTANTMANAGER','ADMIN','TEACHER','STUDENT')")
-    public List<LessonProgramResponse> getAll(){
+    public List<LessonProgramResponse> getAll() {
         return lessonProgramService.getAllLessonProgram();
     }
 
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasAnyAuthority('ASSISTANTMANAGER','ADMIN')")
-    public ResponseMessage delete(@PathVariable Long id){
+    public ResponseMessage delete(@PathVariable Long id) {
         return lessonProgramService.deleteLessonProgram(id);
     }
 
-    @GetMapping("getAllLessonProgramByTeacherId/{teacherId}")
-    @PreAuthorize("hasAnyAuthority('ASSISTANTMANAGER','ADMIN','TEACHER')")
-    public Set<LessonProgramResponse> getAllLessonProgramByTeacherId(@PathVariable Long teacherId){
-        return lessonProgramService.getLessonProgramByTeacherId(teacherId);
+    @GetMapping("getAllLessonProgramByTeacher")
+    @PreAuthorize("hasAnyAuthority( 'TEACHER')")
+    public Set<LessonProgramResponse> getAllLessonProgramByTeacherId(
+            HttpServletRequest httpServletRequest
+    ) {
+        String ssn = (String) httpServletRequest.getAttribute("ssn");
+        return lessonProgramService.getLessonProgramByTeacherSsn(ssn);
     }
 
-    @PreAuthorize("hasAnyAuthority('ASSISTANTMANAGER','ADMIN','STUDENT')")
-    @GetMapping("getAllLessonProgramByStudentId/{studentId}")
-    public Set<LessonProgramResponse> getAllLessonProgramByStudentId(@PathVariable Long studentId){
-        return lessonProgramService.getLessonProgramByStudentId(studentId);
+
+    @GetMapping("getAllLessonProgramByStudent")
+    @PreAuthorize("hasAnyAuthority('STUDENT')")
+    public Set<LessonProgramResponse> getAllLessonProgramByStudent(
+            HttpServletRequest httpServletRequest
+    ) {
+        String ssn = (String) httpServletRequest.getAttribute("ssn");
+        return lessonProgramService.getLessonProgramByStudentSsn(ssn);
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANTMANAGER')")
