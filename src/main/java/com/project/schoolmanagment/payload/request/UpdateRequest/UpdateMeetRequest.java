@@ -26,10 +26,10 @@ public class UpdateMeetRequest {
     @Future
     private LocalDate date;
 
-    @JsonFormat(pattern = "hh:mm a")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "US")
     private LocalTime startTime;
 
-    @JsonFormat(pattern = "hh:mm a")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "US")
     private LocalTime stopTime;
 
 }
