@@ -1,6 +1,5 @@
 package com.project.schoolmanagment.controller;
 
-import com.project.schoolmanagment.entity.concretes.LessonProgram;
 import com.project.schoolmanagment.entity.concretes.Meet;
 import com.project.schoolmanagment.payload.request.MeetRequest;
 import com.project.schoolmanagment.payload.request.UpdateRequest.UpdateMeetRequest;
@@ -9,9 +8,15 @@ import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.service.MeetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -41,23 +46,28 @@ public class MeetController {
         return meetService.getMeetById(meetId);
     }
 
-    @GetMapping("/getAllMeetByAdvisor/{advisorId}")
+    @GetMapping("/getAllMeetByAdvisor")
     @PreAuthorize("hasAnyAuthority('TEACHER','ADMIN')")
-    public List<MeetResponse> getAllMeetByAdvisorTeacher(@PathVariable Long advisorId) {
-        return meetService.getAllMeetByAdvisorTeacher(advisorId);
+    public ResponseEntity<Page<Meet>> getAllMeetByAdvisorTeacher(
+            HttpServletRequest httpServletRequest
+    ) {
+        String ssn = (String) httpServletRequest.getAttribute("ssn");
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("date"));
+        Page<Meet> meet = meetService.getAllMeetByAdvisorTeacher(pageable, ssn);
+        return new ResponseEntity<>(meet, HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyAuthority('TEACHER','ADMIN')")
     @DeleteMapping("/delete/{meetId}")
-    public ResponseMessage delete(@PathVariable Long meetId){
+    public ResponseMessage delete(@PathVariable Long meetId) {
         return meetService.delete(meetId);
     }
 
 
     @PreAuthorize("hasAnyAuthority('TEACHER','ADMIN')")
     @PutMapping("/update/{meetId}")
-    public ResponseMessage<MeetResponse> update(@RequestBody @Valid UpdateMeetRequest meetRequest, @PathVariable Long meetId){
-        return meetService.update(meetRequest,meetId);
+    public ResponseMessage<MeetResponse> update(@RequestBody @Valid UpdateMeetRequest meetRequest, @PathVariable Long meetId) {
+        return meetService.update(meetRequest, meetId);
     }
 
     @PreAuthorize("hasAnyAuthority('TEACHER','ADMIN','STUDENT')")
@@ -65,6 +75,7 @@ public class MeetController {
     public List<MeetResponse> getAllMeetByStudent(@PathVariable Long studentId) {
         return meetService.getAllMeetByStudent(studentId);
     }
+
     @PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANTMANAGER','TEACHER')")
     @GetMapping("/search")
     public Page<MeetResponse> search(

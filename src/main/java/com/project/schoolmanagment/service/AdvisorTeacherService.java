@@ -6,8 +6,6 @@ import com.project.schoolmanagment.entity.concretes.Teacher;
 import com.project.schoolmanagment.entity.enums.Role;
 import com.project.schoolmanagment.payload.response.AdvisorTeacherResponse;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
-import com.project.schoolmanagment.payload.response.StudentResponse;
-import com.project.schoolmanagment.payload.response.ViceDeanResponse;
 import com.project.schoolmanagment.repository.AdvisoryTeacherRepository;
 import com.project.schoolmanagment.utils.Messages;
 import lombok.RequiredArgsConstructor;
@@ -56,6 +54,10 @@ public class AdvisorTeacherService {
 
     public Optional<AdvisorTeacher> getAdvisorTeacherById(Long id) {
         return advisoryTeacherRepository.findById(id);
+
+    }
+    public Optional<AdvisorTeacher> getAdvisorTeacherBySsn(String ssn) {
+        return advisoryTeacherRepository.findByTeacher_SsnEquals(ssn);
 
     }
 
