@@ -53,6 +53,12 @@ public class StudentController {
     public List<StudentResponse> getStudentByName(@RequestParam(name = "name") String studentName) {
         return studentService.getStudentByName(studentName);
     }
+
+    @GetMapping("/getStudentBySnn")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANTMANAGER')")
+    public  StudentResponse getStudentBySnn(@RequestParam(name = "ssn") String ssn) {
+        return studentService.getStudentBySnn(ssn);
+    }
     @PostMapping("/chooseLesson")
     @PreAuthorize("hasAnyAuthority('STUDENT','ADMIN')")
     public ResponseMessage<StudentResponse> chooseLesson(@RequestBody ChooseLessonRequest chooseLessonRequest){

@@ -163,6 +163,10 @@ public class StudentService {
                 .collect(Collectors.toList());
     }
 
+    public StudentResponse getStudentBySnn(String ssn) {
+        return studentRepository.getStudentBySnn(ssn);
+    }
+
     public Page<StudentResponse> search(int page, int size, String sort, String type) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sort).ascending());
         if (Objects.equals(type, "desc")) {
