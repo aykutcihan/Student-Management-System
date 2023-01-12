@@ -30,7 +30,7 @@ public class LessonProgramController {
     }
 
     @GetMapping("/getAll")
-    @PreAuthorize("hasAnyAuthority('ASSISTANTMANAGER','ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ASSISTANTMANAGER','ADMIN','TEACHER','STUDENT')")
     public List<LessonProgramResponse> getAll(){
         return lessonProgramService.getAllLessonProgram();
     }
