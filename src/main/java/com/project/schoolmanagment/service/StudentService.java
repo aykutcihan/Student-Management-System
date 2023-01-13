@@ -1,14 +1,16 @@
 package com.project.schoolmanagment.service;
 
-import com.project.schoolmanagment.Exception.BadRequestException;
 import com.project.schoolmanagment.Exception.ConflictException;
 import com.project.schoolmanagment.Exception.ResourceNotFoundException;
-import com.project.schoolmanagment.entity.concretes.*;
+import com.project.schoolmanagment.entity.concretes.AdvisorTeacher;
+import com.project.schoolmanagment.entity.concretes.LessonProgram;
+import com.project.schoolmanagment.entity.concretes.Student;
 import com.project.schoolmanagment.entity.enums.Role;
 import com.project.schoolmanagment.payload.Dto.StudentRequestDto;
 import com.project.schoolmanagment.payload.request.ChooseLessonRequest;
 import com.project.schoolmanagment.payload.request.StudentRequest;
-import com.project.schoolmanagment.payload.response.*;
+import com.project.schoolmanagment.payload.response.ResponseMessage;
+import com.project.schoolmanagment.payload.response.StudentResponse;
 import com.project.schoolmanagment.repository.StudentRepository;
 import com.project.schoolmanagment.service.util.CheckSameLessonProgram;
 import com.project.schoolmanagment.utils.Messages;
@@ -21,7 +23,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -181,5 +186,9 @@ public class StudentService {
                 || student.getPhoneNumber().equalsIgnoreCase(newStudentRequest.getPhoneNumber())
                 || student.getEmail().equalsIgnoreCase(newStudentRequest.getEmail())
                 || student.getStudentNumber().equalsIgnoreCase(newStudentRequest.getStudentNumber());
+    }
+
+    public boolean existBySnn(String ssn) {
+        return studentRepository.existsBySsn(ssn);
     }
 }
