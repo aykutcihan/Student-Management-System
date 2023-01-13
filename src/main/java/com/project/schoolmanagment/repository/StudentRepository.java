@@ -7,11 +7,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public interface StudentRepository extends JpaRepository<Student, Long> {
     @Query("select s from Student s where s.ssn = ?1")
     StudentResponse getStudentBySnn(String ssn);
+    @Query("select s from Student s where s.ssn = ?1")
+    Optional<Student> getStudentBySnnForOptional(String ssn);
 
     boolean existsBySsn(String ssn);
 

@@ -3,6 +3,7 @@ package com.project.schoolmanagment.controller;
 import com.project.schoolmanagment.entity.concretes.Student;
 import com.project.schoolmanagment.entity.concretes.Teacher;
 import com.project.schoolmanagment.payload.request.ChooseLessonRequest;
+import com.project.schoolmanagment.payload.request.ChooseLessonRequestWithoutId;
 import com.project.schoolmanagment.payload.request.StudentRequest;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.payload.response.StudentResponse;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -61,8 +63,12 @@ public class StudentController {
     }
     @PostMapping("/chooseLesson")
     @PreAuthorize("hasAnyAuthority('STUDENT','ADMIN')")
-    public ResponseMessage<StudentResponse> chooseLesson(@RequestBody ChooseLessonRequest chooseLessonRequest){
-        return studentService.chooseLesson(chooseLessonRequest);
+    public ResponseMessage<StudentResponse> chooseLesson(
+            HttpServletRequest httpServletRequest,
+            @RequestBody ChooseLessonRequestWithoutId chooseLessonRequest
+    ){
+        String ssn = (String) httpServletRequest.getAttribute("ssn");
+        return studentService.chooseLesson(ssn,chooseLessonRequest);
     }
 
     @PreAuthorize("hasAnyAuthority('TEACHER','ADMIN')")

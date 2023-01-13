@@ -8,6 +8,7 @@ import com.project.schoolmanagment.entity.concretes.Student;
 import com.project.schoolmanagment.entity.enums.Role;
 import com.project.schoolmanagment.payload.Dto.StudentRequestDto;
 import com.project.schoolmanagment.payload.request.ChooseLessonRequest;
+import com.project.schoolmanagment.payload.request.ChooseLessonRequestWithoutId;
 import com.project.schoolmanagment.payload.request.StudentRequest;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.payload.response.StudentResponse;
@@ -131,11 +132,11 @@ public class StudentService {
     }
 
 
-    public ResponseMessage<StudentResponse> chooseLesson(ChooseLessonRequest chooseLessonRequest) {
-        Optional<Student> student = studentRepository.findById(chooseLessonRequest.getStudentId());
+    public ResponseMessage<StudentResponse> chooseLesson(String ssn,ChooseLessonRequestWithoutId chooseLessonRequest) {
+        Optional<Student> student = studentRepository.getStudentBySnnForOptional(ssn);
         Set<LessonProgram> lessonPrograms = lessonProgramService.getLessonProgramById(chooseLessonRequest.getLessonProgramId());
         if (!student.isPresent()) {
-            throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_USER_MESSAGE, chooseLessonRequest.getStudentId()));
+            throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_USER_MESSAGE, ssn));
         } else if (lessonPrograms.size() == 0) {
             throw new ResourceNotFoundException(Messages.LESSON_PROGRAM_NOT_FOUND_MESSAGE);
         }
