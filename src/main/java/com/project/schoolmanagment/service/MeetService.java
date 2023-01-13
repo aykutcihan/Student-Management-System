@@ -9,6 +9,7 @@ import com.project.schoolmanagment.entity.concretes.Meet;
 import com.project.schoolmanagment.entity.concretes.Student;
 import com.project.schoolmanagment.payload.Dto.MeetDto;
 import com.project.schoolmanagment.payload.request.MeetRequest;
+import com.project.schoolmanagment.payload.request.MeetRequestWithoutId;
 import com.project.schoolmanagment.payload.request.UpdateRequest.UpdateMeetRequest;
 import com.project.schoolmanagment.payload.response.MeetResponse;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
@@ -39,13 +40,13 @@ public class MeetService {
     private final StudentService studentService;
     private final MeetDto meetDtoObject;
 
-    public ResponseMessage<MeetResponse> save(MeetRequest meetRequest) {
+    public ResponseMessage<MeetResponse> save(String ssn ,MeetRequestWithoutId meetRequest) {
         Optional<Student> student = studentService.getStudentById(meetRequest.getStudentId());
-        Optional<AdvisorTeacher> advisorTeacher = advisorTeacherService.getAdvisorTeacherById(meetRequest.getAdvisorTeacherId());
+        Optional<AdvisorTeacher> advisorTeacher = advisorTeacherService.getAdvisorTeacherBySsn(ssn);
         if (!student.isPresent()) {
             throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_USER_MESSAGE, meetRequest.getStudentId()));
         } else if (!advisorTeacher.isPresent()) {
-            throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_ADVISOR_MESSAGE, meetRequest.getAdvisorTeacherId()));
+            throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_ADVISOR_MESSAGE, ssn));
         } else if (TimeControl.check(meetRequest.getStartTime(), meetRequest.getStopTime())) {
             throw new BadRequestException(Messages.TIME_NOT_VALID_MESSAGE);
         }
@@ -53,7 +54,7 @@ public class MeetService {
 
         checkMeetConflict(meets, meetRequest.getDate(), meetRequest.getStartTime());
 
-        Meet meet = meetRequestToDto(meetRequest);
+        Meet meet = meetRequestWithoutIdToDto(meetRequest);
         meet.setAdvisorTeacher(advisorTeacher.get());
         meet.setStudent(student.get());
         Meet savedMeet = meetRepository.save(meet);
@@ -113,8 +114,8 @@ public class MeetService {
         return meetRepository.findByAdvisorTeacher_Teacher_SsnEqualsAsList(ssn);
     }
 
-    private Meet meetRequestToDto(MeetRequest meetRequest) {
-        return meetDtoObject.meetDto(meetRequest);
+    private Meet meetRequestWithoutIdToDto(MeetRequestWithoutId meetRequestWithoutId) {
+        return meetDtoObject.meetDto(meetRequestWithoutId);
     }
 
     public List<MeetResponse> getAllMeetByStudent(Long studentId) {

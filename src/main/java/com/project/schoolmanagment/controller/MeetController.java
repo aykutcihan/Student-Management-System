@@ -1,7 +1,7 @@
 package com.project.schoolmanagment.controller;
 
 import com.project.schoolmanagment.entity.concretes.Meet;
-import com.project.schoolmanagment.payload.request.MeetRequest;
+import com.project.schoolmanagment.payload.request.MeetRequestWithoutId;
 import com.project.schoolmanagment.payload.request.UpdateRequest.UpdateMeetRequest;
 import com.project.schoolmanagment.payload.response.MeetResponse;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
@@ -29,9 +29,13 @@ public class MeetController {
     private final MeetService meetService;
 
     @PostMapping("/save")
-    @PreAuthorize("hasAnyAuthority('TEACHER','ADMIN')")
-    public ResponseMessage<MeetResponse> save(@RequestBody @Valid MeetRequest meetRequest) {
-        return meetService.save(meetRequest);
+    @PreAuthorize("hasAnyAuthority('TEACHER')")
+    public ResponseMessage<MeetResponse> save(
+            HttpServletRequest httpServletRequest,
+            @RequestBody @Valid MeetRequestWithoutId meetRequest
+    ) {
+        String ssn = (String) httpServletRequest.getAttribute("ssn");
+        return meetService.save(ssn,meetRequest);
     }
 
     @GetMapping("/getAll")
@@ -52,17 +56,18 @@ public class MeetController {
             HttpServletRequest httpServletRequest,
             @RequestParam(value = "page") int page,
             @RequestParam(value = "size") int size
-    ){
+    ) {
         String ssn = (String) httpServletRequest.getAttribute("ssn");
         Pageable pageable = PageRequest.of(page, size, Sort.by("date").descending());
         Page<Meet> meet = meetService.getAllMeetByAdvisorTeacherAsPage(pageable, ssn);
         return new ResponseEntity<>(meet, HttpStatus.OK);
     }
+
     @GetMapping("/getAllMeetByAdvisorTeacherAsList")
     @PreAuthorize("hasAnyAuthority('TEACHER','ADMIN')")
     public ResponseEntity<List<Meet>> getAllMeetByAdvisorTeacherAsList(
             HttpServletRequest httpServletRequest
-    ){
+    ) {
         String ssn = (String) httpServletRequest.getAttribute("ssn");
         List<Meet> meet = meetService.getAllMeetByAdvisorTeacherAsList(ssn);
         return new ResponseEntity<>(meet, HttpStatus.OK);
