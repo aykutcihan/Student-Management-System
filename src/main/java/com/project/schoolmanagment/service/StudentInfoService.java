@@ -2,7 +2,10 @@ package com.project.schoolmanagment.service;
 
 import com.project.schoolmanagment.Exception.ConflictException;
 import com.project.schoolmanagment.Exception.ResourceNotFoundException;
-import com.project.schoolmanagment.entity.concretes.*;
+import com.project.schoolmanagment.entity.concretes.Lesson;
+import com.project.schoolmanagment.entity.concretes.Student;
+import com.project.schoolmanagment.entity.concretes.StudentInfo;
+import com.project.schoolmanagment.entity.concretes.Teacher;
 import com.project.schoolmanagment.entity.enums.Note;
 import com.project.schoolmanagment.payload.request.StudentInfoRequest;
 import com.project.schoolmanagment.payload.request.UpdateRequest.UpdateStudentInfoRequest;
@@ -51,9 +54,8 @@ public class StudentInfoService {
 
         } else if (!teacher.isPresent()) {
             throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_USER_MESSAGE, studentInfoRequest.getTeacherId()));
-        }
-        else if(checkSameLesson(studentInfoRequest.getStudentId(),lesson.get().getLessonName())){
-            throw new ConflictException(String.format(Messages.ALREADY_REGISTER_LESSON_NAME,lesson.get().getLessonName()));
+        } else if (checkSameLesson(studentInfoRequest.getStudentId(), lesson.get().getLessonName())) {
+            throw new ConflictException(String.format(Messages.ALREADY_REGISTER_LESSON_NAME, lesson.get().getLessonName()));
         }
 
         Double noteAverage = calculateExamAverage(studentInfoRequest.getMidtermExam(), studentInfoRequest.getFinalExam());
@@ -79,11 +81,11 @@ public class StudentInfoService {
             throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_LESSON_MESSAGE, studentInfoRequest.getLessonId()));
         }
 
-        System.out.println(studentInfoRequest.getMidtermExam()+" "+studentInfoRequest.getFinalExam());
+        System.out.println(studentInfoRequest.getMidtermExam() + " " + studentInfoRequest.getFinalExam());
         Double noteAverage = calculateExamAverage(studentInfoRequest.getMidtermExam(), studentInfoRequest.getFinalExam());
         Note note = checkLetterGrade(noteAverage);
         StudentInfo studentInfo = createUpdatedStudent(studentInfoRequest,
-                studentInfoId,lesson.get().getLessonName(),note,noteAverage);
+                studentInfoId, lesson.get().getLessonName(), note, noteAverage);
 
         studentInfo.setStudentId(getStudentInfo.get().getStudentId());
         studentInfo.setTeacherId(getStudentInfo.get().getTeacherId());
@@ -112,12 +114,11 @@ public class StudentInfoService {
         return studentInfoRepository.findAll().stream().map(this::createResponse).collect(Collectors.toList());
     }
 
-    public List<StudentInfoResponse> getAllStudentInfoByStudent(Long studentId) {
-        Optional<Student> student = studentService.getStudentById(studentId);
-        if (!student.isPresent()) {
-            throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_USER_MESSAGE, studentId));
-        }
-        return studentInfoRepository.getAllByStudentId_Id(studentId).stream().map(this::createResponse).collect(Collectors.toList());
+
+    public Page<StudentInfoResponse> getAllStudentInfoByStudent(Pageable pageable, String ssn) {
+        boolean student = studentService.existBySnn(ssn);
+        if (!student) throw new ResourceNotFoundException(String.format(Messages.STUDENT_INFO_NOT_FOUND, ssn));
+        return studentInfoRepository.findByStudentId_SsnEquals(pageable, ssn);
     }
 
     public Page<StudentInfoResponse> search(int page, int size, String sort, String type) {
