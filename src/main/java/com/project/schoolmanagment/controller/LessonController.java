@@ -1,16 +1,12 @@
 package com.project.schoolmanagment.controller;
 
-import com.project.schoolmanagment.entity.concretes.Dean;
 import com.project.schoolmanagment.entity.concretes.Lesson;
 import com.project.schoolmanagment.payload.request.LessonRequest;
 import com.project.schoolmanagment.payload.response.LessonResponse;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.service.LessonService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,6 +39,7 @@ public class LessonController {
     public ResponseMessage<LessonResponse> getLessonByLessonName(@RequestParam String lessonName) {
         return lessonService.getLessonByLessonName(lessonName);
     }
+
     @PreAuthorize("hasAnyAuthority('ASSISTANTMANAGER','ADMIN')")
     @GetMapping("/getAll")
     public List<LessonResponse> getAllLesson() {
@@ -51,10 +48,12 @@ public class LessonController {
 
     @PreAuthorize("hasAnyAuthority('ASSISTANTMANAGER','ADMIN')")
     @GetMapping("/getAllLessonByLessonId")
-    public Set<Lesson> getAllLessonByLessonId(@RequestParam(name = "lessonId")
-                                              Set<Long> idList) {
+    public Set<Lesson> getAllLessonByLessonId(
+            @RequestParam(name = "lessonId") Set<Long> idList
+    ) {
         return lessonService.getLessonByLessonNameList(idList);
     }
+
     @PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANTMANAGER')")
     @GetMapping("/search")
     public Page<LessonResponse> search(
