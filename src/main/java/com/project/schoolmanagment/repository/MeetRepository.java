@@ -16,5 +16,6 @@ public interface MeetRepository extends JpaRepository<Meet, Long> {
     Page<Meet> findByAdvisorTeacher_Teacher_SsnEquals(Pageable pageable, String ssn);
 
     List<Meet> getAllMeetByStudent_Id(Long advisorId);
-
+    @Query("select m from Meet m where m.advisorTeacher.teacher.ssn = ?1")
+    List<Meet> findByAdvisorTeacher_Teacher_SsnEqualsAsList(String ssn);
 }

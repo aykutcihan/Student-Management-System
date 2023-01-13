@@ -97,12 +97,20 @@ public class MeetService {
         return meetRepository.findAll().stream().map(this::createMeetResponse).collect(Collectors.toList());
     }
 
-    public Page<Meet> getAllMeetByAdvisorTeacher(Pageable pageable, String ssn) {
+    public Page<Meet> getAllMeetByAdvisorTeacherAsPage(Pageable pageable, String ssn) {
         Optional<AdvisorTeacher> advisorTeacher = advisorTeacherService.getAdvisorTeacherBySsn(ssn);
         if (!advisorTeacher.isPresent()) {
             throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_ADVISOR_MESSAGE, ssn));
         }
         return meetRepository.findByAdvisorTeacher_Teacher_SsnEquals(pageable, ssn);
+    }
+
+    public List<Meet> getAllMeetByAdvisorTeacherAsList(String ssn) {
+        Optional<AdvisorTeacher> advisorTeacher = advisorTeacherService.getAdvisorTeacherBySsn(ssn);
+        if (!advisorTeacher.isPresent()) {
+            throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_ADVISOR_MESSAGE, ssn));
+        }
+        return meetRepository.findByAdvisorTeacher_Teacher_SsnEqualsAsList(ssn);
     }
 
     private Meet meetRequestToDto(MeetRequest meetRequest) {

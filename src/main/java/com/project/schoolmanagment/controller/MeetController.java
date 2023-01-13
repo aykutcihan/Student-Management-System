@@ -46,14 +46,25 @@ public class MeetController {
         return meetService.getMeetById(meetId);
     }
 
-    @GetMapping("/getAllMeetByAdvisor")
+    @GetMapping("/getAllMeetByAdvisorAsPage")
     @PreAuthorize("hasAnyAuthority('TEACHER','ADMIN')")
-    public ResponseEntity<Page<Meet>> getAllMeetByAdvisorTeacher(
-            HttpServletRequest httpServletRequest
-    ) {
+    public ResponseEntity<Page<Meet>> getAllMeetByAdvisorAsPage(
+            HttpServletRequest httpServletRequest,
+            @RequestParam(value = "page") int page,
+            @RequestParam(value = "size") int size
+    ){
         String ssn = (String) httpServletRequest.getAttribute("ssn");
-        Pageable pageable = PageRequest.of(0, 10, Sort.by("date"));
-        Page<Meet> meet = meetService.getAllMeetByAdvisorTeacher(pageable, ssn);
+        Pageable pageable = PageRequest.of(page, size, Sort.by("date").descending());
+        Page<Meet> meet = meetService.getAllMeetByAdvisorTeacherAsPage(pageable, ssn);
+        return new ResponseEntity<>(meet, HttpStatus.OK);
+    }
+    @GetMapping("/getAllMeetByAdvisorTeacherAsList")
+    @PreAuthorize("hasAnyAuthority('TEACHER','ADMIN')")
+    public ResponseEntity<List<Meet>> getAllMeetByAdvisorTeacherAsList(
+            HttpServletRequest httpServletRequest
+    ){
+        String ssn = (String) httpServletRequest.getAttribute("ssn");
+        List<Meet> meet = meetService.getAllMeetByAdvisorTeacherAsList(ssn);
         return new ResponseEntity<>(meet, HttpStatus.OK);
     }
 
