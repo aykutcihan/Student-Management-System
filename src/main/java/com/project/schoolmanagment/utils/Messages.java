@@ -1,7 +1,7 @@
 package com.project.schoolmanagment.utils;
 
 public class Messages {
-    public static final String NOT_FOUND_USER_MESSAGE = "Error: User with id %d not found";
+    public static final String NOT_FOUND_USER_MESSAGE = "Error: User with SSN %s not found";
     public static final String NOT_FOUND_ADVISOR_MESSAGE = "Error: Advisor Teacher with id %d not found";
     public static final String NOT_FOUND_LESSON_MESSAGE = "Error: Lesson with lesson id %d not found";
     public static final String NOT_FOUND_LESSON_IN_LIST = "Error: lessons not found in the list";
