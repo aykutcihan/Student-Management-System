@@ -15,16 +15,18 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
-@RequestMapping("lesson")
+@RequestMapping("lessons")
 @RequiredArgsConstructor
 @CrossOrigin
 public class LessonController {
 
     private final LessonService lessonService;
 
-    @PreAuthorize("hasAnyAuthority('ASSISTANTMANAGER','ADMIN')")
     @PostMapping("/save")
-    public ResponseMessage<LessonResponse> save(@RequestBody @Valid LessonRequest lesson) {
+    @PreAuthorize("hasAnyAuthority('ASSISTANTMANAGER','ADMIN')")
+    public ResponseMessage<LessonResponse> save(
+            @RequestBody @Valid LessonRequest lesson
+    ){
         return lessonService.save(lesson);
     }
 
