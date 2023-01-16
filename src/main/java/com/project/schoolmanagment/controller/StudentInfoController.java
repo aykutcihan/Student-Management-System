@@ -50,10 +50,29 @@ public class StudentInfoController {
         return studentInfoService.update(studentInfoRequest, studentInfoId);
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN','TEACHER')")
-    @GetMapping("/getAll")
-    public List<StudentInfoResponse> getAll() {
-        return studentInfoService.getAll();
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @GetMapping("/getAllForAdmin")
+    public ResponseEntity<Page<StudentInfoResponse>> getAll(
+            @RequestParam(value = "page") int page,
+            @RequestParam(value = "size") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("lessonName").descending());
+        Page<StudentInfoResponse> studentInfoResponse = studentInfoService.getAll(pageable);
+        return new ResponseEntity<>(studentInfoResponse, HttpStatus.OK);
+    }
+
+
+    @PreAuthorize("hasAnyAuthority('TEACHER')")
+    @GetMapping("/getAllForTeacher")
+    public ResponseEntity<Page<StudentInfoResponse>> getAllForTeacher(
+            HttpServletRequest httpServletRequest,
+            @RequestParam(value = "page") int page,
+            @RequestParam(value = "size") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("lessonName").descending());
+        String ssn = (String) httpServletRequest.getAttribute("ssn");
+        Page<StudentInfoResponse> studentInfoResponse = studentInfoService.getAllForTeacher(pageable, ssn);
+        return new ResponseEntity<>(studentInfoResponse, HttpStatus.OK);
     }
 
 

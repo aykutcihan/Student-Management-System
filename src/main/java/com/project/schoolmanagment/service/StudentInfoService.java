@@ -111,10 +111,13 @@ public class StudentInfoService {
                 .build();
     }
 
-    public List<StudentInfoResponse> getAll() {
-        return studentInfoRepository.findAll().stream().map(this::createResponse).collect(Collectors.toList());
+    public Page<StudentInfoResponse> getAll(Pageable pageable) {
+        return studentInfoRepository.getAll(pageable);
     }
 
+    public Page<StudentInfoResponse> getAllForTeacher(Pageable pageable,String ssn) {
+        return studentInfoRepository.findByTeacherId_SsnEquals( ssn,pageable);
+    }
 
     public Page<StudentInfoResponse> getAllStudentInfoByStudent(Pageable pageable, String ssn) {
         boolean student = studentService.existBySnn(ssn);
@@ -199,5 +202,6 @@ public class StudentInfoService {
     private boolean checkSameLesson(Long studentId, String lessonName) {
         return studentInfoRepository.getAllByStudentId_Id(studentId).stream().anyMatch((e) -> e.getLessonName().equalsIgnoreCase(lessonName));
     }
+
 
 }
