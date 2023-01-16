@@ -1,8 +1,5 @@
 package com.project.schoolmanagment.controller;
 
-import com.project.schoolmanagment.entity.concretes.Student;
-import com.project.schoolmanagment.entity.concretes.Teacher;
-import com.project.schoolmanagment.payload.request.ChooseLessonRequest;
 import com.project.schoolmanagment.payload.request.ChooseLessonRequestWithoutId;
 import com.project.schoolmanagment.payload.request.StudentRequest;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
@@ -10,7 +7,6 @@ import com.project.schoolmanagment.payload.response.StudentResponse;
 import com.project.schoolmanagment.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +15,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("student")
+@RequestMapping("students")
 @RequiredArgsConstructor
 @CrossOrigin
 public class StudentController {
@@ -28,7 +24,9 @@ public class StudentController {
 
     @PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANTMANAGER')")
     @PostMapping("/save")
-    public ResponseMessage<StudentResponse> save(@RequestBody @Valid StudentRequest studentRequest) {
+    public ResponseMessage<StudentResponse> save(
+            @RequestBody @Valid StudentRequest studentRequest
+    ) {
         return studentService.save(studentRequest);
     }
 
@@ -58,24 +56,32 @@ public class StudentController {
 
     @GetMapping("/getStudentBySnn")
     @PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANTMANAGER')")
-    public  StudentResponse getStudentBySnn(@RequestParam(name = "ssn") String ssn) {
+    public StudentResponse getStudentBySnn(@RequestParam(name = "ssn") String ssn) {
         return studentService.getStudentBySnn(ssn);
     }
+
     @PostMapping("/chooseLesson")
-    @PreAuthorize("hasAnyAuthority('STUDENT','ADMIN')")
+    @PreAuthorize("hasAnyAuthority('STUDENT')")
     public ResponseMessage<StudentResponse> chooseLesson(
-            HttpServletRequest httpServletRequest,
+            HttpServletRequest request,
             @RequestBody ChooseLessonRequestWithoutId chooseLessonRequest
-    ){
-        String ssn = (String) httpServletRequest.getAttribute("ssn");
-        return studentService.chooseLesson(ssn,chooseLessonRequest);
+    ) {
+
+
+        String ssn = (String) request.getAttribute("ssn");
+        System.out.println(ssn);
+        return studentService.chooseLesson(ssn, chooseLessonRequest);
     }
 
     @PreAuthorize("hasAnyAuthority('TEACHER','ADMIN')")
-    @GetMapping("/getAllByAdvisorId/{advisorId}")
-    public List<StudentResponse> getAllStudentByAdvisorId(@PathVariable Long advisorId){
-        return studentService.getAllStudentByAdvisorId(advisorId);
+    @GetMapping("/getAllByAdvisorId")
+    public List<StudentResponse> getAllStudentByAdvisorId(
+            HttpServletRequest request
+            ) {
+        String ssn = (String) request.getAttribute("ssn");
+        return studentService.getAllStudentBy(ssn);
     }
+
     @GetMapping("/search")
     @PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANTMANAGER')")
     public Page<StudentResponse> search(

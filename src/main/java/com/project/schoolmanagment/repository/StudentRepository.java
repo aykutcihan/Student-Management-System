@@ -32,4 +32,6 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     boolean existsByPhoneNumber(String phoneNumber);
 
     Student getStudentBySsn(String ssn);
+    @Query(value = "SELECT s FROM Student s WHERE s.advisorTeacher.teacher.ssn = :ssn ")
+    List<Student>  getStudentByAdvisorTeacher_Ssn(String ssn);
 }

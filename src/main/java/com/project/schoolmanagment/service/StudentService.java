@@ -192,4 +192,9 @@ public class StudentService {
     public boolean existBySnn(String ssn) {
         return studentRepository.existsBySsn(ssn);
     }
+
+    public List<StudentResponse> getAllStudentBy(String ssn) {
+        return studentRepository.getStudentByAdvisorTeacher_Ssn(ssn).stream().map(responseObjectService::createStudentResponse)
+                .collect(Collectors.toList());
+    }
 }
