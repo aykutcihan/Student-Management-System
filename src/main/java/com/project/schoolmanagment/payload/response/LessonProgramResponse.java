@@ -1,5 +1,6 @@
 package com.project.schoolmanagment.payload.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.project.schoolmanagment.entity.enums.Day;
 import com.project.schoolmanagment.entity.concretes.Lesson;
@@ -22,9 +23,9 @@ public class LessonProgramResponse {
     private Long lessonProgramId;
 
     private Day day;
-
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "US")
     private LocalTime startTime;
-
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "US")
     private LocalTime stopTime;
 
     private Set<Lesson> lessonName;
