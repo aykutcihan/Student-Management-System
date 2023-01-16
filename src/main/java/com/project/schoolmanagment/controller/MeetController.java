@@ -86,10 +86,13 @@ public class MeetController {
         return meetService.update(meetRequest, meetId);
     }
 
-    @PreAuthorize("hasAnyAuthority('TEACHER','ADMIN','STUDENT')")
-    @GetMapping("/getAllMeetByStudent/{studentId}")
-    public List<MeetResponse> getAllMeetByStudent(@PathVariable Long studentId) {
-        return meetService.getAllMeetByStudent(studentId);
+    @PreAuthorize("hasAnyAuthority( 'STUDENT')")
+    @GetMapping("/getAllMeetByStudent" )
+    public List<MeetResponse> getAllMeetByStudent(
+            HttpServletRequest httpServletRequest
+    ) {
+        String ssn = (String) httpServletRequest.getAttribute("ssn");
+        return meetService.getAllMeetByStudentBySsn(ssn);
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANTMANAGER','TEACHER')")

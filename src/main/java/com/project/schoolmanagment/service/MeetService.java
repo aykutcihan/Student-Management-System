@@ -8,7 +8,6 @@ import com.project.schoolmanagment.entity.concretes.AdvisorTeacher;
 import com.project.schoolmanagment.entity.concretes.Meet;
 import com.project.schoolmanagment.entity.concretes.Student;
 import com.project.schoolmanagment.payload.Dto.MeetDto;
-import com.project.schoolmanagment.payload.request.MeetRequest;
 import com.project.schoolmanagment.payload.request.MeetRequestWithoutId;
 import com.project.schoolmanagment.payload.request.UpdateRequest.UpdateMeetRequest;
 import com.project.schoolmanagment.payload.response.MeetResponse;
@@ -40,7 +39,7 @@ public class MeetService {
     private final StudentService studentService;
     private final MeetDto meetDtoObject;
 
-    public ResponseMessage<MeetResponse> save(String ssn ,MeetRequestWithoutId meetRequest) {
+    public ResponseMessage<MeetResponse> save(String ssn, MeetRequestWithoutId meetRequest) {
         Optional<Student> student = studentService.getStudentById(meetRequest.getStudentId());
         Optional<AdvisorTeacher> advisorTeacher = advisorTeacherService.getAdvisorTeacherBySsn(ssn);
         if (!student.isPresent()) {
@@ -118,13 +117,6 @@ public class MeetService {
         return meetDtoObject.meetDto(meetRequestWithoutId);
     }
 
-    public List<MeetResponse> getAllMeetByStudent(Long studentId) {
-        Optional<Student> student = studentService.getStudentById(studentId);
-        if (!student.isPresent()) {
-            throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_USER_MESSAGE, studentId));
-        }
-        return meetRepository.getAllMeetByStudent_Id(studentId).stream().map(this::createMeetResponse).collect(Collectors.toList());
-    }
 
     public ResponseMessage delete(Long meetId) {
         Optional<Meet> meet = meetRepository.findById(meetId);
@@ -203,4 +195,14 @@ public class MeetService {
                 .description(updateMeetRequest.getDescription())
                 .build();
     }
+
+    public List<MeetResponse> getAllMeetByStudentBySsn(String ssn) {
+
+        Optional<Student> student = studentService.getStudentBySnnForOptional(ssn);
+        if (!student.isPresent()) {
+            throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_USER_MESSAGE, ssn));
+        }
+        return meetRepository.getAllMeetByStudent_Id(student.get().getId()).stream().map(this::createMeetResponse).collect(Collectors.toList());
+    }
+
 }

@@ -173,6 +173,10 @@ public class StudentService {
         return studentRepository.getStudentBySsnForResponse(ssn);
     }
 
+    public Optional<Student> getStudentBySnnForOptional(String ssn) {
+        return studentRepository.getStudentBySnnForOptional(ssn);
+    }
+
     public Page<StudentResponse> search(int page, int size, String sort, String type) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sort).ascending());
         if (Objects.equals(type, "desc")) {
@@ -197,4 +201,5 @@ public class StudentService {
         return studentRepository.getStudentByAdvisorTeacher_Ssn(ssn).stream().map(responseObjectService::createStudentResponse)
                 .collect(Collectors.toList());
     }
+
 }
