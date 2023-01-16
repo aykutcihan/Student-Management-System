@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
-@RequestMapping("lessonProgram")
+@RequestMapping("lessonPrograms")
 @RequiredArgsConstructor
 @CrossOrigin
 public class LessonProgramController {
