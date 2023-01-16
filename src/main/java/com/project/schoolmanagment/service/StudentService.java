@@ -170,7 +170,7 @@ public class StudentService {
     }
 
     public StudentResponse getStudentBySnn(String ssn) {
-        return studentRepository.getStudentBySsn(ssn);
+        return studentRepository.getStudentBySsnForResponse(ssn);
     }
 
     public Page<StudentResponse> search(int page, int size, String sort, String type) {

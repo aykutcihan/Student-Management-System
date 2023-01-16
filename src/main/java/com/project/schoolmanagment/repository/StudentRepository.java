@@ -12,7 +12,9 @@ import java.util.Set;
 
 public interface StudentRepository extends JpaRepository<Student, Long> {
     @Query("select s from Student s where s.ssn = :ssn")
-    StudentResponse getStudentBySsn(String ssn);
+    Student getStudentBySsn(String ssn);
+    @Query("select s from Student s where s.ssn = :ssn")
+    StudentResponse getStudentBySsnForResponse(String ssn);
     @Query("select s from Student s where s.ssn = ?1")
     Optional<Student> getStudentBySnnForOptional(String ssn);
 
