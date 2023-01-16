@@ -14,6 +14,6 @@ public interface StudentInfoRepository extends JpaRepository<StudentInfo, Long> 
     List<StudentInfo> getAllByStudentId_Id(Long studentId_id);
 
 
-    @Query("select s from StudentInfo s where s.studentId.ssn = ?2")
+    //@Query("select s from StudentInfo s where s.studentId.ssn = ?2")
     Page<StudentInfoResponse> findByStudentId_SsnEquals(Pageable pageable, String ssn);
 }
