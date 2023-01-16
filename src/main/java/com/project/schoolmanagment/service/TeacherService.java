@@ -22,10 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.project.schoolmanagment.utils.Messages;
@@ -46,7 +43,7 @@ public class TeacherService {
     private final PasswordEncoder passwordEncoder;
 
     public ResponseMessage<TeacherResponse> save(TeacherRequest teacherRequest) {
-        Set<LessonProgram> lessons = lessonProgramService.getLessonProgramById(teacherRequest.getLessonsIdList());
+         Set<LessonProgram> lessons = lessonProgramService.getLessonProgramById(teacherRequest.getLessonsIdList());
         if (lessons.size() == 0) {
             throw new BadRequestException(Messages.LESSON_PROGRAM_NOT_FOUND_MESSAGE);
 
@@ -191,5 +188,9 @@ public class TeacherService {
         return teacher.getSsn().equalsIgnoreCase(newTeacherRequest.getSsn())
                 || teacher.getPhoneNumber().equalsIgnoreCase(newTeacherRequest.getPhoneNumber())
                 || teacher.getEmail().equalsIgnoreCase(newTeacherRequest.getEmail());
+    }
+
+    public Optional<Teacher> getTeacherBySsn(String ssn) {
+        return Optional.ofNullable(teacherRepository.getTeacherBySsn(ssn));
     }
 }

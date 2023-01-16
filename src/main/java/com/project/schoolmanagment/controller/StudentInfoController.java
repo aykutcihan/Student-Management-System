@@ -1,6 +1,7 @@
 package com.project.schoolmanagment.controller;
 
 import com.project.schoolmanagment.payload.request.StudentInfoRequest;
+import com.project.schoolmanagment.payload.request.StudentInfoRequestWithoutTeacherId;
 import com.project.schoolmanagment.payload.request.UpdateRequest.UpdateStudentInfoRequest;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.payload.response.StudentInfoResponse;
@@ -27,10 +28,14 @@ public class StudentInfoController {
 
     private final StudentInfoService studentInfoService;
 
-    @PreAuthorize("hasAnyAuthority('ADMIN','TEACHER')")
+    @PreAuthorize("hasAnyAuthority('TEACHER')")
     @PostMapping("/save")
-    public ResponseMessage<StudentInfoResponse> save(@RequestBody @Valid StudentInfoRequest studentInfoRequest) {
-        return studentInfoService.save(studentInfoRequest);
+    public ResponseMessage<StudentInfoResponse> save(
+            HttpServletRequest httpServletRequest,
+            @RequestBody @Valid StudentInfoRequestWithoutTeacherId studentInfoRequestWithoutTeacherId
+    ) {
+        String ssn = (String) httpServletRequest.getAttribute("ssn");
+        return studentInfoService.save(ssn,studentInfoRequestWithoutTeacherId);
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN','TEACHER')")

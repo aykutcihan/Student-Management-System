@@ -8,6 +8,7 @@ import com.project.schoolmanagment.entity.concretes.StudentInfo;
 import com.project.schoolmanagment.entity.concretes.Teacher;
 import com.project.schoolmanagment.entity.enums.Note;
 import com.project.schoolmanagment.payload.request.StudentInfoRequest;
+import com.project.schoolmanagment.payload.request.StudentInfoRequestWithoutTeacherId;
 import com.project.schoolmanagment.payload.request.UpdateRequest.UpdateStudentInfoRequest;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.payload.response.StudentInfoResponse;
@@ -41,9 +42,9 @@ public class StudentInfoService {
     @Value("${final.exam.impact.percentage}")
     private Double finalExamPercantage;
 
-    public ResponseMessage<StudentInfoResponse> save(StudentInfoRequest studentInfoRequest) {
+    public ResponseMessage<StudentInfoResponse> save(String ssn, StudentInfoRequestWithoutTeacherId studentInfoRequest) {
         Optional<Student> student = studentService.getStudentById(studentInfoRequest.getStudentId());
-        Optional<Teacher> teacher = teacherService.getTeacherById(studentInfoRequest.getTeacherId());
+        Optional<Teacher> teacher = teacherService.getTeacherBySsn(ssn);
         Optional<Lesson> lesson = lessonService.getLessonById(studentInfoRequest.getLessonId());
 
         if (!lesson.isPresent()) {
@@ -53,7 +54,7 @@ public class StudentInfoService {
             throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_USER_MESSAGE, studentInfoRequest.getStudentId()));
 
         } else if (!teacher.isPresent()) {
-            throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_USER_MESSAGE, studentInfoRequest.getTeacherId()));
+            throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_USER_MESSAGE, ssn));
         } else if (checkSameLesson(studentInfoRequest.getStudentId(), lesson.get().getLessonName())) {
             throw new ConflictException(String.format(Messages.ALREADY_REGISTER_LESSON_NAME, lesson.get().getLessonName()));
         }
@@ -130,7 +131,8 @@ public class StudentInfoService {
         return studentInfoRepository.findAll(pageable).map(this::createResponse);
     }
 
-    private StudentInfo createDto(StudentInfoRequest studentInfoRequest, Note note, Double average) {
+
+    private StudentInfo createDto(StudentInfoRequestWithoutTeacherId studentInfoRequest, Note note, Double average) {
         return StudentInfo.builder().infoNote(studentInfoRequest.getInfoNote())
                 .absentee(studentInfoRequest.getAbsentee())
                 .midtermExam(studentInfoRequest.getMidtermExam())
