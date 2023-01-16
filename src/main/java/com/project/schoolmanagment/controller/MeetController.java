@@ -39,10 +39,11 @@ public class MeetController {
     }
 
     @GetMapping("/getAll")
-    @PreAuthorize("hasAnyAuthority('TEACHER','ADMIN')")
+    @PreAuthorize("hasAnyAuthority( 'ADMIN')")
     public List<MeetResponse> getAll() {
         return meetService.getAll();
     }
+
 
     @GetMapping("/getMeetById/{meetId}")
     @PreAuthorize("hasAnyAuthority('TEACHER','ADMIN')")
@@ -51,7 +52,7 @@ public class MeetController {
     }
 
     @GetMapping("/getAllMeetByAdvisorAsPage")
-    @PreAuthorize("hasAnyAuthority('TEACHER','ADMIN')")
+    @PreAuthorize("hasAnyAuthority('TEACHER' )")
     public ResponseEntity<Page<MeetResponse>> getAllMeetByAdvisorAsPage(
             HttpServletRequest httpServletRequest,
             @RequestParam(value = "page") int page,
@@ -64,7 +65,7 @@ public class MeetController {
     }
 
     @GetMapping("/getAllMeetByAdvisorTeacherAsList")
-    @PreAuthorize("hasAnyAuthority('TEACHER','ADMIN')")
+    @PreAuthorize("hasAnyAuthority('TEACHER' )")
     public ResponseEntity<List<MeetResponse>> getAllMeetByAdvisorTeacherAsList(
             HttpServletRequest httpServletRequest
     ) {
