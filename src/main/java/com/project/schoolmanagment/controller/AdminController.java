@@ -17,6 +17,7 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("admin")
 @RequiredArgsConstructor
+@CrossOrigin
 public class AdminController {
 
     private final AdminService adminService;
