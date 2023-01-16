@@ -18,7 +18,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("teacher")
+@RequestMapping("teachers")
 @RequiredArgsConstructor
 @CrossOrigin
 public class TeacherController {
@@ -27,7 +27,9 @@ public class TeacherController {
 
     @PreAuthorize("hasAnyAuthority('ASSISTANTMANAGER','ADMIN')")
     @PostMapping("/save")
-    public ResponseMessage<TeacherResponse> save(@RequestBody @Valid TeacherRequest teacher) {
+    public ResponseMessage<TeacherResponse> save(
+            @RequestBody @Valid TeacherRequest teacher
+    ) {
         return teacherService.save(teacher);
     }
 
