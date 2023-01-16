@@ -54,7 +54,7 @@ public class StudentController {
         return studentService.getStudentByName(studentName);
     }
 
-    @GetMapping("/getStudentBySnn")
+    @GetMapping("/getStudentBySsn")
     @PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANTMANAGER')")
     public StudentResponse getStudentBySnn(@RequestParam(name = "ssn") String ssn) {
         return studentService.getStudentBySnn(ssn);

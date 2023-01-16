@@ -11,8 +11,8 @@ import java.util.Optional;
 import java.util.Set;
 
 public interface StudentRepository extends JpaRepository<Student, Long> {
-    @Query("select s from Student s where s.ssn = ?1")
-    StudentResponse getStudentBySnn(String ssn);
+    @Query("select s from Student s where s.ssn = :ssn")
+    StudentResponse getStudentBySsn(String ssn);
     @Query("select s from Student s where s.ssn = ?1")
     Optional<Student> getStudentBySnnForOptional(String ssn);
 
@@ -31,7 +31,7 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 
     boolean existsByPhoneNumber(String phoneNumber);
 
-    Student getStudentBySsn(String ssn);
+
     @Query(value = "SELECT s FROM Student s WHERE s.advisorTeacher.teacher.ssn = :ssn ")
     List<Student>  getStudentByAdvisorTeacher_Ssn(String ssn);
 }
