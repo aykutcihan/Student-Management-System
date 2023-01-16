@@ -11,8 +11,7 @@ import java.util.Set;
 public interface LessonProgramRepository extends JpaRepository<LessonProgram, Long> {
 
     @Query(value = "SELECT l FROM LessonProgram l WHERE l.id IN :lessonProgramIdList")
-    Set<LessonProgram> getLessonProgramByLessonProgramIdList(@Param("lessonProgramIdList")
-                                                             Set<Long> lessonProgramIdList);
+    Set<LessonProgram> getLessonProgramByLessonProgramIdList( Set<Long> lessonProgramIdList);
 
     @Query("select l from LessonProgram l inner join l.students students where students.ssn = ?1")
     List<LessonProgram> getLessonProgramByStudentSsn(String ssn);
