@@ -1,5 +1,6 @@
 package com.project.schoolmanagment.entity.concretes;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.project.schoolmanagment.entity.enums.Day;
 import lombok.AllArgsConstructor;
@@ -25,9 +26,9 @@ public class LessonProgram implements Serializable {
 
     @Enumerated(EnumType.STRING)
     private Day day;
-
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "US")
     private LocalTime startTime;
-
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "US")
     private LocalTime stopTime;
 
     @ManyToMany
