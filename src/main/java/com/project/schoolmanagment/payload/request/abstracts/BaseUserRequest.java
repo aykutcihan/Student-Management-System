@@ -41,7 +41,7 @@ public abstract class BaseUserRequest implements Serializable {
     @NotEmpty(message = "Please enter your phone number")
     @Pattern(regexp = "^((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$",
       message = "Please enter valid phone number")
-    @Size(min = 10, max = 10, message = "Phone number should be exact 10 characters")
+    @Size(min = 12, max = 12, message = "Phone number should be exact 12 characters")
     private String phoneNumber;
 
     @NotNull
