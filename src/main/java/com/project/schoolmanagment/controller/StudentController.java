@@ -1,5 +1,6 @@
 package com.project.schoolmanagment.controller;
 
+import com.project.schoolmanagment.entity.concretes.Student;
 import com.project.schoolmanagment.payload.request.ChooseLessonRequestWithoutId;
 import com.project.schoolmanagment.payload.request.StudentRequest;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("students")
@@ -54,10 +56,10 @@ public class StudentController {
         return studentService.getStudentByName(studentName);
     }
 
-    @GetMapping("/getStudentBySsn")
+    @GetMapping("/getStudentById")
     @PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANTMANAGER')")
-    public StudentResponse getStudentBySnn(@RequestParam(name = "ssn") String ssn) {
-        return studentService.getStudentBySnn(ssn);
+    public Optional<Student> getStudentById(@RequestParam(name = "id") Long id) {
+        return studentService.getStudentById(id);
     }
 
     @PostMapping("/chooseLesson")

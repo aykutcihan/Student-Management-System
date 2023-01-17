@@ -27,24 +27,24 @@ public class Student extends User {
     private String fatherName;
 
     private String studentNumber;
-
+    @JsonIgnore //https://www.baeldung.com/jackson-bidirectional-relationships-and-infinite-recursion
     @ManyToOne(cascade = CascadeType.REMOVE)
     private AdvisorTeacher advisorTeacher;
 
-
+    @JsonIgnore //https://www.baeldung.com/jackson-bidirectional-relationships-and-infinite-recursion
     @ManyToMany
     @JoinTable(
             name = "student_lessonprogram",
             joinColumns = @JoinColumn(name = "student_id"),
             inverseJoinColumns = @JoinColumn(name = "lesson_program_id"))
     private Set<LessonProgram> lessonsProgramList;
-
+    @JsonIgnore //https://www.baeldung.com/jackson-bidirectional-relationships-and-infinite-recursion
     @OneToMany(mappedBy = "student",cascade = CascadeType.REMOVE)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<Meet> meets;
 
     private String email;
-
+    @JsonIgnore //https://www.baeldung.com/jackson-bidirectional-relationships-and-infinite-recursion
     @OneToMany(mappedBy = "studentId",cascade = CascadeType.REMOVE)
     private List<StudentInfo> studentInfoList;
 

@@ -156,8 +156,9 @@ public class StudentService {
     }
 
     public Optional<Student> getStudentById(Long studentId) {
-        return studentRepository.findById(studentId);
+        return studentRepository.findByIdEquals(studentId);
     }
+
 
     public List<StudentResponse> getAllStudentByAdvisorId(Long advisorId) {
         return studentRepository.getStudentByAdvisorTeacher_Id(advisorId).stream().map(responseObjectService::createStudentResponse)
@@ -169,9 +170,6 @@ public class StudentService {
                 .collect(Collectors.toList());
     }
 
-    public StudentResponse getStudentBySnn(String ssn) {
-        return studentRepository.getStudentBySsnForResponse(ssn);
-    }
 
     public Optional<Student> getStudentBySnnForOptional(String ssn) {
         return studentRepository.getStudentBySnnForOptional(ssn);
