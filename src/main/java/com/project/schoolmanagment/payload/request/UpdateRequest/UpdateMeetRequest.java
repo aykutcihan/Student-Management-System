@@ -32,4 +32,7 @@ public class UpdateMeetRequest {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "US")
     private LocalTime stopTime;
 
+    @NotNull
+    private Long[] studentIds;
+
 }
