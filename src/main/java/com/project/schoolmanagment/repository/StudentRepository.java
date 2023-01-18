@@ -11,6 +11,7 @@ import java.util.Optional;
 import java.util.Set;
 
 public interface StudentRepository extends JpaRepository<Student, Long> {
+    List<Student> findByMeetList_IdEquals(Long id);
     @Query("select s from Student s where s.ssn = :ssn")
     Student getStudentBySsn(String ssn);
 
@@ -36,7 +37,10 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     @Query(value = "SELECT s FROM Student s WHERE s.advisorTeacher.teacher.ssn = :ssn ")
     List<Student>  getStudentByAdvisorTeacher_Ssn(String ssn);
 
+    @Query(value = "SELECT s FROM Student s WHERE s.id IN :id")
+    List<Student> findByIdsEquals(Long[] id);
     Optional<Student> findByIdEquals(Long id);
 
 
+    boolean existsByIdEquals(Long studentId);
 }

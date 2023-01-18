@@ -155,6 +155,9 @@ public class StudentService {
 
     }
 
+    public List<Student>    getStudentByIds(Long[] studentIds) {
+        return studentRepository.findByIdsEquals(studentIds);
+    }
     public Optional<Student> getStudentById(Long studentId) {
         return studentRepository.findByIdEquals(studentId);
     }
