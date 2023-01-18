@@ -1,15 +1,11 @@
 package com.project.schoolmanagment.entity.concretes;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.project.schoolmanagment.entity.abstracts.User;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
 import java.util.List;
 import java.util.Set;
 
@@ -38,10 +34,14 @@ public class Student extends User {
             joinColumns = @JoinColumn(name = "student_id"),
             inverseJoinColumns = @JoinColumn(name = "lesson_program_id"))
     private Set<LessonProgram> lessonsProgramList;
+
+
     @JsonIgnore //https://www.baeldung.com/jackson-bidirectional-relationships-and-infinite-recursion
-    @OneToMany(mappedBy = "student",cascade = CascadeType.REMOVE)
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private List<Meet> meets;
+    @ManyToMany()
+    @JoinTable(
+            joinColumns = @JoinColumn(name = "student_id"),
+            inverseJoinColumns = @JoinColumn(name = "meet_id"))
+    private List<Meet> meetList;
 
     private String email;
     @JsonIgnore //https://www.baeldung.com/jackson-bidirectional-relationships-and-infinite-recursion
