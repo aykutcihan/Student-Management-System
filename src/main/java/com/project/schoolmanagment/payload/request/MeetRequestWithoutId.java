@@ -34,5 +34,5 @@ public class MeetRequestWithoutId implements Serializable {
     private LocalTime stopTime;
 
     @NotNull
-    private Long studentId;
+    private Long[] studentIds;
 }

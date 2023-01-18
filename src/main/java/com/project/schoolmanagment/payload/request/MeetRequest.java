@@ -1,19 +1,14 @@
 package com.project.schoolmanagment.payload.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.project.schoolmanagment.entity.concretes.AdvisorTeacher;
-import com.project.schoolmanagment.entity.concretes.Student;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -42,5 +37,5 @@ public class MeetRequest implements Serializable {
     private Long advisorTeacherId;
 
     @NotNull
-    private Long studentId;
+    private Long[] studentIds;
 }

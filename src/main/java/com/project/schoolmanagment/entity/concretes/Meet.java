@@ -1,6 +1,7 @@
 package com.project.schoolmanagment.entity.concretes;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,6 +12,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Entity
 @Data
@@ -35,7 +37,12 @@ public class Meet implements Serializable {
     @JsonIgnoreProperties({"teacher"})
     private AdvisorTeacher advisorTeacher;
 
-    @ManyToOne
-    @JsonIgnoreProperties({"lessonsProgramList","advisorTeacher"})
-    private Student student;
+
+    @JsonIgnore //https://www.baeldung.com/jackson-bidirectional-relationships-and-infinite-recursion
+    @ManyToMany()
+    @JoinTable(
+            joinColumns = @JoinColumn(name = "meet_id"),
+            inverseJoinColumns = @JoinColumn(name = "student_id"))
+    private List<Student> studentList;
+ 
 }

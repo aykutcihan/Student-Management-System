@@ -1,18 +1,16 @@
 package com.project.schoolmanagment.payload.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.project.schoolmanagment.entity.concretes.AdvisorTeacher;
 import com.project.schoolmanagment.entity.concretes.Student;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.ManyToOne;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -35,7 +33,5 @@ public class MeetResponse {
     private String teacherName;
     private String teacherSsn;
 
-    private Long studentId;
-    private String studentSsn;
-    private String studentName;
+    private List<Student> students;
 }
