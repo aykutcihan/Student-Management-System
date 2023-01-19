@@ -1,15 +1,12 @@
 package com.project.schoolmanagment.payload.response;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.project.schoolmanagment.entity.concretes.LessonProgram;
+import com.project.schoolmanagment.entity.concretes.StudentInfo;
 import com.project.schoolmanagment.entity.enums.Note;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.ManyToOne;
 
 @Data
 @AllArgsConstructor
@@ -35,4 +32,6 @@ public class StudentInfoResponse {
     private Note note;
 
     private StudentResponse studentResponse;
+
+
 }

@@ -15,13 +15,13 @@ public interface StudentInfoRepository extends JpaRepository<StudentInfo, Long> 
 
 
     //@Query("select s from StudentInfo s where s.studentId.ssn = ?2")
-    Page<StudentInfoResponse> findByStudentId_SsnEquals(Pageable pageable, String ssn);
+    Page<StudentInfo> findByStudentId_SsnEquals(Pageable pageable, String ssn);
 
     @Query("select s from StudentInfo s ")
-    Page<StudentInfoResponse> getAll(Pageable pageable);
+    Page<StudentInfo> getAll(Pageable pageable);
 
     @Query("select s from StudentInfo s where s.teacherId.ssn = ?1")
-    Page<StudentInfoResponse> findByTeacherId_SsnEquals(String ssn, Pageable pageable);
+    Page<StudentInfo> findByTeacherId_SsnEquals(String ssn, Pageable pageable);
 
 
  }

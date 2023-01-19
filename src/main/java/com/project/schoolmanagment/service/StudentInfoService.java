@@ -7,7 +7,6 @@ import com.project.schoolmanagment.entity.concretes.Student;
 import com.project.schoolmanagment.entity.concretes.StudentInfo;
 import com.project.schoolmanagment.entity.concretes.Teacher;
 import com.project.schoolmanagment.entity.enums.Note;
-import com.project.schoolmanagment.payload.request.StudentInfoRequest;
 import com.project.schoolmanagment.payload.request.StudentInfoRequestWithoutTeacherId;
 import com.project.schoolmanagment.payload.request.UpdateRequest.UpdateStudentInfoRequest;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
@@ -23,10 +22,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -112,17 +109,17 @@ public class StudentInfoService {
     }
 
     public Page<StudentInfoResponse> getAll(Pageable pageable) {
-        return studentInfoRepository.getAll(pageable);
+        return studentInfoRepository.getAll(pageable).map(this::createResponse);
     }
 
-    public Page<StudentInfoResponse> getAllForTeacher(Pageable pageable,String ssn) {
-        return studentInfoRepository.findByTeacherId_SsnEquals( ssn,pageable);
+    public Page<StudentInfoResponse> getAllForTeacher(Pageable pageable, String ssn) {
+        return studentInfoRepository.findByTeacherId_SsnEquals(ssn, pageable).map(this::createResponse);
     }
 
     public Page<StudentInfoResponse> getAllStudentInfoByStudent(Pageable pageable, String ssn) {
         boolean student = studentService.existBySnn(ssn);
         if (!student) throw new ResourceNotFoundException(String.format(Messages.STUDENT_INFO_NOT_FOUND, ssn));
-        return studentInfoRepository.findByStudentId_SsnEquals(pageable, ssn);
+        return studentInfoRepository.findByStudentId_SsnEquals(pageable, ssn).map(this::createResponse);
     }
 
     public Page<StudentInfoResponse> search(int page, int size, String sort, String type) {
