@@ -23,32 +23,32 @@ public class LessonController {
     private final LessonService lessonService;
 
     @PostMapping("/save")
-    @PreAuthorize("hasAnyAuthority('ASSISTANTMANAGER','ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANTMANAGER')")
     public ResponseMessage<LessonResponse> save(
             @RequestBody @Valid LessonRequest lesson
     ){
         return lessonService.save(lesson);
     }
 
-    @PreAuthorize("hasAnyAuthority('ASSISTANTMANAGER','ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANTMANAGER')")
     @DeleteMapping("/delete/{id}")
     public ResponseMessage deleteLesson(@PathVariable Long id) {
         return lessonService.deleteLesson(id);
     }
 
-    @PreAuthorize("hasAnyAuthority('ASSISTANTMANAGER','ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANTMANAGER')")
     @GetMapping("/getLessonByName")
     public ResponseMessage<LessonResponse> getLessonByLessonName(@RequestParam String lessonName) {
         return lessonService.getLessonByLessonName(lessonName);
     }
 
-    @PreAuthorize("hasAnyAuthority('ASSISTANTMANAGER','ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANTMANAGER')")
     @GetMapping("/getAll")
     public List<LessonResponse> getAllLesson() {
         return lessonService.getAllLesson();
     }
 
-    @PreAuthorize("hasAnyAuthority('ASSISTANTMANAGER','ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANTMANAGER')")
     @GetMapping("/getAllLessonByLessonId")
     public Set<Lesson> getAllLessonByLessonId(
             @RequestParam(name = "lessonId") Set<Long> idList
@@ -56,7 +56,7 @@ public class LessonController {
         return lessonService.getLessonByLessonNameList(idList);
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANTMANAGER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANTMANAGER')")
     @GetMapping("/search")
     public Page<LessonResponse> search(
             @RequestParam(value = "page") int page,
