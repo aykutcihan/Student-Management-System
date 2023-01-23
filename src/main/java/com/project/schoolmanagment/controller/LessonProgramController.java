@@ -23,19 +23,19 @@ public class LessonProgramController {
     private final LessonProgramService lessonProgramService;
 
     @PostMapping("/save")
-    @PreAuthorize("hasAnyAuthority('ASSISTANTMANAGER','ADMIN')")
+        @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANTMANAGER')")
     public ResponseMessage<LessonProgramResponse> save(@RequestBody @Valid LessonProgramRequest lessonProgramRequest) {
         return lessonProgramService.save(lessonProgramRequest);
     }
 
     @GetMapping("/getAll")
-    @PreAuthorize("hasAnyAuthority('ASSISTANTMANAGER','ADMIN','TEACHER','STUDENT')")
+    @PreAuthorize("hasAnyAuthority('ASSISTANTMANAGER','MANAGER','ADMIN','TEACHER','STUDENT')")
     public List<LessonProgramResponse> getAll() {
         return lessonProgramService.getAllLessonProgram();
     }
 
     @DeleteMapping("/delete/{id}")
-    @PreAuthorize("hasAnyAuthority('ASSISTANTMANAGER','ADMIN')")
+        @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANTMANAGER')")
     public ResponseMessage delete(@PathVariable Long id) {
         return lessonProgramService.deleteLessonProgram(id);
     }
@@ -59,7 +59,7 @@ public class LessonProgramController {
         return lessonProgramService.getLessonProgramByStudentSsn(ssn);
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANTMANAGER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANTMANAGER')")
     @GetMapping("/search")
     public Page<LessonProgramResponse> search(
             @RequestParam(value = "page") int page,
