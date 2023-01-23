@@ -24,7 +24,7 @@ public class StudentController {
 
     private final StudentService studentService;
 
-    @PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANTMANAGER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANTMANAGER')")
     @PostMapping("/save")
     public ResponseMessage<StudentResponse> save(
             @RequestBody @Valid StudentRequest studentRequest
@@ -32,32 +32,32 @@ public class StudentController {
         return studentService.save(studentRequest);
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANTMANAGER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANTMANAGER')")
     @GetMapping("/getAll")
     public List<StudentResponse> getAllTeacher() {
         return studentService.getAllStudent();
     }
 
     @PutMapping("/update/{userId}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANTMANAGER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANTMANAGER')")
     public ResponseMessage<StudentResponse> updateStudent(@PathVariable Long userId, @RequestBody @Valid StudentRequest studentRequest) {
         return studentService.updateStudent(userId, studentRequest);
     }
 
     @DeleteMapping("/delete/{studentId}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANTMANAGER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANTMANAGER')")
     public ResponseMessage deleteStudent(@PathVariable Long studentId) {
         return studentService.deleteStudent(studentId);
     }
 
     @GetMapping("/getStudentByName")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANTMANAGER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANTMANAGER')")
     public List<StudentResponse> getStudentByName(@RequestParam(name = "name") String studentName) {
         return studentService.getStudentByName(studentName);
     }
 
     @GetMapping("/getStudentById")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANTMANAGER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANTMANAGER')")
     public Optional<Student> getStudentById(@RequestParam(name = "id") Long id) {
         return studentService.getStudentById(id);
     }
@@ -75,7 +75,7 @@ public class StudentController {
         return studentService.chooseLesson(ssn, chooseLessonRequest);
     }
 
-    @PreAuthorize("hasAnyAuthority('TEACHER','ADMIN')")
+    @PreAuthorize("hasAnyAuthority('TEACHER')")
     @GetMapping("/getAllByAdvisorId")
     public List<StudentResponse> getAllStudentByAdvisorId(
             HttpServletRequest request
@@ -85,7 +85,7 @@ public class StudentController {
     }
 
     @GetMapping("/search")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANTMANAGER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANTMANAGER')")
     public Page<StudentResponse> search(
             @RequestParam(value = "page") int page,
             @RequestParam(value = "size") int size,
