@@ -25,7 +25,7 @@ public class TeacherController {
 
     private final TeacherService teacherService;
 
-    @PreAuthorize("hasAnyAuthority('ASSISTANTMANAGER','ADMIN')")
+        @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANTMANAGER')")
     @PostMapping("/save")
     public ResponseMessage<TeacherResponse> save(
             @RequestBody @Valid TeacherRequest teacher
@@ -33,43 +33,43 @@ public class TeacherController {
         return teacherService.save(teacher);
     }
 
-    @PreAuthorize("hasAnyAuthority('ASSISTANTMANAGER','ADMIN')")
+        @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANTMANAGER')")
     @GetMapping("/getAll")
     public List<TeacherResponse> getAllTeacher() {
         return teacherService.getAllTeacher();
     }
 
-    @PreAuthorize("hasAnyAuthority('ASSISTANTMANAGER','ADMIN')")
+        @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANTMANAGER')")
     @PutMapping("/update/{userId}")
     public ResponseMessage<TeacherResponse> updateTeacher(@RequestBody @Valid TeacherRequest teacher, @PathVariable Long userId) {
         return teacherService.updateTeacher(teacher, userId);
     }
 
-    @PreAuthorize("hasAnyAuthority('ASSISTANTMANAGER','ADMIN')")
+        @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANTMANAGER')")
     @GetMapping("/getTeacherByName")
     public List<TeacherResponse> getTeacherByName(@RequestParam(name = "name") String teacherName) {
         return teacherService.getTeacherByName(teacherName);
     }
 
-    @PreAuthorize("hasAnyAuthority('ASSISTANTMANAGER','ADMIN')")
+        @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANTMANAGER')")
     @DeleteMapping("/delete/{id}")
     public ResponseMessage<?> deleteTeacher(@PathVariable Long id) {
         return teacherService.deleteTeacher(id);
     }
 
-    @PreAuthorize("hasAnyAuthority('ASSISTANTMANAGER','ADMIN')")
+        @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANTMANAGER')")
     @GetMapping("/getSavedTeacherById/{id}")
     public ResponseMessage<TeacherResponse> getSavedTeacherById(@PathVariable Long id) {
         return teacherService.getSavedTeacherById(id);
     }
 
-    @PreAuthorize("hasAnyAuthority('ASSISTANTMANAGER','ADMIN')")
+        @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANTMANAGER')")
     @PostMapping("/chooseLesson")
     public ResponseMessage<TeacherResponse> chooseLesson(@RequestBody ChooseLessonTeacherRequest chooseLessonRequest) {
         return teacherService.chooseLesson(chooseLessonRequest);
     }
 
-    @PreAuthorize("hasAnyAuthority('ASSISTANTMANAGER','ADMIN')")
+        @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANTMANAGER')")
     @GetMapping("/search")
     public Page<TeacherResponse> search(
             @RequestParam(value = "page") int page,
