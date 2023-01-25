@@ -47,7 +47,8 @@ public class WebSecurityConfig{
 
         http.exceptionHandling().authenticationEntryPoint(unauthorizedHandler);
 
-        http.authorizeRequests().antMatchers(HttpMethod.POST, "/auth/login").permitAll()
+        http.authorizeRequests()
+                .antMatchers(HttpMethod.POST, "/auth/login","/contactMessages/save").permitAll()
                 .and().authorizeRequests().antMatchers("/**").authenticated();
 
         http.authenticationManager(authenticationManager);
@@ -72,6 +73,7 @@ public class WebSecurityConfig{
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring()
+                //.antMatchers("/contactMessages/save")
                 .antMatchers("/api/auth/**")
                 .antMatchers("/v2/api-docs/**")
                 .antMatchers("configuration/**")

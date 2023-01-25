@@ -21,6 +21,8 @@ public class Messages {
     public static final String  ALREADY_REGISTER_MESSAGE_EMAIL= "Error: User with email address %s already register";
     public static final String  ALREADY_REGISTER_LESSON_NAME = "Error: Student Info with lesson name %s already register";
 
+    public static final String  ALREADY_SEND_A_MESSAGE_TODAY = "Error: You already sent a message with this e-mail address today";
+
 
 
 
