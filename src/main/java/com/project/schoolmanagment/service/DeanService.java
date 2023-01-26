@@ -1,19 +1,14 @@
 package com.project.schoolmanagment.service;
 
-import com.project.schoolmanagment.Exception.BadRequestException;
-import com.project.schoolmanagment.Exception.ConflictException;
+ import com.project.schoolmanagment.Exception.ConflictException;
 import com.project.schoolmanagment.Exception.ResourceNotFoundException;
 import com.project.schoolmanagment.entity.concretes.Dean;
-import com.project.schoolmanagment.entity.concretes.Teacher;
-import com.project.schoolmanagment.entity.concretes.ViceDean;
-import com.project.schoolmanagment.entity.enums.Role;
+ import com.project.schoolmanagment.entity.enums.Role;
 import com.project.schoolmanagment.payload.Dto.DeanDto;
 import com.project.schoolmanagment.payload.request.DeanRequest;
-import com.project.schoolmanagment.payload.request.ViceDeanRequest;
-import com.project.schoolmanagment.payload.response.DeanResponse;
+ import com.project.schoolmanagment.payload.response.DeanResponse;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
-import com.project.schoolmanagment.payload.response.ViceDeanResponse;
-import com.project.schoolmanagment.repository.DeanRepository;
+ import com.project.schoolmanagment.repository.DeanRepository;
 import com.project.schoolmanagment.service.util.CheckParameterUpdateMethod;
 import com.project.schoolmanagment.utils.Messages;
 import lombok.RequiredArgsConstructor;
