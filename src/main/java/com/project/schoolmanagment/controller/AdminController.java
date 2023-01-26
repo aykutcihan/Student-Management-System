@@ -1,6 +1,7 @@
 package com.project.schoolmanagment.controller;
 
 import com.project.schoolmanagment.entity.concretes.Admin;
+import com.project.schoolmanagment.payload.request.AdminRequest;
 import com.project.schoolmanagment.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -13,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("admin")
@@ -24,14 +26,22 @@ public class AdminController {
 
     @PostMapping("/save")
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public ResponseEntity<?> save(@RequestBody @Valid Admin admin) {
-        return ResponseEntity.ok(adminService.save(admin));
+    public ResponseEntity<?> save(@RequestBody @Valid AdminRequest adminRequest) {
+        return ResponseEntity.ok(adminService.save(adminRequest));
     }
 
-    @GetMapping("/all")
+    @GetMapping("/getAll")
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public ResponseEntity<Page<Admin>> getAll() {
-        Pageable pageable = PageRequest.of(0, 10, Sort.by("username"));
+    public ResponseEntity<Page<Admin>> getAll(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size,
+            @RequestParam(value = "sort", defaultValue = "name") String sort,
+            @RequestParam(value = "type", defaultValue = "desc") String type
+    ) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sort).ascending());
+        if (Objects.equals(type, "asc")) {
+            pageable = PageRequest.of(page, size, Sort.by(sort).ascending());
+        }
         Page<Admin> author = adminService.getAllAdmin(pageable);
         return new ResponseEntity<>(author, HttpStatus.OK);
     }

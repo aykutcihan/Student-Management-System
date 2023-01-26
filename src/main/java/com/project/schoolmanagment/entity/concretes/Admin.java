@@ -1,35 +1,18 @@
 package com.project.schoolmanagment.entity.concretes;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.project.schoolmanagment.entity.abstracts.User;
+import com.project.schoolmanagment.entity.enums.Gender;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import java.io.Serializable;
+import java.time.LocalDate;
 
 @Entity
-@Data
-@AllArgsConstructor
+@Getter
+@Setter
 @NoArgsConstructor
-@Builder
-public class Admin implements Serializable {
+@SuperBuilder
+public class Admin extends User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
-    @NotEmpty
-    private String username;
-
-    @NotEmpty
-    @JsonProperty(access = JsonProperty.Access.READ_WRITE)
-    private String password;
-
-    @OneToOne
-    private UserRole role;
-
-    public Admin(String username, String password) {
-        this.username = username;
-        this.password = password;
-    }
 }

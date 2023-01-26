@@ -29,14 +29,7 @@ public class UserDetailsImpl implements UserDetails {
     private String name;
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserDetailsImpl(String username, String password, String role,String name) {
-        this.username = username;
-        this.password = password;
-        this.name = name;
-        List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-        grantedAuthorities.add(new SimpleGrantedAuthority(role));
-        this.authorities = grantedAuthorities;
-    }
+
     public UserDetailsImpl(String username, String password, String role,Boolean isAdvisor,String name) {
         this.username = username;
         this.password = password;

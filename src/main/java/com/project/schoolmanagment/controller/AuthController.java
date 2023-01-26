@@ -10,11 +10,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -36,20 +36,24 @@ public class AuthController {
     ) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getSsn(), loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String token = "Bearer "+jwtUtils.generateJwtToken(authentication);
+        String token = "Bearer " + jwtUtils.generateJwtToken(authentication);
         UserDetailsImpl user = (UserDetailsImpl) authentication.getPrincipal();
-        Set<String> roles = user.getAuthorities().stream().map(item -> item.getAuthority()).collect(Collectors.toSet());
+        Set<String> roles = user
+                .getAuthorities()
+                .stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toSet());
         Optional<String> role = roles.stream().findFirst();
         AuthResponse.AuthResponseBuilder authResponse = AuthResponse.builder();
         authResponse.ssn(user.getUsername());
         authResponse.token(token);
         authResponse.name(user.getName());
-        if(role.isPresent()){
+        if (role.isPresent()) {
             authResponse.role(role.get());
-            if(role.get().equalsIgnoreCase(Role.TEACHER.name())){
+            if (role.get().equalsIgnoreCase(Role.TEACHER.name())) {
                 authResponse.isAdvisor(user.getIsAdvisor().toString());
             }
         }
-       return ResponseEntity.ok(authResponse.build());
+        return ResponseEntity.ok(authResponse.build());
     }
 }

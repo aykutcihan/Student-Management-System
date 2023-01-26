@@ -4,14 +4,12 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.project.schoolmanagment.entity.concretes.UserRole;
 import com.project.schoolmanagment.entity.enums.Gender;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -26,6 +24,8 @@ public abstract class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String ssn;
+
     private String name;
 
     private String surname;
@@ -33,7 +33,6 @@ public abstract class User implements Serializable {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate birthDay;
 
-    private String ssn;
 
     private String birthPlace;
 
@@ -49,4 +48,6 @@ public abstract class User implements Serializable {
 
     @Enumerated(EnumType.STRING)
     private Gender gender;
+
+
 }

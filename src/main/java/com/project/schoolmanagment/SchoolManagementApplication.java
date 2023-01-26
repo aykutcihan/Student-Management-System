@@ -1,12 +1,16 @@
 package com.project.schoolmanagment;
 
 import com.project.schoolmanagment.entity.concretes.Admin;
+import com.project.schoolmanagment.entity.enums.Gender;
 import com.project.schoolmanagment.entity.enums.Role;
+import com.project.schoolmanagment.payload.request.AdminRequest;
 import com.project.schoolmanagment.service.AdminService;
 import com.project.schoolmanagment.service.UserRoleService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import java.time.LocalDate;
 
 @SpringBootApplication
 public class SchoolManagementApplication implements CommandLineRunner {
@@ -35,7 +39,25 @@ public class SchoolManagementApplication implements CommandLineRunner {
             userRoleService.save(Role.ADVISORTEACHER);
         }
         if (adminService.countAllAdmin() == 0) {
-            adminService.save(new Admin("Admin", "Admin123"));
+            AdminRequest admin = new AdminRequest();
+            admin.setSsn("987-99-9999");
+            admin.setPassword("Admin123");
+            admin.setName("Admin");
+            admin.setSurname("Admin");
+            admin.setPhoneNumber("555-444-4321");
+            admin.setGender(Gender.MALE);
+            admin.setBirthDay(LocalDate.of(2002, 2, 2));
+            admin.setBirthPlace("US");
+            adminService.save(admin);
         }
     }
 }
+
+
+
+
+
+
+
+
+
