@@ -15,6 +15,7 @@ public class CreateResponseObjectService {
 
     public TeacherResponse createTeacherResponse(Teacher teacher){
         return TeacherResponse.builder().userId(teacher.getId())
+                .username(teacher.getUsername())
                 .name(teacher.getName())
                 .surname(teacher.getSurname())
                 .ssn(teacher.getSsn())
@@ -24,6 +25,7 @@ public class CreateResponseObjectService {
 
     public StudentResponse createStudentResponse(Student student) {
         return StudentResponse.builder().userId(student.getId())
+                .username(student.getUsername())
                 .name(student.getName())
                 .surname(student.getSurname())
                 .ssn(student.getSsn())

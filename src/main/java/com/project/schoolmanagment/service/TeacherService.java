@@ -3,16 +3,17 @@ package com.project.schoolmanagment.service;
 import com.project.schoolmanagment.Exception.BadRequestException;
 import com.project.schoolmanagment.Exception.ConflictException;
 import com.project.schoolmanagment.Exception.ResourceNotFoundException;
-import com.project.schoolmanagment.entity.concretes.*;
+import com.project.schoolmanagment.entity.concretes.LessonProgram;
+import com.project.schoolmanagment.entity.concretes.Teacher;
 import com.project.schoolmanagment.entity.enums.Role;
 import com.project.schoolmanagment.payload.Dto.TeacherRequestDto;
 import com.project.schoolmanagment.payload.request.ChooseLessonTeacherRequest;
 import com.project.schoolmanagment.payload.request.TeacherRequest;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
-import com.project.schoolmanagment.payload.response.StudentResponse;
 import com.project.schoolmanagment.payload.response.TeacherResponse;
 import com.project.schoolmanagment.repository.TeacherRepository;
 import com.project.schoolmanagment.service.util.CheckSameLessonProgram;
+import com.project.schoolmanagment.utils.Messages;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,10 +23,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
-
-import com.project.schoolmanagment.utils.Messages;
 
 @Service
 @RequiredArgsConstructor
@@ -43,10 +45,11 @@ public class TeacherService {
     private final PasswordEncoder passwordEncoder;
 
     public ResponseMessage<TeacherResponse> save(TeacherRequest teacherRequest) {
-         Set<LessonProgram> lessons = lessonProgramService.getLessonProgramById(teacherRequest.getLessonsIdList());
+        Set<LessonProgram> lessons = lessonProgramService.getLessonProgramById(teacherRequest.getLessonsIdList());
         if (lessons.size() == 0) {
             throw new BadRequestException(Messages.LESSON_PROGRAM_NOT_FOUND_MESSAGE);
-
+        } else if (teacherRepository.existsByUsername(teacherRequest.getUsername())) {
+            throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_USERNAME, teacherRequest.getUsername()));
         } else if (teacherRepository.existsBySsn(teacherRequest.getSsn())) {
             throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_SSN, teacherRequest.getSsn()));
         } else if (teacherRepository.existsByPhoneNumber(teacherRequest.getPhoneNumber())) {
@@ -79,6 +82,8 @@ public class TeacherService {
         } else if (!checkParameterForUpdateMethod(teacher.get(), newTeacher)) {
             if (teacherRepository.existsBySsn(newTeacher.getSsn())) {
                 throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_SSN, newTeacher.getSsn()));
+            } else if (teacherRepository.existsByUsername(newTeacher.getUsername())) {
+                throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_USERNAME, newTeacher.getUsername()));
             } else if (teacherRepository.existsByPhoneNumber(newTeacher.getPhoneNumber())) {
                 throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_PHONE_NUMBER, newTeacher.getPhoneNumber()));
             } else if (teacherRepository.existsByEmail(newTeacher.getEmail())) {
@@ -129,6 +134,7 @@ public class TeacherService {
 
     private Teacher createUpdatedTeacher(TeacherRequest teacher, Long id) {
         return Teacher.builder().id(id)
+                .username(teacher.getUsername())
                 .name(teacher.getName())
                 .surname(teacher.getSurname())
                 .ssn(teacher.getSsn())
@@ -186,11 +192,16 @@ public class TeacherService {
 
     private boolean checkParameterForUpdateMethod(Teacher teacher, TeacherRequest newTeacherRequest) {
         return teacher.getSsn().equalsIgnoreCase(newTeacherRequest.getSsn())
+                || teacher.getUsername().equalsIgnoreCase(newTeacherRequest.getUsername())
                 || teacher.getPhoneNumber().equalsIgnoreCase(newTeacherRequest.getPhoneNumber())
                 || teacher.getEmail().equalsIgnoreCase(newTeacherRequest.getEmail());
     }
 
     public Optional<Teacher> getTeacherBySsn(String ssn) {
         return Optional.ofNullable(teacherRepository.getTeacherBySsn(ssn));
+    }
+
+    public Optional<Teacher> getTeacherByUsername(String username) {
+        return Optional.ofNullable(teacherRepository.getTeacherByUsername(username));
     }
 }

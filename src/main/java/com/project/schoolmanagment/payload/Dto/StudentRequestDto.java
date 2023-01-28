@@ -18,6 +18,7 @@ public class StudentRequestDto {
                 .surname(studentRequest.getSurname())
                 .motherName(studentRequest.getMotherName())
                 .password(studentRequest.getPassword())
+                .username(studentRequest.getUsername())
                 .ssn(studentRequest.getSsn())
                 .birthPlace(studentRequest.getBirthPlace())
                 .phoneNumber(studentRequest.getPhoneNumber())

@@ -12,7 +12,7 @@ import javax.validation.constraints.NotEmpty;
 public class LoginRequest {
 
     @NotEmpty
-    private String ssn;
+    private String username;
 
     @NotEmpty
     private String password;

@@ -40,7 +40,7 @@ public class StudentService {
     private final UserRoleService userRoleService;
 
     private final AdvisorTeacherService advisorTeacherService;
-    private final LessonService lessonService;
+
 
     private final CreateResponseObjectService responseObjectService;
     private final LessonProgramService lessonProgramService;
@@ -50,8 +50,8 @@ public class StudentService {
     public ResponseMessage<StudentResponse> save(StudentRequest studentRequest) {
         Optional<AdvisorTeacher> advisorTeacher = advisorTeacherService.getAdvisorTeacherById(studentRequest.getAdvisorTeacherId());
         ResponseMessage.ResponseMessageBuilder<StudentResponse> responseMessageBuilder = ResponseMessage.builder();
-        if (studentRepository.existsBySsn(studentRequest.getSsn())) {
-            throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_SSN, studentRequest.getSsn()));
+        if (studentRepository.existsByUsername(studentRequest.getUsername())) {
+            throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_USERNAME, studentRequest.getUsername()));
         } else if (!advisorTeacher.isPresent()) {
             throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_ADVISOR_MESSAGE, studentRequest.getAdvisorTeacherId()));
         } else if (studentRepository.existsByStudentNumber(studentRequest.getStudentNumber())) {
@@ -116,6 +116,7 @@ public class StudentService {
 
     private Student createUpdatedStudent(StudentRequest studentRequest, Long userId) {
         return Student.builder().id(userId)
+                .username(studentRequest.getUsername())
                 .name(studentRequest.getName())
                 .surname(studentRequest.getSurname())
                 .ssn(studentRequest.getSsn())
@@ -132,11 +133,11 @@ public class StudentService {
     }
 
 
-    public ResponseMessage<StudentResponse> chooseLesson(String ssn,ChooseLessonRequestWithoutId chooseLessonRequest) {
-        Optional<Student> student = studentRepository.getStudentBySnnForOptional(ssn);
+    public ResponseMessage<StudentResponse> chooseLesson(String username,ChooseLessonRequestWithoutId chooseLessonRequest) {
+        Optional<Student> student = studentRepository.getStudentByUsernameForOptional(username);
         Set<LessonProgram> lessonPrograms = lessonProgramService.getLessonProgramById(chooseLessonRequest.getLessonProgramId());
         if (!student.isPresent()) {
-            throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_USER_MESSAGE, ssn));
+            throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_USER_MESSAGE, username));
         } else if (lessonPrograms.size() == 0) {
             throw new ResourceNotFoundException(Messages.LESSON_PROGRAM_NOT_FOUND_MESSAGE);
         }
@@ -174,8 +175,8 @@ public class StudentService {
     }
 
 
-    public Optional<Student> getStudentBySnnForOptional(String ssn) {
-        return studentRepository.getStudentBySnnForOptional(ssn);
+    public Optional<Student> getStudentByUsernameForOptional(String username) {
+        return studentRepository.findByUsernameEqualsForOptional(username);
     }
 
     public Page<StudentResponse> search(int page, int size, String sort, String type) {
@@ -194,12 +195,14 @@ public class StudentService {
                 || student.getStudentNumber().equalsIgnoreCase(newStudentRequest.getStudentNumber());
     }
 
-    public boolean existBySnn(String ssn) {
-        return studentRepository.existsBySsn(ssn);
+    public boolean existByUsername(String username) {
+        return studentRepository.existsBySsn(username);
     }
 
-    public List<StudentResponse> getAllStudentBy(String ssn) {
-        return studentRepository.getStudentByAdvisorTeacher_Ssn(ssn).stream().map(responseObjectService::createStudentResponse)
+    public List<StudentResponse> getAllStudentByTeacher_Username(String username) {
+        return studentRepository.getStudentByAdvisorTeacher_Username(username)
+                .stream()
+                .map(responseObjectService::createStudentResponse)
                 .collect(Collectors.toList());
     }
 

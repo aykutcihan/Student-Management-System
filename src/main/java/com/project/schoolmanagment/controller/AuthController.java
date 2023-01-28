@@ -34,7 +34,7 @@ public class AuthController {
     public ResponseEntity<AuthResponse> authenticateUser(
             @RequestBody @Valid LoginRequest loginRequest
     ) {
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getSsn(), loginRequest.getPassword()));
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = "Bearer " + jwtUtils.generateJwtToken(authentication);
         UserDetailsImpl user = (UserDetailsImpl) authentication.getPrincipal();
@@ -45,7 +45,7 @@ public class AuthController {
                 .collect(Collectors.toSet());
         Optional<String> role = roles.stream().findFirst();
         AuthResponse.AuthResponseBuilder authResponse = AuthResponse.builder();
-        authResponse.ssn(user.getUsername());
+        authResponse.username(user.getUsername());
         authResponse.token(token);
         authResponse.name(user.getName());
         if (role.isPresent()) {

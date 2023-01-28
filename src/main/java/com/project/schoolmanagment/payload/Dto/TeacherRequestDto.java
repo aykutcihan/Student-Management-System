@@ -12,6 +12,7 @@ public class TeacherRequestDto {
         return Teacher.builder().name(teacherRequest.getName())
                 .surname(teacherRequest.getSurname())
                 .ssn(teacherRequest.getSsn())
+                .username(teacherRequest.getUsername())
                 .birthDay(teacherRequest.getBirthDay())
                 .birthPlace(teacherRequest.getBirthPlace())
                 .birthPlace(teacherRequest.getBirthPlace())

@@ -9,6 +9,7 @@ public class Messages {
     public static final String NOT_FOUND_LESSON_NAME_MESSAGE = "Error: Lesson with lesson name %s not found";
     public static final String ALREADY_REGISTER_LESSON = "Error: Lesson with lesson name %s already register";
     public static final String ALREADY_REGISTER_MESSAGE_SSN = "Error: User with ssn %s already register";
+    public static final String ALREADY_REGISTER_MESSAGE_USERNAME = "Error: User with username %s already register";
     public static final String ALREADY_REGISTER_MESSAGE_STUDENT_NUMBER = "Error: Student with student number %s already register";
     public static final String LESSON_PROGRAM_NOT_FOUND_MESSAGE = "Error: Lesson Programs not found";
     public static final String  ALREADY_REGISTER_MESSAGE_PHONE_NUMBER = "Error: User with phone number %s already register";
@@ -18,6 +19,7 @@ public class Messages {
 
     public static final String  TIME_NOT_VALID_MESSAGE = "Error: start time must not be greater than or equal to stop time";
     public static final String  STUDENT_INFO_NOT_FOUND = "Error: Student Info with id %d Not found";
+    public static final String  STUDENT_INFO_NOT_FOUND_BY_USERNAME = "Error: Student Info with Username %s Not found";
     public static final String  ALREADY_REGISTER_MESSAGE_EMAIL= "Error: User with email address %s already register";
     public static final String  ALREADY_REGISTER_LESSON_NAME = "Error: Student Info with lesson name %s already register";
 

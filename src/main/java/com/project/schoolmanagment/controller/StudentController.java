@@ -68,11 +68,8 @@ public class StudentController {
             HttpServletRequest request,
             @RequestBody ChooseLessonRequestWithoutId chooseLessonRequest
     ) {
-
-
-        String ssn = (String) request.getAttribute("ssn");
-        System.out.println(ssn);
-        return studentService.chooseLesson(ssn, chooseLessonRequest);
+        String username = (String) request.getAttribute("username");
+        return studentService.chooseLesson(username, chooseLessonRequest);
     }
 
     @PreAuthorize("hasAnyAuthority('TEACHER')")
@@ -80,8 +77,8 @@ public class StudentController {
     public List<StudentResponse> getAllStudentByAdvisorId(
             HttpServletRequest request
             ) {
-        String ssn = (String) request.getAttribute("ssn");
-        return studentService.getAllStudentBy(ssn);
+        String username = (String) request.getAttribute("username");
+        return studentService.getAllStudentByTeacher_Username(username);
     }
 
     @GetMapping("/search")

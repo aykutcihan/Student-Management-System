@@ -1,8 +1,7 @@
 package com.project.schoolmanagment.repository;
 
 import com.project.schoolmanagment.entity.concretes.Student;
-import com.project.schoolmanagment.payload.response.StudentResponse;
-import org.springframework.data.jpa.repository.JpaRepository;
+ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -11,12 +10,15 @@ import java.util.Optional;
 import java.util.Set;
 
 public interface StudentRepository extends JpaRepository<Student, Long> {
+    Student findByUsernameEquals(String username);
+    @Query("select s from Student s where s.username = :username")
+    Optional<Student> findByUsernameEqualsForOptional(String username);
     List<Student> findByMeetList_IdEquals(Long id);
     @Query("select s from Student s where s.ssn = :ssn")
     Student getStudentBySsn(String ssn);
 
-    @Query("select s from Student s where s.ssn = ?1")
-    Optional<Student> getStudentBySnnForOptional(String ssn);
+    @Query("select s from Student s where s.username = ?1")
+    Optional<Student> getStudentByUsernameForOptional(String username);
 
     boolean existsBySsn(String ssn);
 
@@ -43,4 +45,8 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 
 
     boolean existsByIdEquals(Long studentId);
+    @Query(value = "SELECT s FROM Student s WHERE s.advisorTeacher.teacher.username = :username ")
+    List<Student> getStudentByAdvisorTeacher_Username(String username);
+
+    boolean existsByUsername(String username);
 }

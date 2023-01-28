@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TeacherRepository extends JpaRepository<Teacher,Long> {
+    Teacher findByUsernameEquals(String username);
 
     boolean existsBySsn(String ssn);
     List<Teacher> getTeacherByNameContaining(String name);
@@ -19,5 +20,7 @@ public interface TeacherRepository extends JpaRepository<Teacher,Long> {
     boolean existsByEmail(String studentNumber);
 
 
+    Teacher getTeacherByUsername(String username);
 
+    boolean existsByUsername(String username);
 }

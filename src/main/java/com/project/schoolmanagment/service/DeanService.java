@@ -1,14 +1,14 @@
 package com.project.schoolmanagment.service;
 
- import com.project.schoolmanagment.Exception.ConflictException;
+import com.project.schoolmanagment.Exception.ConflictException;
 import com.project.schoolmanagment.Exception.ResourceNotFoundException;
 import com.project.schoolmanagment.entity.concretes.Dean;
- import com.project.schoolmanagment.entity.enums.Role;
+import com.project.schoolmanagment.entity.enums.Role;
 import com.project.schoolmanagment.payload.Dto.DeanDto;
 import com.project.schoolmanagment.payload.request.DeanRequest;
- import com.project.schoolmanagment.payload.response.DeanResponse;
+import com.project.schoolmanagment.payload.response.DeanResponse;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
- import com.project.schoolmanagment.repository.DeanRepository;
+import com.project.schoolmanagment.repository.DeanRepository;
 import com.project.schoolmanagment.service.util.CheckParameterUpdateMethod;
 import com.project.schoolmanagment.utils.Messages;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +40,8 @@ public class DeanService {
     public ResponseMessage<DeanResponse> save(DeanRequest deanRequest) {
         if (deanRepository.existsBySsn(deanRequest.getSsn())) {
             throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_SSN, deanRequest.getSsn()));
-
+        } else if (deanRepository.existsByUsername(deanRequest.getUsername())) {
+            throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_USERNAME, deanRequest.getUsername()));
         } else if (deanRepository.existsByPhoneNumber(deanRequest.getPhoneNumber())) {
             throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_PHONE_NUMBER, deanRequest.getPhoneNumber()));
         }
@@ -61,10 +62,12 @@ public class DeanService {
             throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_USER_MESSAGE, deanId));
 
         } else if (!CheckParameterUpdateMethod.checkParameter(dean.get(), newDean)) {
-            if (deanRepository.existsByPhoneNumber(newDean.getPhoneNumber())) {
-                throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_PHONE_NUMBER, newDean.getPhoneNumber()));
-            } else if (deanRepository.existsBySsn(newDean.getSsn())) {
+            if (deanRepository.existsBySsn(newDean.getSsn())) {
                 throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_SSN, newDean.getSsn()));
+            } else if (deanRepository.existsByUsername(newDean.getUsername())) {
+                throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_USERNAME, newDean.getUsername()));
+            } else if (deanRepository.existsByPhoneNumber(newDean.getPhoneNumber())) {
+                throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_PHONE_NUMBER, newDean.getPhoneNumber()));
             }
         }
         Dean updatedDean = createUpdatedDean(newDean, deanId);
@@ -108,6 +111,7 @@ public class DeanService {
 
     private Dean createUpdatedDean(DeanRequest deanRequest, Long managerId) {
         return Dean.builder().id(managerId)
+                .username(deanRequest.getUsername())
                 .ssn(deanRequest.getSsn())
                 .name(deanRequest.getName())
                 .surname(deanRequest.getSurname())
@@ -131,6 +135,7 @@ public class DeanService {
 
     private DeanResponse createDeanResponse(Dean dean) {
         return DeanResponse.builder().userId(dean.getId())
+                .username(dean.getUsername())
                 .name(dean.getName())
                 .surname(dean.getSurname())
                 .phoneNumber(dean.getPhoneNumber())

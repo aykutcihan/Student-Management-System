@@ -10,6 +10,7 @@ public class ViceDeanDto {
     public ViceDean dtoViceDean(ViceDeanRequest viceDeanRequest) {
         return ViceDean.builder()
                 .birthDay(viceDeanRequest.getBirthDay())
+                .username(viceDeanRequest.getUsername())
                 .name(viceDeanRequest.getName())
                 .surname(viceDeanRequest.getSurname())
                 .password(viceDeanRequest.getPassword())

@@ -16,6 +16,7 @@ import javax.persistence.MappedSuperclass;
 public abstract class BaseUserResponse {
 
     private Long userId;
+    private String username;
     private String name;
     private String surname;
     private String ssn;

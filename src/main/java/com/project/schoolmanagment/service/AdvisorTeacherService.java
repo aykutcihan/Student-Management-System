@@ -56,6 +56,7 @@ public class AdvisorTeacherService {
         return advisoryTeacherRepository.findById(id);
 
     }
+
     public Optional<AdvisorTeacher> getAdvisorTeacherBySsn(String ssn) {
         return advisoryTeacherRepository.findByTeacher_SsnEquals(ssn);
 
@@ -87,5 +88,9 @@ public class AdvisorTeacherService {
         }
 
         return advisoryTeacherRepository.findAll(pageable).map(this::createResponseObject);
+    }
+
+    public Optional<AdvisorTeacher> getAdvisorTeacherByUsername(String username) {
+        return advisoryTeacherRepository.findByTeacher_UsernameEquals(username);
     }
 }

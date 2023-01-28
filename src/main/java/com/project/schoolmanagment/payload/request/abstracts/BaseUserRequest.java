@@ -2,8 +2,11 @@ package com.project.schoolmanagment.payload.request.abstracts;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.project.schoolmanagment.entity.enums.Gender;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.*;
@@ -18,6 +21,9 @@ import java.time.LocalDate;
 public abstract class BaseUserRequest implements Serializable {
 
     @NotEmpty
+    private String username;
+
+    @NotEmpty
     private String name;
 
     @NotEmpty
@@ -29,7 +35,7 @@ public abstract class BaseUserRequest implements Serializable {
     private LocalDate birthDay;
 
     @NotEmpty
-    @Pattern(regexp="^(?!000|666)[0-8][0-9]{2}-(?!00)[0-9]{2}-(?!0000)[0-9]{4}$")
+    @Pattern(regexp = "^(?!000|666)[0-8][0-9]{2}-(?!00)[0-9]{2}-(?!0000)[0-9]{4}$")
     private String ssn;
 
     @NotEmpty
@@ -40,7 +46,7 @@ public abstract class BaseUserRequest implements Serializable {
 
     @NotEmpty(message = "Please enter your phone number")
     @Pattern(regexp = "^((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$",
-      message = "Please enter valid phone number")
+            message = "Please enter valid phone number")
     @Size(min = 12, max = 12, message = "Phone number should be exact 12 characters")
     private String phoneNumber;
 

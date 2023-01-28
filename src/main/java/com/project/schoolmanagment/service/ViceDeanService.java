@@ -7,8 +7,8 @@ import com.project.schoolmanagment.entity.concretes.ViceDean;
 import com.project.schoolmanagment.entity.enums.Role;
 import com.project.schoolmanagment.payload.Dto.ViceDeanDto;
 import com.project.schoolmanagment.payload.request.ViceDeanRequest;
-import com.project.schoolmanagment.payload.response.ViceDeanResponse;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
+import com.project.schoolmanagment.payload.response.ViceDeanResponse;
 import com.project.schoolmanagment.repository.ViceDeanRepository;
 import com.project.schoolmanagment.service.util.CheckParameterUpdateMethod;
 import com.project.schoolmanagment.utils.Messages;
@@ -35,10 +35,12 @@ public class ViceDeanService {
     private final ViceDeanDto viceDeanDto;
 
     private final PasswordEncoder passwordEncoder;
+
     public ResponseMessage<ViceDeanResponse> save(ViceDeanRequest viceDeanRequest) {
         if (viceDeanRepository.existsBySsn(viceDeanRequest.getSsn())) {
             throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_SSN, viceDeanRequest.getSsn()));
-
+        } else if (viceDeanRepository.existsByUsername(viceDeanRequest.getUsername())) {
+            throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_USERNAME, viceDeanRequest.getUsername()));
         } else if (viceDeanRepository.existsByPhoneNumber(viceDeanRequest.getPhoneNumber())) {
             throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_PHONE_NUMBER, viceDeanRequest.getPhoneNumber()));
         }
@@ -56,11 +58,11 @@ public class ViceDeanService {
         Optional<ViceDean> viceDean = viceDeanRepository.findById(managerId);
         if (!viceDean.isPresent()) {
             throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_USER_MESSAGE, managerId));
-        }
-        else if(!CheckParameterUpdateMethod.checkParameter(viceDean.get(),newViceDean)){
+        } else if (!CheckParameterUpdateMethod.checkParameter(viceDean.get(), newViceDean)) {
             if (viceDeanRepository.existsBySsn(newViceDean.getSsn())) {
                 throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_SSN, newViceDean.getSsn()));
-
+            } else if (viceDeanRepository.existsByUsername(newViceDean.getUsername())) {
+                throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_USERNAME, newViceDean.getUsername()));
             } else if (viceDeanRepository.existsByPhoneNumber(newViceDean.getPhoneNumber())) {
                 throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_PHONE_NUMBER, newViceDean.getPhoneNumber()));
             }
@@ -108,6 +110,7 @@ public class ViceDeanService {
 
     private ViceDean createUpdatedViceDean(ViceDeanRequest viceDeanRequest, Long managerId) {
         return ViceDean.builder().id(managerId)
+                .username(viceDeanRequest.getUsername())
                 .ssn(viceDeanRequest.getSsn())
                 .name(viceDeanRequest.getName())
                 .surname(viceDeanRequest.getSurname())
@@ -126,6 +129,7 @@ public class ViceDeanService {
 
     private ViceDeanResponse createViceDeanResponse(ViceDean viceDean) {
         return ViceDeanResponse.builder().userId(viceDean.getId())
+                .username(viceDean.getUsername())
                 .name(viceDean.getName())
                 .surname(viceDean.getSurname())
                 .phoneNumber(viceDean.getPhoneNumber())
@@ -133,6 +137,7 @@ public class ViceDeanService {
                 .gender(viceDean.getGender())
                 .build();
     }
+
     public Page<ViceDeanResponse> search(int page, int size, String sort, String type) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sort).ascending());
         if (Objects.equals(type, "desc")) {

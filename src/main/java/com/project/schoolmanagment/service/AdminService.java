@@ -31,9 +31,10 @@ public class AdminService {
 
     public ResponseMessage save(AdminRequest request) {
 
-        if (repository.existsBySsn(request.getSsn())) {
-            throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_SSN, request.getSsn()));
-
+        if (repository.existsByUsername(request.getUsername())) {
+            throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_USERNAME, request.getUsername()));
+        } else if (repository.existsBySsn(request.getSsn())) {
+            throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_PHONE_NUMBER, request.getSsn()));
         } else if (repository.existsByPhoneNumber(request.getPhoneNumber())) {
             throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_PHONE_NUMBER, request.getPhoneNumber()));
         }
@@ -66,6 +67,7 @@ public class AdminService {
 
     protected Admin createAdminForSave(AdminRequest request) {
         return Admin.builder()
+                .username(request.getUsername())
                 .name(request.getName())
                 .surname(request.getSurname())
                 .password(request.getPassword())
@@ -80,6 +82,7 @@ public class AdminService {
 
     private Admin createUpdate(AdminRequest request, Long managerId) {
         return Admin.builder().id(managerId)
+                .username(request.getUsername())
                 .ssn(request.getSsn())
                 .name(request.getName())
                 .surname(request.getSurname())
@@ -94,6 +97,7 @@ public class AdminService {
 
     private AdminResponse createResponse(Admin admin) {
         return AdminResponse.builder().userId(admin.getId())
+                .username(admin.getUsername())
                 .name(admin.getName())
                 .surname(admin.getSurname())
                 .phoneNumber(admin.getPhoneNumber())

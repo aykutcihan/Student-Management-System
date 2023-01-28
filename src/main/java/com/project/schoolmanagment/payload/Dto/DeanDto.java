@@ -9,6 +9,7 @@ public class DeanDto {
 
     public Dean dtoDean(DeanRequest deanRequest) {
         return Dean.builder()
+                .username(deanRequest.getUsername())
                 .name(deanRequest.getName())
                 .surname(deanRequest.getSurname())
                 .password(deanRequest.getPassword())

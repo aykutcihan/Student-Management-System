@@ -45,8 +45,8 @@ public class LessonProgramController {
     public Set<LessonProgramResponse> getAllLessonProgramByTeacherId(
             HttpServletRequest httpServletRequest
     ) {
-        String ssn = (String) httpServletRequest.getAttribute("ssn");
-        return lessonProgramService.getLessonProgramByTeacherSsn(ssn);
+        String username = (String) httpServletRequest.getAttribute("username");
+        return lessonProgramService.getLessonProgramByTeacher(username);
     }
 
 
@@ -55,8 +55,8 @@ public class LessonProgramController {
     public Set<LessonProgramResponse> getAllLessonProgramByStudent(
             HttpServletRequest httpServletRequest
     ) {
-        String ssn = (String) httpServletRequest.getAttribute("ssn");
-        return lessonProgramService.getLessonProgramByStudentSsn(ssn);
+        String username = (String) httpServletRequest.getAttribute("username");
+        return lessonProgramService.getLessonProgramByStudent(username);
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANTMANAGER')")

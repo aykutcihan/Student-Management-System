@@ -23,5 +23,12 @@ public interface StudentInfoRepository extends JpaRepository<StudentInfo, Long> 
     @Query("select s from StudentInfo s where s.teacherId.ssn = ?1")
     Page<StudentInfo> findByTeacherId_SsnEquals(String ssn, Pageable pageable);
 
+    @Query("select s from StudentInfo s where s.teacherId.username = ?1")
+    Page<StudentInfo> findByTeacherId_UsernameEquals(String username, Pageable pageable);
 
- }
+
+    @Query("select s from StudentInfo s where s.studentId.username = ?1")
+    Page<StudentInfo> findByStudentId_UsernameEquals(String username, Pageable pageable);
+
+
+}

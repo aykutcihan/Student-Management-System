@@ -34,8 +34,8 @@ public class StudentInfoController {
             HttpServletRequest httpServletRequest,
             @RequestBody @Valid StudentInfoRequestWithoutTeacherId studentInfoRequestWithoutTeacherId
     ) {
-        String ssn = (String) httpServletRequest.getAttribute("ssn");
-        return studentInfoService.save(ssn,studentInfoRequestWithoutTeacherId);
+        String username = (String) httpServletRequest.getAttribute("username");
+        return studentInfoService.save(username,studentInfoRequestWithoutTeacherId);
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN','TEACHER')")
@@ -70,8 +70,8 @@ public class StudentInfoController {
             @RequestParam(value = "size") int size
     ) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("lessonName").descending());
-        String ssn = (String) httpServletRequest.getAttribute("ssn");
-        Page<StudentInfoResponse> studentInfoResponse = studentInfoService.getAllForTeacher(pageable, ssn);
+        String username = (String) httpServletRequest.getAttribute("username");
+        Page<StudentInfoResponse> studentInfoResponse = studentInfoService.getAllForTeacher(pageable, username);
         return new ResponseEntity<>(studentInfoResponse, HttpStatus.OK);
     }
 
@@ -83,9 +83,9 @@ public class StudentInfoController {
             @RequestParam(value = "page") int page,
             @RequestParam(value = "size") int size
     ) {
-        String ssn = (String) httpServletRequest.getAttribute("ssn");
+        String username = (String) httpServletRequest.getAttribute("username");
         Pageable pageable = PageRequest.of(page, size, Sort.by("lessonName").descending());
-        Page<StudentInfoResponse> studentInfoResponse = studentInfoService.getAllStudentInfoByStudent(pageable, ssn);
+        Page<StudentInfoResponse> studentInfoResponse = studentInfoService.getAllStudentInfoByStudent(username, pageable);
         return new ResponseEntity<>(studentInfoResponse, HttpStatus.OK);
     }
 

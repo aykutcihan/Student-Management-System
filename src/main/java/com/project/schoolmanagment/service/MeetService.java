@@ -39,11 +39,11 @@ public class MeetService {
     private final StudentService studentService;
     private final StudentRepository studentRepository;
 
-    public ResponseMessage<MeetResponse> save(String ssn, MeetRequestWithoutId meetRequest) {
+    public ResponseMessage<MeetResponse> save(String username, MeetRequestWithoutId meetRequest) {
 
-        Optional<AdvisorTeacher> advisorTeacher = advisorTeacherService.getAdvisorTeacherBySsn(ssn);
+        Optional<AdvisorTeacher> advisorTeacher = advisorTeacherService.getAdvisorTeacherByUsername(username);
         if (!advisorTeacher.isPresent())
-            throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_ADVISOR_MESSAGE, ssn));
+            throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_ADVISOR_MESSAGE, username));
 
         if (TimeControl.check(meetRequest.getStartTime(), meetRequest.getStopTime()))
             throw new BadRequestException(Messages.TIME_NOT_VALID_MESSAGE);
@@ -108,18 +108,18 @@ public class MeetService {
                 .collect(Collectors.toList());
     }
 
-    public Page<MeetResponse> getAllMeetByAdvisorTeacherAsPage(Pageable pageable, String ssn) {
-        Optional<AdvisorTeacher> advisorTeacher = advisorTeacherService.getAdvisorTeacherBySsn(ssn);
+    public Page<MeetResponse> getAllMeetByAdvisorTeacherAsPage(String username, Pageable pageable) {
+        Optional<AdvisorTeacher> advisorTeacher = advisorTeacherService.getAdvisorTeacherByUsername(username);
         if (!advisorTeacher.isPresent()) {
-            throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_ADVISOR_MESSAGE, ssn));
+            throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_ADVISOR_MESSAGE, username));
         }
         return  meetRepository.findByAdvisorTeacher_IdEquals( advisorTeacher.get().getId(),pageable).map(this::createMeetResponse);
     }
 
-    public List<MeetResponse> getAllMeetByAdvisorTeacherAsList(String ssn) {
-        Optional<AdvisorTeacher> advisorTeacher = advisorTeacherService.getAdvisorTeacherBySsn(ssn);
+    public List<MeetResponse> getAllMeetByAdvisorTeacherAsList(String username) {
+        Optional<AdvisorTeacher> advisorTeacher = advisorTeacherService.getAdvisorTeacherByUsername(username);
         if (!advisorTeacher.isPresent()) {
-            throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_ADVISOR_MESSAGE, ssn));
+            throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_ADVISOR_MESSAGE, username));
         }
         return meetRepository.getByAdvisorTeacher_IdEquals(advisorTeacher.get().getId()).stream().map(this::createMeetResponse).collect(Collectors.toList());
     }
@@ -204,13 +204,12 @@ public class MeetService {
                 .build();
     }
 
-    public List<MeetResponse> getAllMeetByStudentBySsn(String ssn) {
-
-        Optional<Student> student = studentService.getStudentBySnnForOptional(ssn);
+    public List<MeetResponse> getAllMeetByStudentByUsername(String username) {
+        Optional<Student> student = studentService.getStudentByUsernameForOptional(username);
         if (!student.isPresent()) {
-            throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_USER_MESSAGE, ssn));
+            throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_USER_MESSAGE, username));
         }
         return meetRepository.findByStudentList_IdEquals(student.get().getId()).stream().map(this::createMeetResponse).collect(Collectors.toList());
-    }
 
+    }
 }

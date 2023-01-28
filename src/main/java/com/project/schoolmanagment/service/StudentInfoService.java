@@ -39,19 +39,17 @@ public class StudentInfoService {
     @Value("${final.exam.impact.percentage}")
     private Double finalExamPercantage;
 
-    public ResponseMessage<StudentInfoResponse> save(String ssn, StudentInfoRequestWithoutTeacherId studentInfoRequest) {
+    public ResponseMessage<StudentInfoResponse> save(String username, StudentInfoRequestWithoutTeacherId studentInfoRequest) {
         Optional<Student> student = studentService.getStudentById(studentInfoRequest.getStudentId());
-        Optional<Teacher> teacher = teacherService.getTeacherBySsn(ssn);
+        Optional<Teacher> teacher = teacherService.getTeacherByUsername(username);
         Optional<Lesson> lesson = lessonService.getLessonById(studentInfoRequest.getLessonId());
 
         if (!lesson.isPresent()) {
             throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_LESSON_MESSAGE, studentInfoRequest.getLessonId()));
-
         } else if (!student.isPresent()) {
             throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_USER_MESSAGE, studentInfoRequest.getStudentId()));
-
         } else if (!teacher.isPresent()) {
-            throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_USER_MESSAGE, ssn));
+            throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_USER_MESSAGE, username));
         } else if (checkSameLesson(studentInfoRequest.getStudentId(), lesson.get().getLessonName())) {
             throw new ConflictException(String.format(Messages.ALREADY_REGISTER_LESSON_NAME, lesson.get().getLessonName()));
         }
@@ -112,14 +110,14 @@ public class StudentInfoService {
         return studentInfoRepository.getAll(pageable).map(this::createResponse);
     }
 
-    public Page<StudentInfoResponse> getAllForTeacher(Pageable pageable, String ssn) {
-        return studentInfoRepository.findByTeacherId_SsnEquals(ssn, pageable).map(this::createResponse);
+    public Page<StudentInfoResponse> getAllForTeacher(Pageable pageable, String username) {
+        return studentInfoRepository.findByTeacherId_UsernameEquals(username, pageable).map(this::createResponse);
     }
 
-    public Page<StudentInfoResponse> getAllStudentInfoByStudent(Pageable pageable, String ssn) {
-        boolean student = studentService.existBySnn(ssn);
-        if (!student) throw new ResourceNotFoundException(String.format(Messages.STUDENT_INFO_NOT_FOUND, ssn));
-        return studentInfoRepository.findByStudentId_SsnEquals(pageable, ssn).map(this::createResponse);
+    public Page<StudentInfoResponse> getAllStudentInfoByStudent( String username,Pageable pageable) {
+        boolean student = studentService.existByUsername(username);
+        if (!student) throw new ResourceNotFoundException(String.format(Messages.STUDENT_INFO_NOT_FOUND_BY_USERNAME, username));
+        return studentInfoRepository.findByStudentId_UsernameEquals( username,pageable).map(this::createResponse);
     }
 
     public Page<StudentInfoResponse> search(int page, int size, String sort, String type) {

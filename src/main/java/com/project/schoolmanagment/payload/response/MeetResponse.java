@@ -32,6 +32,7 @@ public class MeetResponse {
     private Long advisorTeacherId;
     private String teacherName;
     private String teacherSsn;
+    private String username;
 
     private List<Student> students;
 }

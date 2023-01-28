@@ -57,15 +57,15 @@ public class LessonProgramService {
                 .collect(Collectors.toList());
     }
 
-    public Set<LessonProgramResponse> getLessonProgramByTeacherSsn(String ssn) {
-        return lessonProgramRepository.getLessonProgramByTeacherSsn(ssn)
+    public Set<LessonProgramResponse> getLessonProgramByTeacher(String username) {
+        return lessonProgramRepository.getLessonProgramByTeacherUsername(username)
                 .stream()
                 .map(this::createLessonProgramResponseForTeacher)
                 .collect(Collectors.toSet());
     }
 
-    public Set<LessonProgramResponse> getLessonProgramByStudentSsn(String ssn) {
-        return lessonProgramRepository.getLessonProgramByStudentSsn(ssn)
+    public Set<LessonProgramResponse> getLessonProgramByStudent(String username) {
+        return lessonProgramRepository.getLessonProgramByStudentUsername(username)
                 .stream()
                 .map(this::createLessonProgramResponseForStudent)
                 .collect(Collectors.toSet());
@@ -142,4 +142,6 @@ public class LessonProgramService {
                 .httpStatus(HttpStatus.OK)
                 .build();
     }
+
+
 }
