@@ -73,7 +73,7 @@ public class WebSecurityConfig{
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring()
-                //.antMatchers("/contactMessages/save")
+                .antMatchers("/contactMessages/save")
                 .antMatchers("/api/auth/**")
                 .antMatchers("/v2/api-docs/**")
                 .antMatchers("configuration/**")
