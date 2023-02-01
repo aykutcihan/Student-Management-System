@@ -2,10 +2,10 @@ package com.project.schoolmanagment.controller;
 
 import com.project.schoolmanagment.payload.request.ContactMessageRequest;
 import com.project.schoolmanagment.payload.request.ContactMessageResponse;
+import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.service.ContactMessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,8 +20,8 @@ public class ContactController {
     private final ContactMessageService contactMessageService;
 
     @PostMapping("/save")
-    public ResponseEntity<?> save(@RequestBody @Valid ContactMessageRequest contactMessageRequest) {
-        return ResponseEntity.ok(contactMessageService.save(contactMessageRequest));
+    public ResponseMessage<ContactMessageResponse> save(@RequestBody @Valid ContactMessageRequest contactMessageRequest) {
+        return  contactMessageService.save(contactMessageRequest);
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANTMANAGER')")

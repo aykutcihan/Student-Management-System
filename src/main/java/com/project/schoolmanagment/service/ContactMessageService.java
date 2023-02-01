@@ -25,16 +25,17 @@ public class ContactMessageService {
 
     private final ContactMessageRepository contactMessageRepository;
 
-    public Object save(ContactMessageRequest contactMessageRequest) {
+    public ResponseMessage<ContactMessageResponse> save(ContactMessageRequest contactMessageRequest) {
 
         boolean isSameMessageWithSameEmailForToday = contactMessageRepository.existsByEmailEqualsAndDateEquals(contactMessageRequest.getEmail(), LocalDate.now());
         if (isSameMessageWithSameEmailForToday) throw new ConflictException(String.format(ALREADY_SEND_A_MESSAGE_TODAY));
 
         ContactMessage contactMessage = createObject(contactMessageRequest);
-        return ResponseMessage.builder()
-                .object(contactMessageRepository.save(contactMessage))
+        ContactMessage savedData = contactMessageRepository.save(contactMessage);
+        return ResponseMessage.<ContactMessageResponse>builder()
                 .message("Contact Message Created Successfully")
-                .httpStatus(HttpStatus.OK)
+                .httpStatus(HttpStatus.CREATED)
+                .object(createResponse(savedData))
                 .build();
     }
 
