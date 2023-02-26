@@ -33,7 +33,6 @@ public class EducationTermService {
         if (request.getEndDate().isBefore(request.getStartDate()))
             throw new ResourceNotFoundException(String.format(Messages.EDUCATION_START_DATE_IS_SMALLER_THAN_END_DATE));
 
-
         if (educationTermRepository.existsByTermAndYear(request.getTerm(), request.getStartDate().getYear()))
             throw new ResourceNotFoundException(String.format(Messages.EDUCATION_TERM_NOT_FOUND_MESSAGE_BY_TERM_AND_YEAR));
 
@@ -120,6 +119,16 @@ public class EducationTermService {
 
     public EducationTermResponse createEducationTermResponse(EducationTerm response) {
         return EducationTermResponse.builder()
+                .id(response.getId())
+                .term(response.getTerm())
+                .startDate(response.getStartDate())
+                .endDate(response.getEndDate())
+                .lastRegistrationDate(response.getLastRegistrationDate())
+                .build();
+    }
+    public EducationTermResponse createEducationTermResponseWithId(EducationTerm response) {
+        return EducationTermResponse.builder()
+                .id(response.getId())
                 .term(response.getTerm())
                 .startDate(response.getStartDate())
                 .endDate(response.getEndDate())
@@ -128,4 +137,11 @@ public class EducationTermService {
     }
 
 
+    public EducationTerm getById(Long id) {
+
+        if (!educationTermRepository.existsByIdEquals(id)) {
+            throw new ResourceNotFoundException(String.format(Messages.EDUCATION_TERM_NOT_FOUND_MESSAGE, id));
+        }
+        return educationTermRepository.findByIdEquals(id);
+    }
 }

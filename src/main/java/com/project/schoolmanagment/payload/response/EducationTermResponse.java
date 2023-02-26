@@ -16,7 +16,10 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Builder(toBuilder = true)
 public class EducationTermResponse implements Serializable {
-    
+
+    @NotNull
+    private Long id;
+
     private Term term;
 
     @NotNull
