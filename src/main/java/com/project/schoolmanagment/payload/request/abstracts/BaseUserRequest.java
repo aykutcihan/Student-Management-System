@@ -20,28 +20,29 @@ import java.time.LocalDate;
 @SuperBuilder
 public abstract class BaseUserRequest implements Serializable {
 
-    @NotEmpty
+    @NotEmpty(message = "Please enter your  usename")
     private String username;
 
-    @NotEmpty
+    @NotEmpty(message = "Please enter your name")
     private String name;
 
-    @NotEmpty
+    @NotEmpty(message = "Please enter your surname")
     private String surname;
 
-    @NotNull
+    @NotNull(message = "Please enter your birthday")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Past
     private LocalDate birthDay;
 
     @NotEmpty
-    @Pattern(regexp = "^(?!000|666)[0-8][0-9]{2}-(?!00)[0-9]{2}-(?!0000)[0-9]{4}$")
+    @Pattern(regexp = "^(?!000|666)[0-8][0-9]{2}-(?!00)[0-9]{2}-(?!0000)[0-9]{4}$" ,
+            message = "Please enter valid SSN number")
     private String ssn;
 
-    @NotEmpty
+    @NotEmpty(message = "Please enter your birth place")
     private String birthPlace;
 
-    @NotEmpty
+    @NotEmpty(message = "Please enter your password")
     private String password;
 
     @NotEmpty(message = "Please enter your phone number")
@@ -50,6 +51,6 @@ public abstract class BaseUserRequest implements Serializable {
     @Size(min = 12, max = 12, message = "Phone number should be exact 12 characters")
     private String phoneNumber;
 
-    @NotNull
+    @NotNull(message = "Please enter your gander")
     private Gender gender;
 }
