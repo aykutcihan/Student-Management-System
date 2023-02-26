@@ -1,6 +1,5 @@
 package com.project.schoolmanagment;
 
-import com.project.schoolmanagment.entity.concretes.Admin;
 import com.project.schoolmanagment.entity.enums.Gender;
 import com.project.schoolmanagment.entity.enums.Role;
 import com.project.schoolmanagment.payload.request.AdminRequest;
@@ -19,6 +18,7 @@ public class SchoolManagementApplication implements CommandLineRunner {
     private final UserRoleService userRoleService;
 
     public SchoolManagementApplication(AdminService adminService, UserRoleService userRoleService) {
+
         this.adminService = adminService;
         this.userRoleService = userRoleService;
     }
@@ -37,6 +37,7 @@ public class SchoolManagementApplication implements CommandLineRunner {
             userRoleService.save(Role.TEACHER);
             userRoleService.save(Role.STUDENT);
             userRoleService.save(Role.ADVISORTEACHER);
+            userRoleService.save(Role.GUESTUSER);
         }
         if (adminService.countAllAdmin() == 0) {
             AdminRequest admin = new AdminRequest();
