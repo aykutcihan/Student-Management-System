@@ -15,4 +15,5 @@ public interface EducationTermRepository extends JpaRepository<EducationTerm, Lo
     @Query("select (count(e) > 0) from EducationTerm e where e.id = ?1")
     boolean existsByIdEquals(Long id);
 
+
 }

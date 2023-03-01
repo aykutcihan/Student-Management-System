@@ -135,4 +135,14 @@ public class EducationTermService {
         }
         return educationTermRepository.findByIdEquals(id);
     }
+
+    public ResponseMessage delete(Long id) {
+        if (!educationTermRepository.existsByIdEquals(id)) {
+            throw new ResourceNotFoundException(String.format(Messages.EDUCATION_TERM_NOT_FOUND_MESSAGE, id));
+        }
+          educationTermRepository.deleteById(id);
+        return ResponseMessage.builder()
+                .message("Education Term deleted Successful")
+                .httpStatus(HttpStatus.CREATED).build();
+    }
 }

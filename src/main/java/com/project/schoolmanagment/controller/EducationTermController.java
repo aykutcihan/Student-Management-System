@@ -51,12 +51,11 @@ public class EducationTermController {
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANTMANAGER')")
-    @PutMapping("/{id}")
-    public ResponseMessage<EducationTermResponse> update(
-            @PathVariable Long id,
-            @RequestBody @Valid  EducationTermRequest request
+    @DeleteMapping("/{id}")
+    public ResponseMessage<EducationTermResponse> delete(
+            @PathVariable Long id
     ) {
-        return educationTermService.update(id, request);
+        return educationTermService.delete(id);
     }
 
 
