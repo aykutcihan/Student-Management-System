@@ -10,6 +10,8 @@ import java.util.Optional;
 import java.util.Set;
 
 public interface LessonRepository extends JpaRepository<Lesson,Long> {
+    boolean existsByLessonIdEquals(Long lessonId);
+    Lesson findByLessonIdEquals(Long lessonId);
     Optional<Lesson> getLessonByLessonName(String name);
 
     boolean existsLessonByLessonNameEqualsIgnoreCase(String name);

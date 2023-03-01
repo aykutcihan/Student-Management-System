@@ -20,14 +20,21 @@ import java.util.Set;
 @Builder
 public class LessonProgram implements Serializable {
 
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne(cascade = CascadeType.REMOVE)
+    private EducationTerm educationTerm;
+
     @Enumerated(EnumType.STRING)
     private Day day;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "US")
     private LocalTime startTime;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "US")
     private LocalTime stopTime;
 
@@ -41,6 +48,9 @@ public class LessonProgram implements Serializable {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @ManyToMany(mappedBy = "lessonsProgramList", fetch = FetchType.EAGER)
     private Set<Student> students;
+
+
+
 
     @PreRemove
     private void removeLessonProgramFromStudent() {

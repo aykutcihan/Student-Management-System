@@ -201,7 +201,9 @@ public class TeacherService {
         return Optional.ofNullable(teacherRepository.getTeacherBySsn(ssn));
     }
 
-    public Optional<Teacher> getTeacherByUsername(String username) {
-        return Optional.ofNullable(teacherRepository.getTeacherByUsername(username));
+    public Teacher getTeacherByUsername(String username) {
+        if (!teacherRepository.existsByUsername(username))
+            throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_USER_MESSAGE, username));
+        return teacherRepository.getTeacherByUsername(username);
     }
 }

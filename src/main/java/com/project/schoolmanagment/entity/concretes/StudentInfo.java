@@ -1,8 +1,6 @@
 package com.project.schoolmanagment.entity.concretes;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.project.schoolmanagment.entity.enums.Gender;
 import com.project.schoolmanagment.entity.enums.Note;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,25 +20,29 @@ public class StudentInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Double midtermExam;
+    @ManyToOne
+    @JsonIgnoreProperties("lesson")
+    private Lesson lesson;
 
-    private Double finalExam;
+    @ManyToOne
+    @JsonIgnoreProperties("teacher")
+    private Teacher teacher;
+
+    @ManyToOne
+    private Student student;
+    @OneToOne
+    private EducationTerm educationTerm;
 
     private Integer absentee;
 
-    private String infoNote;
+    private Double midtermExam;
 
-    private String lessonName;
+    private Double finalExam;
 
     private Double examAverage;
 
     @Enumerated(EnumType.STRING)
     private Note letterGrade;
 
-    @ManyToOne
-    @JsonIgnoreProperties("lessonsProgramList")
-    private Teacher teacherId;
-
-    @ManyToOne
-    private Student studentId;
+    private String infoNote;
 }

@@ -10,6 +10,8 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface StudentInfoRepository extends JpaRepository<StudentInfo, Long> {
+    StudentInfo findByIdEquals(Long id);
+    boolean existsByIdEquals(Long id);
 
     List<StudentInfo> getAllByStudentId_Id(Long studentId_id);
 
@@ -20,14 +22,14 @@ public interface StudentInfoRepository extends JpaRepository<StudentInfo, Long> 
     @Query("select s from StudentInfo s ")
     Page<StudentInfo> getAll(Pageable pageable);
 
-    @Query("select s from StudentInfo s where s.teacherId.ssn = ?1")
+    @Query("select s from StudentInfo s where s.teacher.ssn = ?1")
     Page<StudentInfo> findByTeacherId_SsnEquals(String ssn, Pageable pageable);
 
-    @Query("select s from StudentInfo s where s.teacherId.username = ?1")
+    @Query("select s from StudentInfo s where s.teacher.username = ?1")
     Page<StudentInfo> findByTeacherId_UsernameEquals(String username, Pageable pageable);
 
 
-    @Query("select s from StudentInfo s where s.studentId.username = ?1")
+    @Query("select s from StudentInfo s where s.student.username = ?1")
     Page<StudentInfo> findByStudentId_UsernameEquals(String username, Pageable pageable);
 
 

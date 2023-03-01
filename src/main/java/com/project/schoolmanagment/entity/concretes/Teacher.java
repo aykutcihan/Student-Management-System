@@ -33,7 +33,7 @@ public class Teacher extends User {
 
     private String email;
 
-    @OneToMany(mappedBy = "teacherId",cascade = CascadeType.REMOVE)
-    private List<StudentInfo> studentInfoList;
+    @OneToMany(mappedBy = "teacher",cascade = CascadeType.REMOVE)
+    private List<StudentInfo> studentInfos;
 
 }

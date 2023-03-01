@@ -32,4 +32,6 @@ public class UpdateStudentInfoRequest {
 
     @NotNull
     private Long lessonId;
+    @NotNull
+    private Long educationTermId;
 }

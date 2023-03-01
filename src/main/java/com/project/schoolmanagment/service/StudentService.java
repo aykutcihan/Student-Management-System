@@ -7,8 +7,7 @@ import com.project.schoolmanagment.entity.concretes.LessonProgram;
 import com.project.schoolmanagment.entity.concretes.Student;
 import com.project.schoolmanagment.entity.enums.Role;
 import com.project.schoolmanagment.payload.Dto.StudentRequestDto;
-import com.project.schoolmanagment.payload.request.ChooseLessonRequest;
-import com.project.schoolmanagment.payload.request.ChooseLessonRequestWithoutId;
+ import com.project.schoolmanagment.payload.request.ChooseLessonRequestWithoutId;
 import com.project.schoolmanagment.payload.request.StudentRequest;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.payload.response.StudentResponse;
@@ -66,12 +65,25 @@ public class StudentService {
         student.setAdvisorTeacher(advisorTeacher.get());
         student.setUserRole(userRoleService.getUserRole(Role.STUDENT));
         student.setPassword(passwordEncoder.encode(studentRequest.getPassword()));
+        student.setActive(true);
         return responseMessageBuilder.object(responseObjectService.createStudentResponse(studentRepository.save(student)))
                 .message("Student saved Successfully").build();
     }
 
+
     public List<StudentResponse> getAllStudent() {
         return studentRepository.findAll().stream().map(responseObjectService::createStudentResponse).collect(Collectors.toList());
+    }
+
+    public ResponseMessage changeStatus(Long id, boolean status) {
+        if (!studentRepository.existsByIdEquals(id))
+            throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_USER_MESSAGE, id));
+        Optional<Student> student = studentRepository.findById(id);
+        student.get().setActive(status);
+        studentRepository.save(student.get());
+        return ResponseMessage.builder().message("Student is " + (status ? "active" : "passive"))
+                .httpStatus(HttpStatus.OK)
+                .build();
     }
 
     public ResponseMessage<StudentResponse> updateStudent(Long userId, StudentRequest studentRequest) {
@@ -114,6 +126,7 @@ public class StudentService {
         return studentRequestDto.dtoStudent(studentRequest);
     }
 
+
     private Student createUpdatedStudent(StudentRequest studentRequest, Long userId) {
         return Student.builder().id(userId)
                 .username(studentRequest.getUsername())
@@ -133,7 +146,7 @@ public class StudentService {
     }
 
 
-    public ResponseMessage<StudentResponse> chooseLesson(String username,ChooseLessonRequestWithoutId chooseLessonRequest) {
+    public ResponseMessage<StudentResponse> chooseLesson(String username, ChooseLessonRequestWithoutId chooseLessonRequest) {
         Optional<Student> student = studentRepository.getStudentByUsernameForOptional(username);
         Set<LessonProgram> lessonPrograms = lessonProgramService.getLessonProgramById(chooseLessonRequest.getLessonProgramId());
         if (!student.isPresent()) {
@@ -156,18 +169,26 @@ public class StudentService {
 
     }
 
-    public List<Student>    getStudentByIds(Long[] studentIds) {
+    public List<Student> getStudentByIds(Long[] studentIds) {
         return studentRepository.findByIdsEquals(studentIds);
     }
-    public Optional<Student> getStudentById(Long studentId) {
+
+
+    public Student getStudentById(Long studentId) {
+        existsStudentById(studentId);
         return studentRepository.findByIdEquals(studentId);
     }
 
-
-    public List<StudentResponse> getAllStudentByAdvisorId(Long advisorId) {
-        return studentRepository.getStudentByAdvisorTeacher_Id(advisorId).stream().map(responseObjectService::createStudentResponse)
-                .collect(Collectors.toList());
+    public Student getStudentByIdForResponse(Long studentId) {
+        existsStudentById(studentId);
+        return studentRepository.findByIdEquals(studentId) ;
     }
+
+    private void existsStudentById(Long id) {
+        if (!studentRepository.existsByIdEquals(id))
+            throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_USER_MESSAGE, id));
+    }
+
 
     public List<StudentResponse> getStudentByName(String studentName) {
         return studentRepository.getStudentByNameContaining(studentName).stream().map(responseObjectService::createStudentResponse)

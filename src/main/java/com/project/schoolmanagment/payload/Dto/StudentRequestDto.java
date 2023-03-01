@@ -1,12 +1,8 @@
 package com.project.schoolmanagment.payload.Dto;
 
-import com.project.schoolmanagment.entity.concretes.Lesson;
-import com.project.schoolmanagment.entity.concretes.Student;
+ import com.project.schoolmanagment.entity.concretes.Student;
 import com.project.schoolmanagment.payload.request.StudentRequest;
-import lombok.Data;
-import lombok.Getter;
 
-import java.util.Set;
 
 public class StudentRequestDto {
 
@@ -26,4 +22,5 @@ public class StudentRequestDto {
                 .gender(studentRequest.getGender())
                 .build();
     }
+
 }

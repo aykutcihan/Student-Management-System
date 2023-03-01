@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("students")
@@ -30,6 +29,14 @@ public class StudentController {
             @RequestBody @Valid StudentRequest studentRequest
     ) {
         return studentService.save(studentRequest);
+    }
+
+    @GetMapping("/changeStatus")
+    public ResponseMessage changeStatus(
+            @RequestParam Long id,
+            @RequestParam  boolean status
+    ) {
+        return studentService.changeStatus(id, status);
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANTMANAGER')")
@@ -58,8 +65,9 @@ public class StudentController {
 
     @GetMapping("/getStudentById")
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANTMANAGER')")
-    public Optional<Student> getStudentById(@RequestParam(name = "id") Long id) {
-        return studentService.getStudentById(id);
+    public Student getStudentById(@RequestParam(name = "id") Long id) {
+
+        return studentService.getStudentByIdForResponse(id);
     }
 
     @PostMapping("/chooseLesson")
@@ -76,7 +84,7 @@ public class StudentController {
     @GetMapping("/getAllByAdvisorId")
     public List<StudentResponse> getAllStudentByAdvisorId(
             HttpServletRequest request
-            ) {
+    ) {
         String username = (String) request.getAttribute("username");
         return studentService.getAllStudentByTeacher_Username(username);
     }

@@ -1,6 +1,7 @@
 package com.project.schoolmanagment.controller;
 
 import com.project.schoolmanagment.entity.enums.Role;
+import com.project.schoolmanagment.payload.request.AdminRequest;
 import com.project.schoolmanagment.payload.request.LoginRequest;
 import com.project.schoolmanagment.payload.response.AuthResponse;
 import com.project.schoolmanagment.security.JwtUtils;
@@ -56,4 +57,5 @@ public class AuthController {
         }
         return ResponseEntity.ok(authResponse.build());
     }
+
 }

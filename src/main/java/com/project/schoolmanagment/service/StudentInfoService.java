@@ -2,10 +2,7 @@ package com.project.schoolmanagment.service;
 
 import com.project.schoolmanagment.Exception.ConflictException;
 import com.project.schoolmanagment.Exception.ResourceNotFoundException;
-import com.project.schoolmanagment.entity.concretes.Lesson;
-import com.project.schoolmanagment.entity.concretes.Student;
-import com.project.schoolmanagment.entity.concretes.StudentInfo;
-import com.project.schoolmanagment.entity.concretes.Teacher;
+import com.project.schoolmanagment.entity.concretes.*;
 import com.project.schoolmanagment.entity.enums.Note;
 import com.project.schoolmanagment.payload.request.StudentInfoRequestWithoutTeacherId;
 import com.project.schoolmanagment.payload.request.UpdateRequest.UpdateStudentInfoRequest;
@@ -23,43 +20,44 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class StudentInfoService {
     private final StudentInfoRepository studentInfoRepository;
     private final LessonService lessonService;
+    private final EducationTermService educationTermService;
     private final StudentService studentService;
     private final TeacherService teacherService;
 
     private final CreateResponseObjectService createResponseObjectService;
     @Value("${midterm.exam.impact.percentage}")
-    private Double midtermExamPercantage;
+    private Double midtermExamPercentage;
     @Value("${final.exam.impact.percentage}")
-    private Double finalExamPercantage;
+    private Double finalExamPercentage;
+
+    @Value("${regular.impact.percentage}")
+    private Double regularPercentage;
+
+    @Value("${compulsory.impact.percentage}")
+    private Double compulsoryPercentage;
 
     public ResponseMessage<StudentInfoResponse> save(String username, StudentInfoRequestWithoutTeacherId studentInfoRequest) {
-        Optional<Student> student = studentService.getStudentById(studentInfoRequest.getStudentId());
-        Optional<Teacher> teacher = teacherService.getTeacherByUsername(username);
-        Optional<Lesson> lesson = lessonService.getLessonById(studentInfoRequest.getLessonId());
+        Student student = studentService.getStudentById(studentInfoRequest.getStudentId());
+        Teacher teacher = teacherService.getTeacherByUsername(username);
+        Lesson lesson = lessonService.getLessonById(studentInfoRequest.getLessonId());
+        EducationTerm educationTerm = educationTermService.getById(studentInfoRequest.getEducationTermId());
 
-        if (!lesson.isPresent()) {
-            throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_LESSON_MESSAGE, studentInfoRequest.getLessonId()));
-        } else if (!student.isPresent()) {
-            throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_USER_MESSAGE, studentInfoRequest.getStudentId()));
-        } else if (!teacher.isPresent()) {
-            throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_USER_MESSAGE, username));
-        } else if (checkSameLesson(studentInfoRequest.getStudentId(), lesson.get().getLessonName())) {
-            throw new ConflictException(String.format(Messages.ALREADY_REGISTER_LESSON_NAME, lesson.get().getLessonName()));
-        }
+        if (checkSameLesson(studentInfoRequest.getStudentId(), lesson.getLessonName()))
+            throw new ConflictException(String.format(Messages.ALREADY_REGISTER_LESSON_NAME, lesson.getLessonName()));
 
-        Double noteAverage = calculateExamAverage(studentInfoRequest.getMidtermExam(), studentInfoRequest.getFinalExam());
+        Double noteAverage = calculateExamAverage(studentInfoRequest.getMidtermExam(), studentInfoRequest.getFinalExam(), lesson.isCompulsory());
         Note note = checkLetterGrade(noteAverage);
         StudentInfo studentInfo = createDto(studentInfoRequest, note, noteAverage);
-        studentInfo.setStudentId(student.get());
-        studentInfo.setTeacherId(teacher.get());
-        studentInfo.setLessonName(lesson.get().getLessonName());
+        studentInfo.setStudent(student);
+        studentInfo.setEducationTerm(educationTerm);
+        studentInfo.setTeacher(teacher);
+        studentInfo.setLesson(lesson);
         StudentInfo savedStudentInfo = studentInfoRepository.save(studentInfo);
         return ResponseMessage.<StudentInfoResponse>builder()
                 .object(createResponse(savedStudentInfo))
@@ -69,22 +67,25 @@ public class StudentInfoService {
     }
 
     public ResponseMessage<StudentInfoResponse> update(UpdateStudentInfoRequest studentInfoRequest, Long studentInfoId) {
-        Optional<Lesson> lesson = lessonService.getLessonById(studentInfoRequest.getLessonId());
-        Optional<StudentInfo> getStudentInfo = studentInfoRepository.findById(studentInfoId);
-        if (!getStudentInfo.isPresent()) {
-            throw new ResourceNotFoundException(String.format(Messages.STUDENT_INFO_NOT_FOUND, studentInfoId));
-        } else if (!lesson.isPresent()) {
-            throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_LESSON_MESSAGE, studentInfoRequest.getLessonId()));
-        }
 
-        System.out.println(studentInfoRequest.getMidtermExam() + " " + studentInfoRequest.getFinalExam());
-        Double noteAverage = calculateExamAverage(studentInfoRequest.getMidtermExam(), studentInfoRequest.getFinalExam());
+        System.out.println("studentInfoRequest.getLessonId()"+studentInfoRequest.getLessonId());
+        Lesson lesson = lessonService.getLessonById(studentInfoRequest.getLessonId());
+        StudentInfo getStudentInfo = getStudentInfoById(studentInfoId);
+        EducationTerm educationTerm = educationTermService.getById(studentInfoRequest.getEducationTermId());
+
+        Double noteAverage = calculateExamAverage(studentInfoRequest.getMidtermExam(), studentInfoRequest.getFinalExam(), lesson.isCompulsory());
         Note note = checkLetterGrade(noteAverage);
-        StudentInfo studentInfo = createUpdatedStudent(studentInfoRequest,
-                studentInfoId, lesson.get().getLessonName(), note, noteAverage);
+        StudentInfo studentInfo = createUpdatedStudent(
+                studentInfoRequest,
+                studentInfoId,
+                lesson,
+                educationTerm,
+                note,
+                noteAverage
+        );
 
-        studentInfo.setStudentId(getStudentInfo.get().getStudentId());
-        studentInfo.setTeacherId(getStudentInfo.get().getTeacherId());
+        studentInfo.setStudent(getStudentInfo.getStudent());
+        studentInfo.setTeacher(getStudentInfo.getTeacher());
         StudentInfo updatedStudentInfo = studentInfoRepository.save(studentInfo);
 
         return ResponseMessage.<StudentInfoResponse>builder()
@@ -94,11 +95,18 @@ public class StudentInfoService {
                 .build();
     }
 
+    private StudentInfo getStudentInfoById(Long studentInfoId) {
+        if (!studentInfoRepository.existsByIdEquals(studentInfoId))
+            throw new ResourceNotFoundException(String.format(Messages.STUDENT_INFO_NOT_FOUND, studentInfoId));
+        return studentInfoRepository.findByIdEquals(studentInfoId);
+
+    }
+
     public ResponseMessage deleteStudentInfo(Long id) {
-        Optional<StudentInfo> studentInfo = studentInfoRepository.findById(id);
-        if (!studentInfo.isPresent()) {
+
+        if (!studentInfoRepository.existsByIdEquals(id))
             throw new ResourceNotFoundException(String.format(Messages.STUDENT_INFO_NOT_FOUND, id));
-        }
+
         studentInfoRepository.deleteById(id);
         return ResponseMessage.<StudentInfoResponse>builder()
                 .message("Student Info deleted Successfully")
@@ -114,10 +122,10 @@ public class StudentInfoService {
         return studentInfoRepository.findByTeacherId_UsernameEquals(username, pageable).map(this::createResponse);
     }
 
-    public Page<StudentInfoResponse> getAllStudentInfoByStudent( String username,Pageable pageable) {
+    public Page<StudentInfoResponse> getAllStudentInfoByStudent(String username, Pageable pageable) {
         boolean student = studentService.existByUsername(username);
         if (!student) throw new ResourceNotFoundException(String.format(Messages.STUDENT_INFO_NOT_FOUND_BY_USERNAME, username));
-        return studentInfoRepository.findByStudentId_UsernameEquals( username,pageable).map(this::createResponse);
+        return studentInfoRepository.findByStudentId_UsernameEquals(username, pageable).map(this::createResponse);
     }
 
     public Page<StudentInfoResponse> search(int page, int size, String sort, String type) {
@@ -141,7 +149,11 @@ public class StudentInfoService {
     }
 
     private StudentInfoResponse createResponse(StudentInfo studentInfo) {
-        return StudentInfoResponse.builder().lessonName(studentInfo.getLessonName())
+        return StudentInfoResponse.builder()
+                .lessonName(studentInfo.getLesson().getLessonName())
+                .creditScore(studentInfo.getLesson().getCreditScore())
+                .isCompulsory(studentInfo.getLesson().isCompulsory())
+                .educationTerm(studentInfo.getEducationTerm().getTerm())
                 .id(studentInfo.getId())
                 .absentee(studentInfo.getAbsentee())
                 .midtermExam(studentInfo.getMidtermExam())
@@ -149,28 +161,36 @@ public class StudentInfoService {
                 .finalExam(studentInfo.getFinalExam())
                 .note(studentInfo.getLetterGrade())
                 .average(studentInfo.getExamAverage())
-                .studentResponse(createResponseObjectService.createStudentResponse(studentInfo.getStudentId())).build();
+                .studentResponse(createResponseObjectService.createStudentResponse(studentInfo.getStudent())).build();
     }
 
     private StudentInfo createUpdatedStudent(UpdateStudentInfoRequest studentInfoRequest,
                                              Long studentInfoRequestId,
-                                             String lessonName,
+                                             Lesson lesson,
+                                             EducationTerm educationTerm,
                                              Note note,
                                              Double average) {
-        return StudentInfo.builder().id(studentInfoRequestId)
+        return StudentInfo.builder()
+                .id(studentInfoRequestId)
                 .infoNote(studentInfoRequest.getInfoNote())
                 .midtermExam(studentInfoRequest.getMidtermExam())
                 .absentee(studentInfoRequest.getAbsentee())
                 .finalExam(studentInfoRequest.getFinalExam())
-                .lessonName(lessonName)
+                .lesson(lesson)
+                .educationTerm(educationTerm)
                 .examAverage(average)
                 .letterGrade(note)
                 .build();
     }
 
-    private Double calculateExamAverage(Double midtermExam, Double finalExam) {
-        return (midtermExam * midtermExamPercantage) + (finalExam * finalExamPercantage);
+    private Double calculateExamAverage(Double midtermExam, Double finalExam, boolean isCompulsory) {
+        double rate = regularPercentage;
+        if (isCompulsory)
+            rate = compulsoryPercentage;
+
+        return (midtermExam * midtermExamPercentage) + (finalExam * finalExamPercentage) * rate;
     }
+
 
     private Note checkLetterGrade(Double average) {
         if (average < 50.0) {
@@ -195,7 +215,7 @@ public class StudentInfoService {
     }
 
     private boolean checkSameLesson(Long studentId, String lessonName) {
-        return studentInfoRepository.getAllByStudentId_Id(studentId).stream().anyMatch((e) -> e.getLessonName().equalsIgnoreCase(lessonName));
+        return studentInfoRepository.getAllByStudentId_Id(studentId).stream().anyMatch((e) -> e.getLesson().getLessonName().equalsIgnoreCase(lessonName));
     }
 
 

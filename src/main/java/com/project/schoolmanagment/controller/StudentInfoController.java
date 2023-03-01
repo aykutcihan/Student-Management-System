@@ -1,7 +1,6 @@
 package com.project.schoolmanagment.controller;
 
-import com.project.schoolmanagment.payload.request.StudentInfoRequest;
-import com.project.schoolmanagment.payload.request.StudentInfoRequestWithoutTeacherId;
+ import com.project.schoolmanagment.payload.request.StudentInfoRequestWithoutTeacherId;
 import com.project.schoolmanagment.payload.request.UpdateRequest.UpdateStudentInfoRequest;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.payload.response.StudentInfoResponse;
@@ -46,7 +45,10 @@ public class StudentInfoController {
 
     @PreAuthorize("hasAnyAuthority('ADMIN','TEACHER')")
     @PutMapping("/update/{studentInfoId}")
-    public ResponseMessage<StudentInfoResponse> update(@RequestBody @Valid UpdateStudentInfoRequest studentInfoRequest, @PathVariable Long studentInfoId) {
+    public ResponseMessage<StudentInfoResponse> update(
+            @RequestBody @Valid UpdateStudentInfoRequest studentInfoRequest,
+            @PathVariable Long studentInfoId
+    ) {
         return studentInfoService.update(studentInfoRequest, studentInfoId);
     }
 
@@ -56,7 +58,7 @@ public class StudentInfoController {
             @RequestParam(value = "page") int page,
             @RequestParam(value = "size") int size
     ) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by("lessonName").descending());
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
         Page<StudentInfoResponse> studentInfoResponse = studentInfoService.getAll(pageable);
         return new ResponseEntity<>(studentInfoResponse, HttpStatus.OK);
     }
@@ -69,7 +71,7 @@ public class StudentInfoController {
             @RequestParam(value = "page") int page,
             @RequestParam(value = "size") int size
     ) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by("lessonName").descending());
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
         String username = (String) httpServletRequest.getAttribute("username");
         Page<StudentInfoResponse> studentInfoResponse = studentInfoService.getAllForTeacher(pageable, username);
         return new ResponseEntity<>(studentInfoResponse, HttpStatus.OK);

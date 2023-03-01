@@ -1,5 +1,6 @@
 package com.project.schoolmanagment.payload.request;
 
+import com.project.schoolmanagment.entity.concretes.EducationTerm;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -32,8 +33,8 @@ public class StudentInfoRequestWithoutTeacherId {
 
     @NotNull
     private Long lessonId;
-
-
+    @NotNull
+    private Long educationTermId;
 
     @NotNull
     private Long studentId;

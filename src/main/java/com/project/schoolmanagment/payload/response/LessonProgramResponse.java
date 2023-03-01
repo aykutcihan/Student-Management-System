@@ -2,6 +2,7 @@ package com.project.schoolmanagment.payload.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.project.schoolmanagment.entity.concretes.EducationTerm;
 import com.project.schoolmanagment.entity.enums.Day;
 import com.project.schoolmanagment.entity.concretes.Lesson;
 import lombok.AllArgsConstructor;
@@ -31,5 +32,6 @@ public class LessonProgramResponse {
     private Set<Lesson> lessonName;
     private Set<TeacherResponse> teachers;
     private Set<StudentResponse> students;
+    private EducationTerm educationTerm;
 
 }

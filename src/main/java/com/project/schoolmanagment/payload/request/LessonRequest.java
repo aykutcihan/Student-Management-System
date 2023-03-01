@@ -1,9 +1,9 @@
 package com.project.schoolmanagment.payload.request;
 
-import lombok.*;
+ import lombok.*;
 
-import javax.validation.constraints.NotEmpty;
-import java.io.Serializable;
+ import javax.validation.constraints.NotNull;
+ import java.io.Serializable;
 
 @Data
 @AllArgsConstructor
@@ -11,6 +11,10 @@ import java.io.Serializable;
 @Builder
 public class LessonRequest implements Serializable {
 
-    @NotEmpty
+    @NotNull
     private String lessonName;
+    @NotNull
+    private int creditScore;
+
+    private boolean isCompulsory;
 }

@@ -1,5 +1,6 @@
 package com.project.schoolmanagment.payload.request;
 
+import com.project.schoolmanagment.entity.concretes.EducationTerm;
 import com.project.schoolmanagment.entity.concretes.LessonProgram;
 import com.project.schoolmanagment.entity.concretes.Student;
 import com.project.schoolmanagment.entity.concretes.Teacher;
@@ -19,6 +20,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @Builder(toBuilder = true)
 public class StudentInfoRequest {
+
 
     @DecimalMax("100.0") @DecimalMin("0.0")
     @NotNull

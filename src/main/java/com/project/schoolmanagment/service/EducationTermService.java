@@ -88,15 +88,6 @@ public class EducationTermService {
 
     }
 
-   /* public ResponseMessage delete(Long id) {
-        if (!educationTermRepository.existsByIdEquals(id)) {
-            throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_LESSON_MESSAGE, id));
-        }
-        educationTermRepository.deleteById(id);
-        return ResponseMessage.builder().message("Education Term Program Deleted")
-                .httpStatus(HttpStatus.OK)
-                .build();
-    }*/
 
     public EducationTerm createUpdatedEducationTerm(Long id, EducationTermRequest request) {
         return EducationTerm.builder()

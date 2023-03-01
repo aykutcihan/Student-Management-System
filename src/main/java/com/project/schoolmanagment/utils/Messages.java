@@ -31,6 +31,5 @@ public class Messages {
     public static final String EDUCATION_START_DATE_IS_SMALLER_THAN_END_DATE  = "Error: The start date cannot be less than the end date.";
     public static final String EDUCATION_START_DATE_IS_SMALLER_THAN_LAST_REGISTRATION_DATE  = "Error: The start date cannot be less than the last registration date.";
     public static final String EDUCATION_END_DATE_IS_SMALLER_THAN_LAST_REGISTRATION_DATE  = "Error: The end date cannot be less than the last registration date.";
-
-
+    public static final String NOT_FOUND_GUESTUSER_BY_ID =  "Error: User with ID %d not found";
 }

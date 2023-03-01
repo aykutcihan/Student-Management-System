@@ -3,7 +3,10 @@ package com.project.schoolmanagment.payload.response;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.project.schoolmanagment.entity.concretes.LessonProgram;
 import com.project.schoolmanagment.payload.response.abstracts.BaseUserResponse;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import java.util.Set;
@@ -17,4 +20,5 @@ import java.util.Set;
 public class StudentResponse extends BaseUserResponse {
 
     private Set<LessonProgram> lessonProgramSet;
+    private boolean isActive;
 }

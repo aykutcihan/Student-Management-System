@@ -45,7 +45,9 @@ public class Student extends User {
 
     private String email;
     @JsonIgnore //https://www.baeldung.com/jackson-bidirectional-relationships-and-infinite-recursion
-    @OneToMany(mappedBy = "studentId",cascade = CascadeType.REMOVE)
-    private List<StudentInfo> studentInfoList;
+    @OneToMany(mappedBy = "student", cascade = CascadeType.REMOVE)
+    private List<StudentInfo> studentInfos;
 
+
+    private boolean isActive;
 }

@@ -1,7 +1,8 @@
 package com.project.schoolmanagment.repository;
 
 import com.project.schoolmanagment.entity.concretes.Student;
- import org.springframework.data.jpa.repository.JpaRepository;
+import com.project.schoolmanagment.payload.response.StudentResponse;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -41,7 +42,7 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 
     @Query(value = "SELECT s FROM Student s WHERE s.id IN :id")
     List<Student> findByIdsEquals(Long[] id);
-    Optional<Student> findByIdEquals(Long id);
+    Student findByIdEquals(Long id);
 
 
     boolean existsByIdEquals(Long studentId);
@@ -49,4 +50,6 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     List<Student> getStudentByAdvisorTeacher_Username(String username);
 
     boolean existsByUsername(String username);
+    @Query(value = "SELECT s FROM Student s WHERE s.id = :id ")
+    StudentResponse findByIdEqualsForStudentResponse(Long id);
 }

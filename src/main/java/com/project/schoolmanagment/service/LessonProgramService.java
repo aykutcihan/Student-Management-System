@@ -2,6 +2,7 @@ package com.project.schoolmanagment.service;
 
 import com.project.schoolmanagment.Exception.BadRequestException;
 import com.project.schoolmanagment.Exception.ResourceNotFoundException;
+import com.project.schoolmanagment.entity.concretes.EducationTerm;
 import com.project.schoolmanagment.entity.concretes.Lesson;
 import com.project.schoolmanagment.entity.concretes.LessonProgram;
 import com.project.schoolmanagment.payload.Dto.LessonProgramDto;
@@ -33,22 +34,33 @@ public class LessonProgramService {
     private final LessonProgramDto lessonProgramDto;
 
     private final LessonService lessonService;
+    private final EducationTermService educationTermService;
     private final CreateResponseObjectService createResponseObjectService;
 
-    public ResponseMessage<LessonProgramResponse> save(LessonProgramRequest lessonProgramRequest) {
-        Set<Lesson> lessons = lessonService.getLessonByLessonNameList(lessonProgramRequest.getLessonIdList());
+    public ResponseMessage<LessonProgramResponse> save(LessonProgramRequest request) {
+        Set<Lesson> lessons = lessonService.getLessonByLessonNameList(request.getLessonIdList());
+        EducationTerm educationTerm = educationTermService.getById(request.getEducationTermId());
         if (lessons.size() == 0) {
             throw new ResourceNotFoundException(Messages.NOT_FOUND_LESSON_IN_LIST);
-        } else if (TimeControl.check(lessonProgramRequest.getStartTime(), lessonProgramRequest.getStopTime())) {
+        } else if (TimeControl.check(request.getStartTime(), request.getStopTime())) {
             throw new BadRequestException(Messages.TIME_NOT_VALID_MESSAGE);
         }
-        LessonProgram lessonProgram = lessonProgramRequestToDto(lessonProgramRequest, lessons);
+
+
+        LessonProgram lessonProgram = lessonProgramRequestToDto(request, lessons);
+        lessonProgram.setEducationTerm(educationTerm);
         LessonProgram savedLessonProgram = lessonProgramRepository.save(lessonProgram);
         return ResponseMessage.<LessonProgramResponse>builder()
                 .message("Created Lesson Program")
                 .object(createLessonProgramResponseForSaveMethod(savedLessonProgram))
                 .httpStatus(HttpStatus.CREATED).build();
     }
+
+ /*   private int calculateTotalCreditScore(Set<Lesson> lessons) {
+        return lessons.stream()
+                .map(Lesson::getCreditScore)
+                .reduce(0, Integer::sum);
+    }*/
 
     public List<LessonProgramResponse> getAllLessonProgram() {
         return lessonProgramRepository.findAll()

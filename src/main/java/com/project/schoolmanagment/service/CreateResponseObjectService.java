@@ -1,11 +1,11 @@
 package com.project.schoolmanagment.service;
 
+import com.project.schoolmanagment.entity.concretes.Lesson;
 import com.project.schoolmanagment.entity.concretes.Student;
 import com.project.schoolmanagment.entity.concretes.Teacher;
+import com.project.schoolmanagment.payload.response.LessonResponse;
 import com.project.schoolmanagment.payload.response.StudentResponse;
 import com.project.schoolmanagment.payload.response.TeacherResponse;
-import com.project.schoolmanagment.repository.StudentRepository;
-import com.project.schoolmanagment.repository.TeacherRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CreateResponseObjectService {
 
-    public TeacherResponse createTeacherResponse(Teacher teacher){
+    public TeacherResponse createTeacherResponse(Teacher teacher) {
         return TeacherResponse.builder().userId(teacher.getId())
                 .username(teacher.getUsername())
                 .name(teacher.getName())
@@ -30,6 +30,15 @@ public class CreateResponseObjectService {
                 .surname(student.getSurname())
                 .ssn(student.getSsn())
                 .phoneNumber(student.getPhoneNumber())
+                .isActive(student.isActive())
+                .build();
+    }
+
+    public LessonResponse createLessonResponse(Lesson lesson) {
+        return LessonResponse.builder()
+                .lessonName(lesson.getLessonName())
+                .isCompulsory(lesson.isCompulsory())
+                .creditScore(lesson.getCreditScore())
                 .build();
     }
 }

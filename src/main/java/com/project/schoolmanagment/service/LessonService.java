@@ -1,9 +1,7 @@
 package com.project.schoolmanagment.service;
 
-import com.project.schoolmanagment.Exception.BadRequestException;
 import com.project.schoolmanagment.Exception.ConflictException;
 import com.project.schoolmanagment.Exception.ResourceNotFoundException;
-import com.project.schoolmanagment.entity.concretes.Dean;
 import com.project.schoolmanagment.entity.concretes.Lesson;
 import com.project.schoolmanagment.payload.request.LessonRequest;
 import com.project.schoolmanagment.payload.response.LessonResponse;
@@ -18,7 +16,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import javax.swing.*;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -64,8 +61,10 @@ public class LessonService {
                 .object(createLessonResponse(lesson.get())).build();
     }
 
-    public Optional<Lesson> getLessonById(Long lessonId){
-        return lessonRepository.findById(lessonId);
+    public Lesson getLessonById(Long lessonId) {
+        if (!lessonRepository.existsByLessonIdEquals(lessonId))
+            throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_LESSON_MESSAGE, lessonId));
+        return lessonRepository.findByLessonIdEquals(lessonId);
     }
 
     public Page<LessonResponse> search(int page, int size, String sort, String type) {
@@ -76,6 +75,7 @@ public class LessonService {
 
         return lessonRepository.findAll(pageable).map(this::createLessonResponse);
     }
+
     public boolean existsLessonByLessonName(String lessonName) {
         return lessonRepository.existsLessonByLessonNameEqualsIgnoreCase(lessonName);
     }
@@ -88,12 +88,21 @@ public class LessonService {
         return lessonRepository.getLessonByLessonIdList(lessons);
     }
 
-    private LessonResponse createLessonResponse(Lesson lesson){
-       return LessonResponse.builder().lessonId(lesson.getLessonId()).lessonName(lesson.getLessonName()).build();
+    private LessonResponse createLessonResponse(Lesson lesson) {
+        return LessonResponse.builder()
+                .lessonId(lesson.getLessonId())
+                .lessonName(lesson.getLessonName())
+                .creditScore(lesson.getCreditScore())
+                .isCompulsory(lesson.isCompulsory())
+                .build();
     }
 
-    private Lesson createLessonObject(LessonRequest lessonRequest){
-       return Lesson.builder().lessonName(lessonRequest.getLessonName()).build();
+    private Lesson createLessonObject(LessonRequest request) {
+        return Lesson.builder()
+                .lessonName(request.getLessonName())
+                .creditScore(request.getCreditScore())
+                .isCompulsory(request.isCompulsory())
+                .build();
     }
 
 
