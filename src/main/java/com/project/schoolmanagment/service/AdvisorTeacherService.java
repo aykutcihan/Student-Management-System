@@ -75,7 +75,8 @@ public class AdvisorTeacherService {
     }
 
     private AdvisorTeacherResponse createResponseObject(AdvisorTeacher advisorTeacher) {
-        return AdvisorTeacherResponse.builder().advisorTeacherId(advisorTeacher.getId())
+        return AdvisorTeacherResponse.builder()
+                .advisorTeacherId(advisorTeacher.getId())
                 .teacherName(advisorTeacher.getTeacher().getName())
                 .teacherSurname(advisorTeacher.getTeacher().getSurname())
                 .teacherSSN(advisorTeacher.getTeacher().getSsn()).build();

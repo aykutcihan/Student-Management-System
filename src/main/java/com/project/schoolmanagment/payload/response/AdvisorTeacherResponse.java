@@ -12,7 +12,6 @@ public class AdvisorTeacherResponse {
 
     private Long advisorTeacherId;
     private String teacherName;
-    private String usename;
     private String teacherSSN;
     private String teacherSurname;
 }
