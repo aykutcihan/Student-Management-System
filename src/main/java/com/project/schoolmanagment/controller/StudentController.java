@@ -39,14 +39,14 @@ public class StudentController {
         return studentService.changeStatus(id, status);
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANTMANAGER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','TEACHER','ASSISTANTMANAGER')")
     @GetMapping("/getAll")
     public List<StudentResponse> getAllTeacher() {
         return studentService.getAllStudent();
     }
 
     @PutMapping("/update/{userId}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANTMANAGER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','TEACHER','ASSISTANTMANAGER')")
     public ResponseMessage<StudentResponse> updateStudent(@PathVariable Long userId, @RequestBody @Valid StudentRequest studentRequest) {
         return studentService.updateStudent(userId, studentRequest);
     }
