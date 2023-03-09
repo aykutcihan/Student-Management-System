@@ -25,7 +25,7 @@ public class EducationTermController {
         return educationTermService.save(educationTermRequest);
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANTMANAGER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','TEACHER','ASSISTANTMANAGER')")
     @GetMapping("/{id}")
     public EducationTermResponse get(
             @PathVariable Long id
@@ -33,13 +33,13 @@ public class EducationTermController {
         return educationTermService.get(id);
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANTMANAGER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','TEACHER','ASSISTANTMANAGER')")
     @GetMapping("/getAll")
     public List<EducationTermResponse> getAll() {
         return educationTermService.getAll();
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANTMANAGER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','TEACHER','ASSISTANTMANAGER')")
     @GetMapping("/search")
     public Page<EducationTermResponse> getAll(
             @RequestParam(value = "page", defaultValue = "0") int page,
@@ -50,7 +50,7 @@ public class EducationTermController {
         return educationTermService.search(page, size, sort, type);
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANTMANAGER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','TEACHER','ASSISTANTMANAGER')")
     @DeleteMapping("/{id}")
     public ResponseMessage<EducationTermResponse> delete(
             @PathVariable Long id
