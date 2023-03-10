@@ -130,6 +130,11 @@ public class StudentInfoService {
         return studentInfoRepository.findByStudentId_UsernameEquals(username, pageable).map(this::createResponse);
     }
 
+    public StudentInfoResponse getStudentInfoByid(Long id) {
+        if (!studentInfoRepository.existsByIdEquals(id))
+            throw new ResourceNotFoundException(String.format(Messages.STUDENT_INFO_NOT_FOUND, id));
+        return createResponse(studentInfoRepository.findByIdEquals(id));
+    }
 
     public List<StudentInfoResponse> getStudentInfoByStudentId(Long studentId) {
 

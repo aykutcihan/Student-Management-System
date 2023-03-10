@@ -99,6 +99,14 @@ public class StudentInfoController {
         List<StudentInfoResponse> studentInfoResponse = studentInfoService.getStudentInfoByStudentId( studentId);
         return new ResponseEntity<>(studentInfoResponse, HttpStatus.OK);
     }
+    @GetMapping("/get/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANTMANAGER','TEACHER')")
+    public ResponseEntity<StudentInfoResponse> get(
+            @PathVariable Long id
+    ) {
+        StudentInfoResponse studentInfoResponse = studentInfoService.getStudentInfoByid( id);
+        return new ResponseEntity<>(studentInfoResponse, HttpStatus.OK);
+    }
 
     @GetMapping("/search")
     @PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANTMANAGER')")
