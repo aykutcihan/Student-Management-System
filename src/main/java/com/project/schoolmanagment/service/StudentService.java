@@ -7,7 +7,7 @@ import com.project.schoolmanagment.entity.concretes.LessonProgram;
 import com.project.schoolmanagment.entity.concretes.Student;
 import com.project.schoolmanagment.entity.enums.Role;
 import com.project.schoolmanagment.payload.Dto.StudentRequestDto;
- import com.project.schoolmanagment.payload.request.ChooseLessonRequestWithoutId;
+import com.project.schoolmanagment.payload.request.ChooseLessonRequestWithoutId;
 import com.project.schoolmanagment.payload.request.StudentRequest;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.payload.response.StudentResponse;
@@ -181,7 +181,7 @@ public class StudentService {
 
     public Student getStudentByIdForResponse(Long studentId) {
         existsStudentById(studentId);
-        return studentRepository.findByIdEquals(studentId) ;
+        return studentRepository.findByIdEquals(studentId);
     }
 
     private void existsStudentById(Long id) {
@@ -227,4 +227,7 @@ public class StudentService {
                 .collect(Collectors.toList());
     }
 
+    public boolean existById(Long studentId) {
+        return studentRepository.existsById(studentId);
+    }
 }

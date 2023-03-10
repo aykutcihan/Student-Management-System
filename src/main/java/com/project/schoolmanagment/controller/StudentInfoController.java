@@ -91,6 +91,15 @@ public class StudentInfoController {
         return new ResponseEntity<>(studentInfoResponse, HttpStatus.OK);
     }
 
+    @GetMapping("/getByStudentId/{studentId}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANTMANAGER','TEACHER')")
+    public ResponseEntity<List<StudentInfoResponse>> getByStudentId(
+            @PathVariable Long studentId
+    ) {
+        List<StudentInfoResponse> studentInfoResponse = studentInfoService.getStudentInfoByStudentId( studentId);
+        return new ResponseEntity<>(studentInfoResponse, HttpStatus.OK);
+    }
+
     @GetMapping("/search")
     @PreAuthorize("hasAnyAuthority('ADMIN','ASSISTANTMANAGER')")
     public Page<StudentInfoResponse> search(

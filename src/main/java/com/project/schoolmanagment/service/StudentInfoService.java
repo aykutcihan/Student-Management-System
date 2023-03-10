@@ -19,7 +19,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -68,7 +70,7 @@ public class StudentInfoService {
 
     public ResponseMessage<StudentInfoResponse> update(UpdateStudentInfoRequest studentInfoRequest, Long studentInfoId) {
 
-        System.out.println("studentInfoRequest.getLessonId()"+studentInfoRequest.getLessonId());
+        System.out.println("studentInfoRequest.getLessonId()" + studentInfoRequest.getLessonId());
         Lesson lesson = lessonService.getLessonById(studentInfoRequest.getLessonId());
         StudentInfo getStudentInfo = getStudentInfoById(studentInfoId);
         EducationTerm educationTerm = educationTermService.getById(studentInfoRequest.getEducationTermId());
@@ -128,12 +130,25 @@ public class StudentInfoService {
         return studentInfoRepository.findByStudentId_UsernameEquals(username, pageable).map(this::createResponse);
     }
 
+
+    public List<StudentInfoResponse> getStudentInfoByStudentId(Long studentId) {
+
+        if (!studentService.existById(studentId))
+            throw new ResourceNotFoundException(String.format(Messages.STUDENT_NOT_FOUND, studentId));
+        if (!studentInfoRepository.existsByStudent_IdEquals(studentId))
+            throw new ResourceNotFoundException(String.format(Messages.STUDENT_INFO_NOT_FOUND_BY_STUDENT_ID, studentId));
+
+        return studentInfoRepository.findByStudent_IdEquals(studentId)
+                .stream()
+                .map(this::createResponse)
+                .collect(Collectors.toList());
+    }
+
     public Page<StudentInfoResponse> search(int page, int size, String sort, String type) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sort).ascending());
         if (Objects.equals(type, "desc")) {
             pageable = PageRequest.of(page, size, Sort.by(sort).descending());
         }
-
         return studentInfoRepository.findAll(pageable).map(this::createResponse);
     }
 

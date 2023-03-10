@@ -10,6 +10,12 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface StudentInfoRepository extends JpaRepository<StudentInfo, Long> {
+    @Query("select (count(s) > 0) from StudentInfo s where s.student.id = ?1")
+    boolean existsByStudent_IdEquals(Long id);
+    @Query("select count(s) from StudentInfo s where s.student.id = ?1")
+    long countByStudent_IdEquals(Long id);
+    @Query("select s from StudentInfo s where s.student.id = ?1")
+    List<StudentInfo> findByStudent_IdEquals(Long id);
     StudentInfo findByIdEquals(Long id);
     boolean existsByIdEquals(Long id);
 
