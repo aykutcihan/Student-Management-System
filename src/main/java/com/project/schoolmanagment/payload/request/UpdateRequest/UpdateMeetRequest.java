@@ -18,7 +18,7 @@ import java.time.LocalTime;
 @Builder(toBuilder = true)
 public class UpdateMeetRequest {
 
-    @NotEmpty
+    @NotNull
     private String description;
 
     @NotNull

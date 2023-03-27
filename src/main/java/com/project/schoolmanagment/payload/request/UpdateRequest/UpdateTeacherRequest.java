@@ -18,10 +18,10 @@ import java.time.LocalDate;
 @Builder(toBuilder = true)
 public class UpdateTeacherRequest implements Serializable {
 
-    @NotEmpty
+    @NotNull
     private String name;
 
-    @NotEmpty
+    @NotNull
     private String surname;
 
     @NotNull
@@ -29,6 +29,6 @@ public class UpdateTeacherRequest implements Serializable {
     @Past
     private LocalDate birthDay;
 
-    @NotEmpty
+    @NotNull
     private String ssn;
 }

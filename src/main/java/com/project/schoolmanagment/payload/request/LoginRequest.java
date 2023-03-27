@@ -5,15 +5,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class LoginRequest {
 
-    @NotEmpty
+    @NotNull(message = "Username must not be empty")
     private String username;
 
-    @NotEmpty
+    @NotNull(message = "Password must not be empty")
     private String password;
 }

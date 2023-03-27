@@ -9,6 +9,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -20,21 +22,23 @@ import java.util.List;
 public class EducationTerm {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     private Long id;
 
-    @Column(name = "term", nullable = false)
+    @NotNull(message = "Education Term must not be empty")
+    @Column(name = "term")
     private Term term;
-
-    @Column(name = "start_date", nullable = false)
+    @NotNull(message = "Start Date must not be empty")
+    @Column(name = "start_date")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate startDate;
-
-    @Column(name = "end_date", nullable = false)
+    @NotNull(message = "End Date must not be empty")
+    @Column(name = "end_date")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate endDate;
 
-    @Column(name = "last_registration_date", nullable = false)
+    @NotNull(message = "last Registration Date must not be empty")
+    @Column(name = "last_registration_date")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate lastRegistrationDate;
 

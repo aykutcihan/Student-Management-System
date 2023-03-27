@@ -14,5 +14,4 @@ import java.time.LocalDate;
 @SuperBuilder
 public class Admin extends User {
 
-
 }

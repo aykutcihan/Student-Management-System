@@ -26,7 +26,7 @@ public class LessonProgram implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private EducationTerm educationTerm;
 
     @Enumerated(EnumType.STRING)

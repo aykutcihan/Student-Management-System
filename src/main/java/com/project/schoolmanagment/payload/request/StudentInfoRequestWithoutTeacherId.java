@@ -28,7 +28,7 @@ public class StudentInfoRequestWithoutTeacherId {
     @NotNull
     private Integer absentee;
 
-    @NotEmpty
+    @NotNull
     private String infoNote;
 
     @NotNull

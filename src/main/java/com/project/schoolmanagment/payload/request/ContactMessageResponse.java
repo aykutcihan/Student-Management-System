@@ -26,6 +26,7 @@ public class ContactMessageResponse implements Serializable {
     @NotNull
     private String message;
 
+    @NotNull
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate date;
 }

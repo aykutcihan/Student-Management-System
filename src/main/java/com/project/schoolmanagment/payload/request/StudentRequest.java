@@ -16,16 +16,16 @@ import javax.validation.constraints.NotEmpty;
 @SuperBuilder
 public class StudentRequest extends BaseUserRequest {
 
-    @NotEmpty
+    @NotNull
     private String motherName;
 
-    @NotEmpty
+    @NotNull
     private String fatherName;
 
-    @NotEmpty
+    @NotNull
     private String studentNumber;
 
-    @NotEmpty
+    @NotNull
     @Email
     private String email;
 

@@ -25,7 +25,7 @@ public class TeacherRequest extends BaseUserRequest {
     @JsonProperty("isAdvisorTeacher")
     private boolean isAdvisorTeacher;
 
-    @NotEmpty
+    @NotNull
     @Email
     private String email;
 }

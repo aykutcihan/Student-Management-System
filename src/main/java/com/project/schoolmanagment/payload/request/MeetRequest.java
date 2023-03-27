@@ -19,17 +19,17 @@ import java.time.LocalTime;
 @Builder(toBuilder = true)
 public class MeetRequest implements Serializable {
 
-    @NotEmpty
+    @NotNull
     private String description;
 
     @NotNull
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Future
     private LocalDate date;
-   
+    @NotNull
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "US")
     private LocalTime startTime;
-
+    @NotNull
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "US")
     private LocalTime stopTime;
 

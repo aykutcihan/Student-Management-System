@@ -27,7 +27,7 @@ public class UpdateStudentInfoRequest {
     @NotNull
     private Integer absentee;
 
-    @NotEmpty
+    @NotNull
     private String infoNote;
 
     @NotNull

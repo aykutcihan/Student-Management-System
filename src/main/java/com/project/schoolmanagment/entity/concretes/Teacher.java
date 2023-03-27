@@ -25,7 +25,7 @@ public class Teacher extends User {
             inverseJoinColumns = @JoinColumn(name = "lesson_program_id"))
     private Set<LessonProgram> lessonsProgramList;
 
-    @OneToOne(mappedBy = "teacher",cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToOne(mappedBy = "teacher",cascade = CascadeType.PERSIST, orphanRemoval = true)
     private AdvisorTeacher advisorTeacher;
 
     @Column(name = "isAdvisor")

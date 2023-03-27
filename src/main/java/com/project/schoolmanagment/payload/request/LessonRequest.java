@@ -15,6 +15,6 @@ public class LessonRequest implements Serializable {
     private String lessonName;
     @NotNull
     private int creditScore;
-
+    @NotNull
     private boolean isCompulsory;
 }
