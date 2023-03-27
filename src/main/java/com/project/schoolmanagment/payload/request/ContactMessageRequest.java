@@ -17,13 +17,13 @@ import java.time.LocalDate;
 public class ContactMessageRequest implements Serializable {
 
 
-    @NotNull
+    @NotNull(message = "Please enter name")
     private String name;
-    @NotNull
+    @NotNull(message = "Please enter email ")
     private String email;
-    @NotNull
+    @NotNull(message = "Please enter subject")
     private String subject;
-    @NotNull
+    @NotNull(message = "Please enter message ")
     private String message;
 
 

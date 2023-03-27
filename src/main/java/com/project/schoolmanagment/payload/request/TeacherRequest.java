@@ -17,15 +17,15 @@ import java.util.Set;
 @SuperBuilder
 public class TeacherRequest extends BaseUserRequest {
 
-    @NotNull
+   @NotNull(message = "Please select lesson")
     @Size(min = 1, message = "lessons must not empty")
     private Set<Long> lessonsIdList;
 
-    @NotNull
+   @NotNull(message = "Please select isAdvisor Teacher")
     @JsonProperty("isAdvisorTeacher")
     private boolean isAdvisorTeacher;
 
-    @NotNull
+   @NotNull(message = "Please enter email")
     @Email
     private String email;
 }

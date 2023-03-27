@@ -1,18 +1,12 @@
 package com.project.schoolmanagment.payload.request;
 
-import com.project.schoolmanagment.entity.concretes.EducationTerm;
-import com.project.schoolmanagment.entity.concretes.LessonProgram;
-import com.project.schoolmanagment.entity.concretes.Student;
-import com.project.schoolmanagment.entity.concretes.Teacher;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.ManyToOne;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Data
@@ -22,26 +16,28 @@ import javax.validation.constraints.NotNull;
 public class StudentInfoRequest {
 
 
-    @DecimalMax("100.0") @DecimalMin("0.0")
-    @NotNull
+    @DecimalMax("100.0")
+    @DecimalMin("0.0")
+    @NotNull(message = "Please enter midterm exam")
     private Double midtermExam;
 
-    @DecimalMax("100.0") @DecimalMin("0.0")
-    @NotNull
+    @DecimalMax("100.0")
+    @DecimalMin("0.0")
+    @NotNull(message = "Please enter final exam")
     private Double finalExam;
 
-    @NotNull
+    @NotNull(message = "Please enter absentee")
     private Integer absentee;
 
-    @NotNull
+    @NotNull(message = "Please enter info")
     private String infoNote;
 
-    @NotNull
+    @NotNull(message = "Please select lesson")
     private Long lessonId;
 
-    @NotNull
+    @NotNull(message = "Please select teacher")
     private Long teacherId;
 
-    @NotNull
+    @NotNull(message = "Please select student")
     private Long studentId;
 }

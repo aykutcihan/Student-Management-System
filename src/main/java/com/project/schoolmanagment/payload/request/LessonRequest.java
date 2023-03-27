@@ -11,10 +11,10 @@ package com.project.schoolmanagment.payload.request;
 @Builder
 public class LessonRequest implements Serializable {
 
-    @NotNull
+    @NotNull(message = "Please enter lesson ")
     private String lessonName;
-    @NotNull
+    @NotNull(message = "Please enter credit score")
     private int creditScore;
-    @NotNull
+    @NotNull(message = "Please select isCompulsory")
     private boolean isCompulsory;
 }

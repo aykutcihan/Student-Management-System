@@ -20,20 +20,20 @@ import java.util.Set;
 @Builder(toBuilder = true)
 public class LessonProgramRequest implements Serializable {
 
-    @NotNull
+    @NotNull(message = "Please enter day")
     @DayType(message = "Invalid day!")
     private Day day;
-    @NotNull
+    @NotNull(message = "Please enter start time")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "US")
     private LocalTime startTime;
-    @NotNull
+    @NotNull(message = "Please enter stop time")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "US")
     private LocalTime stopTime;
 
-    @NotNull
+    @NotNull(message = "Please select lesson ")
     @Size(min = 1, message = "lessons must not empty")
     private Set<Long> lessonIdList;
 
-    @NotNull
+    @NotNull(message = "Please select education term")
     private Long educationTermId;
 }

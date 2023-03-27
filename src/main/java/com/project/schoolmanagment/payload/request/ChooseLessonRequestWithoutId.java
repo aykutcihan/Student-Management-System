@@ -16,7 +16,7 @@ import java.util.Set;
 @Builder(toBuilder = true)
 public class ChooseLessonRequestWithoutId implements Serializable {
 
-    @NotNull
+    @NotNull(message = "Please select lesson program   ")
     @Size(min = 1, message = "lessons must not empty")
     private Set<Long> lessonProgramId;
 

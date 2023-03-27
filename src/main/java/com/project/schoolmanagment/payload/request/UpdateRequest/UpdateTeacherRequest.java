@@ -18,17 +18,17 @@ import java.time.LocalDate;
 @Builder(toBuilder = true)
 public class UpdateTeacherRequest implements Serializable {
 
-    @NotNull
+    @NotNull(message = "Please enter name ")
     private String name;
 
-    @NotNull
+    @NotNull(message = "Please enter surname")
     private String surname;
 
-    @NotNull
+    @NotNull(message = "Please enter birthday ")
     @JsonFormat(pattern = "dd/MM/yyyy")
     @Past
     private LocalDate birthDay;
 
-    @NotNull
+    @NotNull(message = "Please enter ssn")
     private String ssn;
 }

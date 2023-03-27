@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Future;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -19,20 +18,20 @@ import java.time.LocalTime;
 @Builder(toBuilder = true)
 public class MeetRequestWithoutId implements Serializable {
 
-    @NotNull
+    @NotNull(message = "Please enter description")
     private String description;
 
-    @NotNull
+    @NotNull(message = "Please enter day")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Future
     private LocalDate date;
-    @NotNull
+    @NotNull(message = "Please enter start time")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "US")
     private LocalTime startTime;
-    @NotNull
+    @NotNull(message = "Please enter stop time ")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "US")
     private LocalTime stopTime;
 
-    @NotNull
+    @NotNull(message = "Please select students")
     private Long[] studentIds;
 }

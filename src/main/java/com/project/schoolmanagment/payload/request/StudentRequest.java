@@ -1,14 +1,15 @@
 package com.project.schoolmanagment.payload.request;
 
 import com.project.schoolmanagment.payload.request.abstracts.BaseUserRequest;
-import com.sun.istack.NotNull;
+ 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 
 @Getter
 @Setter
@@ -16,20 +17,20 @@ import javax.validation.constraints.NotEmpty;
 @SuperBuilder
 public class StudentRequest extends BaseUserRequest {
 
-    @NotNull
+   @NotNull(message = "Please enter mother name")
     private String motherName;
 
-    @NotNull
+   @NotNull(message = "Please enter father name")
     private String fatherName;
 
-    @NotNull
+   @NotNull(message = "Please enter student number ")
     private String studentNumber;
 
-    @NotNull
+   @NotNull(message = "Please enter email")
     @Email
     private String email;
 
-    @NotNull
+   @NotNull(message = "Please select advisor teacher")
     private Long advisorTeacherId;
 
 }

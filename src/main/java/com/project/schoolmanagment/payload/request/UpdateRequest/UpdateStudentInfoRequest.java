@@ -17,21 +17,21 @@ import javax.validation.constraints.NotNull;
 public class UpdateStudentInfoRequest {
 
     @DecimalMax("100.0") @DecimalMin("0.0")
-    @NotNull
+    @NotNull(message = "Please enter midterm exam")
     private Double midtermExam;
 
     @DecimalMax("100.0") @DecimalMin("0.0")
-    @NotNull
+    @NotNull(message = "Please enter final exam  ")
     private Double finalExam;
 
-    @NotNull
+    @NotNull(message = "Please enter absentee ")
     private Integer absentee;
 
-    @NotNull
+    @NotNull(message = "Please enter extra info  ")
     private String infoNote;
 
-    @NotNull
+    @NotNull(message = "Please select lesson ")
     private Long lessonId;
-    @NotNull
+    @NotNull(message = "Please select education term ")
     private Long educationTermId;
 }

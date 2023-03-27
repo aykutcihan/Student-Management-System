@@ -14,6 +14,6 @@ import java.io.Serializable;
 @Builder(toBuilder = true)
 public class AdvisorTeacherRequest implements Serializable {
 
-    @NotNull
+    @NotNull(message = "Please enter select advisor teacher")
     private Long teacherId;
 }

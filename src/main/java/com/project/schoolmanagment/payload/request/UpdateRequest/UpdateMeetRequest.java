@@ -18,21 +18,23 @@ import java.time.LocalTime;
 @Builder(toBuilder = true)
 public class UpdateMeetRequest {
 
-    @NotNull
+    @NotNull(message = "Please enter description")
     private String description;
 
-    @NotNull
+    @NotNull(message = "Please enter description")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Future
     private LocalDate date;
 
+    @NotNull(message = "Please enter start time ")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "US")
     private LocalTime startTime;
 
+    @NotNull(message = "Please enter  stop time ")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "US")
     private LocalTime stopTime;
 
-    @NotNull
+    @NotNull(message = "Please select students")
     private Long[] studentIds;
 
 }

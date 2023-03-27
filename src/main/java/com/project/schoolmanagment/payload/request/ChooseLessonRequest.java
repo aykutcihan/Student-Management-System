@@ -20,6 +20,6 @@ public class ChooseLessonRequest implements Serializable {
     @Size(min = 1, message = "lessons must not empty")
     private Set<Long> lessonProgramId;
 
-    @NotNull
+    @NotNull(message = "Please select student")
     private Long studentId;
 }
