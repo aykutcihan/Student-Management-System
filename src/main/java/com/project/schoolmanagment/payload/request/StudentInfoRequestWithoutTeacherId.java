@@ -18,6 +18,9 @@ import javax.validation.constraints.NotNull;
 public class StudentInfoRequestWithoutTeacherId {
 
 
+    @NotNull(message = "Please select education term ")
+    private Long educationTermId;
+
 
     @DecimalMax("100.0")
     @DecimalMin("0.0")
