@@ -5,6 +5,7 @@ import com.project.schoolmanagment.payload.request.abstracts.BaseUserRequest;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import javax.persistence.Column;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -25,7 +26,9 @@ public class TeacherRequest extends BaseUserRequest {
     @JsonProperty("isAdvisorTeacher")
     private boolean isAdvisorTeacher;
 
-   @NotNull(message = "Please enter email")
-    @Email
+    @Email(message = "Please enter valid email")
+    @Size(min = 5, max = 80)
+    @NotNull(message = "Please enter your email")
+    @Column(nullable = false, unique = true, length = 80)
     private String email;
 }

@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.validator.constraints.UniqueElements;
 
+import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.*;
 import java.io.Serializable;
@@ -42,7 +43,10 @@ public abstract class BaseUserRequest implements Serializable {
     @NotNull(message = "Please enter your birth place")
     private String birthPlace;
 
+
+    @Size(min = 8, max = 60, message = "Please enter min 4 characters")
     @NotNull(message = "Please enter your password")
+    @Column(nullable = false, length = 60)
     private String password;
 
     @NotNull(message = "Please enter your phone number")
