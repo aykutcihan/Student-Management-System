@@ -36,7 +36,7 @@ public abstract class BaseUserRequest implements Serializable {
     private LocalDate birthDay;
 
     @NotNull
-    @Pattern(regexp = "^(?!000|666)[0-8][0-9]{2}-(?!00)[0-9]{2}-(?!0000)[0-9]{4}$" ,
+    @Pattern(regexp = "^(?!000|666)[0-8][0-9]{2}-(?!00)[0-9]{2}-(?!0000)[0-9]{4}$",
             message = "Please enter valid SSN number")
     private String ssn;
 
@@ -44,7 +44,7 @@ public abstract class BaseUserRequest implements Serializable {
     private String birthPlace;
 
 
-    @Size(min = 8, max = 60, message = "Please enter min 4 characters")
+    @Size(min = 8, max = 60, message = "Please enter your password as at least 8 characters")
     @NotNull(message = "Please enter your password")
     @Column(nullable = false, length = 60)
     private String password;

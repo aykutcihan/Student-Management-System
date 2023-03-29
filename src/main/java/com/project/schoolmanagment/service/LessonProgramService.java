@@ -68,6 +68,18 @@ public class LessonProgramService {
                 .map(this::createLessonProgramResponse)
                 .collect(Collectors.toList());
     }
+    public List<LessonProgramResponse> getAllLessonProgramUnassigned() {
+        return lessonProgramRepository.findByTeachers_IdNull()
+                .stream()
+                .map(this::createLessonProgramResponse)
+                .collect(Collectors.toList());
+    }
+    public List<LessonProgramResponse> getAllLessonProgramAssigned() {
+        return lessonProgramRepository.findByTeachers_IdNotNull()
+                .stream()
+                .map(this::createLessonProgramResponse)
+                .collect(Collectors.toList());
+    }
 
     public Set<LessonProgramResponse> getLessonProgramByTeacher(String username) {
         return lessonProgramRepository.getLessonProgramByTeacherUsername(username)
@@ -154,6 +166,7 @@ public class LessonProgramService {
                 .httpStatus(HttpStatus.OK)
                 .build();
     }
+
 
 
 }

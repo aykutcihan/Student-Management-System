@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Set;
 
 public interface LessonProgramRepository extends JpaRepository<LessonProgram, Long> {
+    List<LessonProgram> findByTeachers_IdNotNull();
+    List<LessonProgram> findByTeachers_IdNull();
 
     @Query(value = "SELECT l FROM LessonProgram l WHERE l.id IN :lessonProgramIdList")
     Set<LessonProgram> getLessonProgramByLessonProgramIdList( Set<Long> lessonProgramIdList);

@@ -34,6 +34,18 @@ public class LessonProgramController {
         return lessonProgramService.getAllLessonProgram();
     }
 
+    @GetMapping("/getAllUnassigned")
+    @PreAuthorize("hasAnyAuthority('ASSISTANTMANAGER','MANAGER','ADMIN','TEACHER','STUDENT')")
+    public List<LessonProgramResponse> getAllUnassigned() {
+        return lessonProgramService.getAllLessonProgramUnassigned();
+    }
+
+    @GetMapping("/getAllAssigned")
+    @PreAuthorize("hasAnyAuthority('ASSISTANTMANAGER','MANAGER','ADMIN','TEACHER','STUDENT')")
+    public List<LessonProgramResponse> getAllAssigned() {
+        return lessonProgramService.getAllLessonProgramAssigned();
+    }
+
     @DeleteMapping("/delete/{id}")
         @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANTMANAGER')")
     public ResponseMessage delete(@PathVariable Long id) {

@@ -1,15 +1,11 @@
 package com.project.schoolmanagment.controller;
 
-import com.project.schoolmanagment.entity.concretes.AdvisorTeacher;
-import com.project.schoolmanagment.entity.concretes.Student;
 import com.project.schoolmanagment.payload.response.AdvisorTeacherResponse;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
-import com.project.schoolmanagment.payload.response.ViceDeanResponse;
-import com.project.schoolmanagment.service.AdvisorTeacherService;
+ import com.project.schoolmanagment.service.AdvisorTeacherService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
+ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
