@@ -25,7 +25,7 @@ public class ErrorHandler implements ErrorController {
         String message=(String) attributes.get("message");
         Integer status=(Integer) attributes.get("status");
         String path=(String) attributes.get("path");
-        System.out.println(attributes.toString());
+
         ApiErrorResponse apiError=new ApiErrorResponse(message,status,path);
         if(attributes.containsKey("errors")){
             List<FieldError> fieldErrorList= (List<FieldError>) attributes.get("errors");
