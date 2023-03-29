@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.MappedSuperclass;
+import java.time.LocalDate;
 
 @MappedSuperclass
 @Data
@@ -19,7 +20,10 @@ public abstract class BaseUserResponse {
     private String username;
     private String name;
     private String surname;
+    private LocalDate birthDay;
     private String ssn;
+    private String birthPlace;
     private String phoneNumber;
     private Gender gender;
+
 }
