@@ -61,6 +61,7 @@ public class StudentService {
             throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_PHONE_NUMBER, studentRequest.getPhoneNumber()));
         }
 
+
         Student student = studentRequestToDto(studentRequest);
         student.setAdvisorTeacher(advisorTeacher.get());
         student.setUserRole(userRoleService.getUserRole(Role.STUDENT));
@@ -229,5 +230,11 @@ public class StudentService {
 
     public boolean existById(Long studentId) {
         return studentRepository.existsById(studentId);
+    }
+
+    public int lastNumber() {
+        if (!studentRepository.findStudent())
+            return 1000;
+        return studentRepository.getMaxStudentNumber() + 1;
     }
 }

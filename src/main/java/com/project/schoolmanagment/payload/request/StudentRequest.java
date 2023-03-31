@@ -1,7 +1,6 @@
 package com.project.schoolmanagment.payload.request;
 
 import com.project.schoolmanagment.payload.request.abstracts.BaseUserRequest;
- 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,13 +18,13 @@ import javax.validation.constraints.Size;
 @SuperBuilder
 public class StudentRequest extends BaseUserRequest {
 
-   @NotNull(message = "Please enter mother name")
+    @NotNull(message = "Please enter mother name")
     private String motherName;
 
-   @NotNull(message = "Please enter father name")
+    @NotNull(message = "Please enter father name")
     private String fatherName;
 
-   @NotNull(message = "Please enter student number ")
+    @NotNull(message = "Please enter student number ")
     private String studentNumber;
 
     @Email(message = "Please enter valid email")
@@ -34,7 +33,7 @@ public class StudentRequest extends BaseUserRequest {
     @Column(nullable = false, unique = true, length = 80)
     private String email;
 
-   @NotNull(message = "Please select advisor teacher")
+    @NotNull(message = "Please select advisor teacher")
     private Long advisorTeacherId;
 
 }

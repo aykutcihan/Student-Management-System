@@ -39,6 +39,11 @@ public class StudentController {
         return studentService.changeStatus(id, status);
     }
 
+    @GetMapping("/lastNumber")
+    public int lastNumber( ) {
+        return studentService.lastNumber();
+    }
+
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','TEACHER','ASSISTANTMANAGER')")
     @GetMapping("/getAll")
     public List<StudentResponse> getAllTeacher() {

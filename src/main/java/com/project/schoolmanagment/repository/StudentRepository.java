@@ -11,6 +11,8 @@ import java.util.Optional;
 import java.util.Set;
 
 public interface StudentRepository extends JpaRepository<Student, Long> {
+    @Query("select (count(s) > 0) from Student s")
+    boolean findStudent();
     Student findByUsernameEquals(String username);
     @Query("select s from Student s where s.username = :username")
     Optional<Student> findByUsernameEqualsForOptional(String username);
@@ -52,4 +54,7 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     boolean existsByUsername(String username);
     @Query(value = "SELECT s FROM Student s WHERE s.id = :id ")
     StudentResponse findByIdEqualsForStudentResponse(Long id);
+
+    @Query(value = "SELECT MAX(s.studentNumber) FROM Student s ")
+    int getMaxStudentNumber();
 }
