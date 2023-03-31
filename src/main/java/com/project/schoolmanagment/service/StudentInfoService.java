@@ -208,7 +208,7 @@ public class StudentInfoService {
         if (isCompulsory)
             rate = compulsoryPercentage;
 
-        return (midtermExam * midtermExamPercentage) + (finalExam * finalExamPercentage) * rate;
+        return ((midtermExam * midtermExamPercentage) + (finalExam * finalExamPercentage));
     }
 
 
