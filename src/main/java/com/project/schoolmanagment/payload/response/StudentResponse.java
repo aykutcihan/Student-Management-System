@@ -20,5 +20,9 @@ import java.util.Set;
 public class StudentResponse extends BaseUserResponse {
 
     private Set<LessonProgram> lessonProgramSet;
+    private int studentNumber;
+    private String motherName;
+    private String fatherName;
+    private String email;
     private boolean isActive;
 }

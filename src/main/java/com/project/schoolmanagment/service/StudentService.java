@@ -214,7 +214,7 @@ public class StudentService {
         return student.getSsn().equalsIgnoreCase(newStudentRequest.getSsn())
                 || student.getPhoneNumber().equalsIgnoreCase(newStudentRequest.getPhoneNumber())
                 || student.getEmail().equalsIgnoreCase(newStudentRequest.getEmail())
-                || student.getStudentNumber().equalsIgnoreCase(newStudentRequest.getStudentNumber());
+                || student.getStudentNumber()==newStudentRequest.getStudentNumber();
     }
 
     public boolean existByUsername(String username) {

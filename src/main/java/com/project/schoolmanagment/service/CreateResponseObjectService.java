@@ -18,8 +18,12 @@ public class CreateResponseObjectService {
                 .username(teacher.getUsername())
                 .name(teacher.getName())
                 .surname(teacher.getSurname())
+                .birthDay(teacher.getBirthDay())
                 .ssn(teacher.getSsn())
+                .birthPlace(teacher.getBirthPlace())
                 .phoneNumber(teacher.getPhoneNumber())
+                .gender(teacher.getGender())
+                .email(teacher.getEmail())
                 .build();
     }
 
@@ -28,8 +32,14 @@ public class CreateResponseObjectService {
                 .username(student.getUsername())
                 .name(student.getName())
                 .surname(student.getSurname())
-                .ssn(student.getSsn())
+                .birthDay(student.getBirthDay())
+                .birthPlace(student.getBirthPlace())
                 .phoneNumber(student.getPhoneNumber())
+                .gender(student.getGender())
+                .email(student.getEmail())
+                .motherName(student.getMotherName())
+                .fatherName(student.getFatherName())
+                .studentNumber(student.getStudentNumber())
                 .isActive(student.isActive())
                 .build();
     }

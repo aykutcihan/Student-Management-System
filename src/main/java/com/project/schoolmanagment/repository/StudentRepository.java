@@ -32,7 +32,7 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 
     List<Student> getStudentByAdvisorTeacher_Id(Long advisorId);
 
-    boolean existsByStudentNumber(String studentNumber);
+    boolean existsByStudentNumber(int studentNumber);
 
     boolean existsByEmail(String email);
 

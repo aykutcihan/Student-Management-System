@@ -71,7 +71,6 @@ public class StudentController {
     @GetMapping("/getStudentById")
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANTMANAGER')")
     public Student getStudentById(@RequestParam(name = "id") Long id) {
-
         return studentService.getStudentByIdForResponse(id);
     }
 

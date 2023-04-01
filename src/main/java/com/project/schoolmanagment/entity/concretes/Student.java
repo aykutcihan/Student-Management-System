@@ -22,7 +22,7 @@ public class Student extends User {
 
     private String fatherName;
 
-    private String studentNumber;
+    private int studentNumber;
     @JsonIgnore //https://www.baeldung.com/jackson-bidirectional-relationships-and-infinite-recursion
     @ManyToOne(cascade = CascadeType.PERSIST)
     private AdvisorTeacher advisorTeacher;

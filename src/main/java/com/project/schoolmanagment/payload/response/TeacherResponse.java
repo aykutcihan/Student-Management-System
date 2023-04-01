@@ -16,4 +16,6 @@ import java.util.Set;
 public class TeacherResponse extends BaseUserResponse {
 
     private Set<LessonProgram> lessonPrograms;
+    private String email;
+
 }
