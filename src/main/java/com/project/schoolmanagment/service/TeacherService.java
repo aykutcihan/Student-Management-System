@@ -11,7 +11,7 @@ import com.project.schoolmanagment.payload.request.ChooseLessonTeacherRequest;
 import com.project.schoolmanagment.payload.request.TeacherRequest;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.payload.response.TeacherResponse;
-import com.project.schoolmanagment.repository.TeacherRepository;
+import com.project.schoolmanagment.repository.*;
 import com.project.schoolmanagment.service.util.CheckSameLessonProgram;
 import com.project.schoolmanagment.utils.Messages;
 import lombok.RequiredArgsConstructor;
@@ -29,10 +29,12 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+
 @Service
 @RequiredArgsConstructor
 public class TeacherService {
 
+    private final AdminService adminService;
     private final TeacherRepository teacherRepository;
     private final LessonProgramService lessonProgramService;
     private final TeacherRequestDto teacherRequestDto;
@@ -44,19 +46,13 @@ public class TeacherService {
 
     private final PasswordEncoder passwordEncoder;
 
+
     public ResponseMessage<TeacherResponse> save(TeacherRequest teacherRequest) {
         Set<LessonProgram> lessons = lessonProgramService.getLessonProgramById(teacherRequest.getLessonsIdList());
         if (lessons.size() == 0) {
             throw new BadRequestException(Messages.LESSON_PROGRAM_NOT_FOUND_MESSAGE);
-        } else if (teacherRepository.existsByUsername(teacherRequest.getUsername())) {
-            throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_USERNAME, teacherRequest.getUsername()));
-        } else if (teacherRepository.existsBySsn(teacherRequest.getSsn())) {
-            throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_SSN, teacherRequest.getSsn()));
-        } else if (teacherRepository.existsByPhoneNumber(teacherRequest.getPhoneNumber())) {
-            throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_PHONE_NUMBER, teacherRequest.getPhoneNumber()));
-        } else if (teacherRepository.existsByEmail(teacherRequest.getEmail())) {
-            throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_SSN, teacherRequest.getEmail()));
-        }
+        } else
+            adminService.checkDuplicateWithEmail(teacherRequest.getUsername(), teacherRequest.getSsn(), teacherRequest.getPhoneNumber(), teacherRequest.getEmail());
 
         Teacher teacher = teacherRequestToDto(teacherRequest);
         teacher.setUserRole(userRoleService.getUserRole(Role.TEACHER));
@@ -80,15 +76,8 @@ public class TeacherService {
         } else if (lessons.size() == 0) {
             throw new BadRequestException(Messages.LESSON_PROGRAM_NOT_FOUND_MESSAGE);
         } else if (!checkParameterForUpdateMethod(teacher.get(), newTeacher)) {
-            if (teacherRepository.existsBySsn(newTeacher.getSsn())) {
-                throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_SSN, newTeacher.getSsn()));
-            } else if (teacherRepository.existsByUsername(newTeacher.getUsername())) {
-                throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_USERNAME, newTeacher.getUsername()));
-            } else if (teacherRepository.existsByPhoneNumber(newTeacher.getPhoneNumber())) {
-                throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_PHONE_NUMBER, newTeacher.getPhoneNumber()));
-            } else if (teacherRepository.existsByEmail(newTeacher.getEmail())) {
-                throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_EMAIL, newTeacher.getEmail()));
-            }
+            adminService.checkDuplicateWithEmail(newTeacher.getUsername(), newTeacher.getSsn(), newTeacher.getPhoneNumber(), newTeacher.getEmail());
+
         }
 
         Teacher updateTeacher = createUpdatedTeacher(newTeacher, userId);
@@ -101,6 +90,7 @@ public class TeacherService {
                 .httpStatus(HttpStatus.OK)
                 .message("Teacher updated Successful").build();
     }
+
 
     public ResponseMessage deleteTeacher(Long id) {
         Optional<Teacher> teacher = teacherRepository.findById(id);
@@ -197,13 +187,11 @@ public class TeacherService {
                 || teacher.getEmail().equalsIgnoreCase(newTeacherRequest.getEmail());
     }
 
-    public Optional<Teacher> getTeacherBySsn(String ssn) {
-        return Optional.ofNullable(teacherRepository.getTeacherBySsn(ssn));
-    }
-
     public Teacher getTeacherByUsername(String username) {
         if (!teacherRepository.existsByUsername(username))
             throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_USER_MESSAGE, username));
         return teacherRepository.getTeacherByUsername(username);
     }
+
+
 }

@@ -11,4 +11,5 @@ public interface ViceDeanRepository extends JpaRepository<ViceDean,Long> {
     ViceDean getViceDeanBySsn(String ssn);
 
     boolean existsByUsername(String username);
-}
+
+ }

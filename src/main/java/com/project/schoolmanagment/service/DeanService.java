@@ -35,16 +35,12 @@ public class DeanService {
     private final PasswordEncoder passwordEncoder;
 
     private final DeanDto deanDto;
+    private final AdminService adminService;
 
 
     public ResponseMessage<DeanResponse> save(DeanRequest deanRequest) {
-        if (deanRepository.existsBySsn(deanRequest.getSsn())) {
-            throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_SSN, deanRequest.getSsn()));
-        } else if (deanRepository.existsByUsername(deanRequest.getUsername())) {
-            throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_USERNAME, deanRequest.getUsername()));
-        } else if (deanRepository.existsByPhoneNumber(deanRequest.getPhoneNumber())) {
-            throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_PHONE_NUMBER, deanRequest.getPhoneNumber()));
-        }
+        adminService. checkDuplicate(deanRequest.getUsername(), deanRequest.getSsn(), deanRequest.getPhoneNumber());
+
         Dean dean = createDtoForDean(deanRequest);
         dean.setUserRole(userRoleService.getUserRole(Role.MANAGER));
         dean.setPassword(passwordEncoder.encode(dean.getPassword()));
@@ -62,13 +58,7 @@ public class DeanService {
             throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_USER_MESSAGE, deanId));
 
         } else if (!CheckParameterUpdateMethod.checkParameter(dean.get(), newDean)) {
-            if (deanRepository.existsBySsn(newDean.getSsn())) {
-                throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_SSN, newDean.getSsn()));
-            } else if (deanRepository.existsByUsername(newDean.getUsername())) {
-                throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_USERNAME, newDean.getUsername()));
-            } else if (deanRepository.existsByPhoneNumber(newDean.getPhoneNumber())) {
-                throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_PHONE_NUMBER, newDean.getPhoneNumber()));
-            }
+            adminService. checkDuplicate(newDean.getUsername(), newDean.getSsn(), newDean.getPhoneNumber());
         }
         Dean updatedDean = createUpdatedDean(newDean, deanId);
         updatedDean.setPassword(passwordEncoder.encode(newDean.getPassword()));

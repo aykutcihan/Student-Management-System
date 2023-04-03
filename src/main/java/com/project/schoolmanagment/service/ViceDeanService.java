@@ -1,7 +1,6 @@
 package com.project.schoolmanagment.service;
 
 import com.project.schoolmanagment.Exception.BadRequestException;
-import com.project.schoolmanagment.Exception.ConflictException;
 import com.project.schoolmanagment.Exception.ResourceNotFoundException;
 import com.project.schoolmanagment.entity.concretes.ViceDean;
 import com.project.schoolmanagment.entity.enums.Role;
@@ -29,6 +28,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class ViceDeanService {
+    private final AdminService adminService;
 
     private final ViceDeanRepository viceDeanRepository;
     private final UserRoleService userRoleService;
@@ -37,13 +37,8 @@ public class ViceDeanService {
     private final PasswordEncoder passwordEncoder;
 
     public ResponseMessage<ViceDeanResponse> save(ViceDeanRequest viceDeanRequest) {
-        if (viceDeanRepository.existsBySsn(viceDeanRequest.getSsn())) {
-            throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_SSN, viceDeanRequest.getSsn()));
-        } else if (viceDeanRepository.existsByUsername(viceDeanRequest.getUsername())) {
-            throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_USERNAME, viceDeanRequest.getUsername()));
-        } else if (viceDeanRepository.existsByPhoneNumber(viceDeanRequest.getPhoneNumber())) {
-            throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_PHONE_NUMBER, viceDeanRequest.getPhoneNumber()));
-        }
+
+        adminService.checkDuplicate(viceDeanRequest.getUsername(), viceDeanRequest.getSsn(), viceDeanRequest.getPhoneNumber());
         ViceDean viceDean = createDtoForViceDean(viceDeanRequest);
         viceDean.setUserRole(userRoleService.getUserRole(Role.ASSISTANTMANAGER));
         viceDean.setPassword(passwordEncoder.encode(viceDeanRequest.getPassword()));
@@ -59,13 +54,8 @@ public class ViceDeanService {
         if (!viceDean.isPresent()) {
             throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_USER_MESSAGE, managerId));
         } else if (!CheckParameterUpdateMethod.checkParameter(viceDean.get(), newViceDean)) {
-            if (viceDeanRepository.existsBySsn(newViceDean.getSsn())) {
-                throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_SSN, newViceDean.getSsn()));
-            } else if (viceDeanRepository.existsByUsername(newViceDean.getUsername())) {
-                throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_USERNAME, newViceDean.getUsername()));
-            } else if (viceDeanRepository.existsByPhoneNumber(newViceDean.getPhoneNumber())) {
-                throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_PHONE_NUMBER, newViceDean.getPhoneNumber()));
-            }
+            adminService.checkDuplicate(newViceDean.getUsername(), newViceDean.getSsn(), newViceDean.getPhoneNumber());
+
         }
 
         ViceDean updatedViceDean = createUpdatedViceDean(newViceDean, managerId);

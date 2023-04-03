@@ -9,9 +9,8 @@ public interface AdvisoryTeacherRepository extends JpaRepository<AdvisorTeacher,
     Optional<AdvisorTeacher> findByTeacher_UsernameEquals(String username);
     boolean existsById(Long advisorTeacherId);
     Optional<AdvisorTeacher> getAdvisorTeacherByTeacher_Id(Long advisorTeacherId);
-    AdvisorTeacher getAdvisorTeacherByTeacher_Ssn(String ssn);
-
-
-
+    
     Optional<AdvisorTeacher>  findByTeacher_SsnEquals(String ssn);
+
+
 }

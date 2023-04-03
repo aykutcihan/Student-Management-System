@@ -1,6 +1,5 @@
 package com.project.schoolmanagment.service;
 
-import com.project.schoolmanagment.Exception.ConflictException;
 import com.project.schoolmanagment.Exception.ResourceNotFoundException;
 import com.project.schoolmanagment.entity.concretes.AdvisorTeacher;
 import com.project.schoolmanagment.entity.concretes.LessonProgram;
@@ -32,6 +31,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class StudentService {
+    private final AdminService adminService;
 
     private final StudentRepository studentRepository;
     private final StudentRequestDto studentRequestDto;
@@ -49,17 +49,10 @@ public class StudentService {
     public ResponseMessage<StudentResponse> save(StudentRequest studentRequest) {
         Optional<AdvisorTeacher> advisorTeacher = advisorTeacherService.getAdvisorTeacherById(studentRequest.getAdvisorTeacherId());
         ResponseMessage.ResponseMessageBuilder<StudentResponse> responseMessageBuilder = ResponseMessage.builder();
-        if (studentRepository.existsByUsername(studentRequest.getUsername())) {
-            throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_USERNAME, studentRequest.getUsername()));
-        } else if (!advisorTeacher.isPresent()) {
+
+        adminService.checkDuplicateWithEmail(studentRequest.getUsername(), studentRequest.getSsn(), studentRequest.getPhoneNumber(), studentRequest.getEmail());
+        if (!advisorTeacher.isPresent())
             throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_ADVISOR_MESSAGE, studentRequest.getAdvisorTeacherId()));
-        } else if (studentRepository.existsByStudentNumber(studentRequest.getStudentNumber())) {
-            throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_STUDENT_NUMBER, studentRequest.getStudentNumber()));
-        } else if (studentRepository.existsByEmail(studentRequest.getEmail())) {
-            throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_EMAIL, studentRequest.getEmail()));
-        } else if (studentRepository.existsByPhoneNumber(studentRequest.getPhoneNumber())) {
-            throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_PHONE_NUMBER, studentRequest.getPhoneNumber()));
-        }
 
 
         Student student = studentRequestToDto(studentRequest);
@@ -91,19 +84,15 @@ public class StudentService {
         Optional<Student> student = studentRepository.findById(userId);
         Optional<AdvisorTeacher> advisorTeacher = advisorTeacherService.getAdvisorTeacherById(studentRequest.getAdvisorTeacherId());
         ResponseMessage.ResponseMessageBuilder<StudentResponse> responseMessageBuilder = ResponseMessage.builder();
-        if (!student.isPresent()) {
+
+        if (!student.isPresent())
             throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_USER_MESSAGE, userId));
-        } else if (!checkParameterForUpdateMethod(student.get(), studentRequest)) {
-            if (studentRepository.existsBySsn(studentRequest.getSsn())) {
-                throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_SSN, studentRequest.getSsn()));
-            } else if (!advisorTeacher.isPresent()) {
-                throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_ADVISOR_MESSAGE, studentRequest.getAdvisorTeacherId()));
-            } else if (studentRepository.existsByStudentNumber(studentRequest.getStudentNumber())) {
-                throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_STUDENT_NUMBER, studentRequest.getStudentNumber()));
-            } else if (studentRepository.existsByEmail(studentRequest.getEmail())) {
-                throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_EMAIL, studentRequest.getEmail()));
-            }
-        }
+
+        adminService.checkDuplicateWithEmail(studentRequest.getUsername(), studentRequest.getSsn(), studentRequest.getPhoneNumber(), studentRequest.getEmail());
+
+        if (!advisorTeacher.isPresent())
+            throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_ADVISOR_MESSAGE, studentRequest.getAdvisorTeacherId()));
+
         Student updateStudent = createUpdatedStudent(studentRequest, userId);
         updateStudent.setPassword(passwordEncoder.encode(studentRequest.getPassword()));
         studentRepository.save(updateStudent);
@@ -214,7 +203,7 @@ public class StudentService {
         return student.getSsn().equalsIgnoreCase(newStudentRequest.getSsn())
                 || student.getPhoneNumber().equalsIgnoreCase(newStudentRequest.getPhoneNumber())
                 || student.getEmail().equalsIgnoreCase(newStudentRequest.getEmail())
-                || student.getStudentNumber()==newStudentRequest.getStudentNumber();
+                || student.getStudentNumber() == newStudentRequest.getStudentNumber();
     }
 
     public boolean existByUsername(String username) {
