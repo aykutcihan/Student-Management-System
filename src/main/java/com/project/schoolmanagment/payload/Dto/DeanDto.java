@@ -1,8 +1,9 @@
 package com.project.schoolmanagment.payload.Dto;
 
+
 import com.project.schoolmanagment.entity.concretes.Dean;
- import com.project.schoolmanagment.payload.request.DeanRequest;
- import lombok.Data;
+import com.project.schoolmanagment.payload.request.DeanRequest;
+import lombok.Data;
 
 @Data
 public class DeanDto {

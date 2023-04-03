@@ -1,7 +1,6 @@
 package com.project.schoolmanagment.payload.Dto;
 
 import com.project.schoolmanagment.entity.concretes.Meet;
-import com.project.schoolmanagment.payload.request.MeetRequest;
 import com.project.schoolmanagment.payload.request.MeetRequestWithoutId;
 import lombok.Data;
 

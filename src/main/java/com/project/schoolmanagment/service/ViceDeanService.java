@@ -132,6 +132,8 @@ public class ViceDeanService {
                 .username(viceDean.getUsername())
                 .name(viceDean.getName())
                 .surname(viceDean.getSurname())
+                .birthPlace(viceDean.getBirthPlace())
+                .birthDay(viceDean.getBirthDay())
                 .phoneNumber(viceDean.getPhoneNumber())
                 .ssn(viceDean.getSsn())
                 .gender(viceDean.getGender())

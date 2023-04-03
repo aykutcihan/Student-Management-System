@@ -138,6 +138,8 @@ public class DeanService {
                 .username(dean.getUsername())
                 .name(dean.getName())
                 .surname(dean.getSurname())
+                .birthDay(dean.getBirthDay())
+                .birthPlace(dean.getBirthPlace())
                 .phoneNumber(dean.getPhoneNumber())
                 .gender(dean.getGender())
                 .ssn(dean.getSsn()).build();
