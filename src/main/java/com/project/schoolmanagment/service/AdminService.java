@@ -34,17 +34,19 @@ public class AdminService {
 
         if (adminRepository.existsByUsername(request.getUsername())) {
             throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_USERNAME, request.getUsername()));
-        } else
-            checkDuplicate(request.getUsername(), request.getSsn(), request.getPhoneNumber());
+        } else checkDuplicate(request.getUsername(), request.getSsn(), request.getPhoneNumber());
+
 
         Admin admin = createAdminForSave(request);
+        admin.setBuilt_in(false);
+        if (request.getUsername() == "Admin") admin.setBuilt_in(true);
+
         admin.setUserRole(userRoleService.getUserRole(Role.ADMIN));
         admin.setPassword(passwordEncoder.encode(admin.getPassword()));
         Admin savedData = adminRepository.save(admin);
-        return ResponseMessage.<AdminResponse>builder()
-                .message("Admin Saved")
-                .httpStatus(HttpStatus.CREATED)
-                .object(createResponse(savedData)).build();
+
+
+        return ResponseMessage.<AdminResponse>builder().message("Admin Saved").httpStatus(HttpStatus.CREATED).object(createResponse(savedData)).build();
     }
 
     public long countAllAdmin() {
@@ -57,6 +59,10 @@ public class AdminService {
 
     public String deleteAdmin(Long id) {
         Optional<Admin> admin = adminRepository.findById(id);
+        if (admin.get().isBuilt_in())
+            throw new ConflictException(String.format(Messages.NOT_PERMITTED_METHOD_MESSAGE));
+
+
         if (admin.isPresent()) {
             adminRepository.deleteById(id);
             return "Admin deleted Successful";
@@ -65,99 +71,37 @@ public class AdminService {
     }
 
     protected Admin createAdminForSave(AdminRequest request) {
-        return Admin.builder()
-                .username(request.getUsername())
-                .name(request.getName())
-                .surname(request.getSurname())
-                .password(request.getPassword())
-                .ssn(request.getSsn())
-                .birthDay(request.getBirthDay())
-                .birthPlace(request.getBirthPlace())
-                .phoneNumber(request.getPhoneNumber())
-                .gender(request.getGender())
-                .build();
+        return Admin.builder().username(request.getUsername()).name(request.getName()).surname(request.getSurname()).password(request.getPassword()).ssn(request.getSsn()).birthDay(request.getBirthDay()).birthPlace(request.getBirthPlace()).phoneNumber(request.getPhoneNumber()).gender(request.getGender()).build();
     }
 
 
-    private Admin createUpdate(AdminRequest request, Long managerId) {
-        return Admin.builder().id(managerId)
-                .username(request.getUsername())
-                .ssn(request.getSsn())
-                .name(request.getName())
-                .surname(request.getSurname())
-                .birthPlace(request.getBirthPlace())
-                .birthDay(request.getBirthDay())
-                .phoneNumber(request.getPhoneNumber())
-                .gender(request.getGender())
-                .userRole(userRoleService.getUserRole(Role.ADMIN))
-                .build();
-
-    }
 
     private AdminResponse createResponse(Admin admin) {
-        return AdminResponse.builder().userId(admin.getId())
-                .username(admin.getUsername())
-                .name(admin.getName())
-                .surname(admin.getSurname())
-                .phoneNumber(admin.getPhoneNumber())
-                .gender(admin.getGender())
-                .ssn(admin.getSsn()).build();
+        return AdminResponse.builder().userId(admin.getId()).username(admin.getUsername()).name(admin.getName()).surname(admin.getSurname()).phoneNumber(admin.getPhoneNumber()).gender(admin.getGender()).ssn(admin.getSsn()).build();
 
 
     }
 
     public void checkDuplicateWithEmail(String username, String ssn, String phone, String email) {
 
-        if (adminRepository.existsByUsername(username)  ||
-                deanRepository.existsByUsername(username)  ||
-                studentRepository.existsByUsername(username)  ||
-                teacherRepository.existsByUsername(username)  ||
-                viceDeanRepository.existsByUsername(username)
-        ) {
+        if (adminRepository.existsByUsername(username) || deanRepository.existsByUsername(username) || studentRepository.existsByUsername(username) || teacherRepository.existsByUsername(username) || viceDeanRepository.existsByUsername(username)) {
             throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_USERNAME, username));
-        } else if (adminRepository.existsBySsn(ssn)  ||
-                deanRepository.existsBySsn(ssn)  ||
-                studentRepository.existsBySsn(ssn)  ||
-                teacherRepository.existsBySsn(ssn)  ||
-                viceDeanRepository.existsBySsn(ssn)
-        ) {
+        } else if (adminRepository.existsBySsn(ssn) || deanRepository.existsBySsn(ssn) || studentRepository.existsBySsn(ssn) || teacherRepository.existsBySsn(ssn) || viceDeanRepository.existsBySsn(ssn)) {
             throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_SSN, ssn));
-        } else if (adminRepository.existsByPhoneNumber(phone)  ||
-                deanRepository.existsByPhoneNumber(phone)  ||
-                studentRepository.existsByPhoneNumber(phone)  ||
-                teacherRepository.existsByPhoneNumber(phone)  ||
-                viceDeanRepository.existsByPhoneNumber(phone)
-        ) {
+        } else if (adminRepository.existsByPhoneNumber(phone) || deanRepository.existsByPhoneNumber(phone) || studentRepository.existsByPhoneNumber(phone) || teacherRepository.existsByPhoneNumber(phone) || viceDeanRepository.existsByPhoneNumber(phone)) {
             throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_PHONE_NUMBER, phone));
-        } else if (studentRepository.existsByEmail(phone)  ||
-                teacherRepository.existsByEmail(phone)
-        ) {
+        } else if (studentRepository.existsByEmail(phone) || teacherRepository.existsByEmail(phone)) {
             throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_SSN, email));
         }
     }
 
     public void checkDuplicate(String username, String ssn, String phone) {
 
-        if (adminRepository.existsByUsername(username)  ||
-                deanRepository.existsByUsername(username)  ||
-                studentRepository.existsByUsername(username)  ||
-                teacherRepository.existsByUsername(username)  ||
-                viceDeanRepository.existsByUsername(username)
-        ) {
+        if (adminRepository.existsByUsername(username) || deanRepository.existsByUsername(username) || studentRepository.existsByUsername(username) || teacherRepository.existsByUsername(username) || viceDeanRepository.existsByUsername(username)) {
             throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_USERNAME, username));
-        } else if (adminRepository.existsBySsn(ssn)  ||
-                deanRepository.existsBySsn(ssn)  ||
-                studentRepository.existsBySsn(ssn)  ||
-                teacherRepository.existsBySsn(ssn)  ||
-                viceDeanRepository.existsBySsn(ssn)
-        ) {
+        } else if (adminRepository.existsBySsn(ssn) || deanRepository.existsBySsn(ssn) || studentRepository.existsBySsn(ssn) || teacherRepository.existsBySsn(ssn) || viceDeanRepository.existsBySsn(ssn)) {
             throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_SSN, ssn));
-        } else if (adminRepository.existsByPhoneNumber(phone)  ||
-                deanRepository.existsByPhoneNumber(phone)  ||
-                studentRepository.existsByPhoneNumber(phone)  ||
-                teacherRepository.existsByPhoneNumber(phone)  ||
-                viceDeanRepository.existsByPhoneNumber(phone)
-        ) {
+        } else if (adminRepository.existsByPhoneNumber(phone) || deanRepository.existsByPhoneNumber(phone) || studentRepository.existsByPhoneNumber(phone) || teacherRepository.existsByPhoneNumber(phone) || viceDeanRepository.existsByPhoneNumber(phone)) {
             throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_PHONE_NUMBER, phone));
         }
     }

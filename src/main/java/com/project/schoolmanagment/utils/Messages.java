@@ -27,6 +27,7 @@ public class Messages {
     public static final String ALREADY_REGISTER_LESSON_NAME = "Error: Student Info with lesson name %s already register";
 
     public static final String ALREADY_SEND_A_MESSAGE_TODAY = "Error: You already sent a message with this e-mail address today";
+    public final static String NOT_PERMITTED_METHOD_MESSAGE="You dont have any permission to change this value";
 
     public static final String EDUCATION_TERM_NOT_FOUND_MESSAGE = "Error: Education Term with id %d not found";
     public static final String EDUCATION_TERM_NOT_FOUND_MESSAGE_BY_TERM_AND_YEAR = "Error: Education Term with TERM AND YEAR already register";

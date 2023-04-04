@@ -11,4 +11,5 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @SuperBuilder
 public class AdminRequest extends BaseUserRequest {
+    private boolean built_in;
 }

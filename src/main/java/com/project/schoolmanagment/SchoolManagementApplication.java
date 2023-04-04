@@ -43,7 +43,7 @@ public class SchoolManagementApplication implements CommandLineRunner {
             AdminRequest admin = new AdminRequest();
             admin.setUsername("Admin");
             admin.setSsn("987-99-9999");
-            admin.setPassword("Admin1234");
+            admin.setPassword("485424698");
             admin.setName("Admin");
             admin.setSurname("Admin");
             admin.setPhoneNumber("555-444-4321");

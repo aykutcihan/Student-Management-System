@@ -1,11 +1,12 @@
 package com.project.schoolmanagment.entity.concretes;
+
 import com.project.schoolmanagment.entity.abstracts.User;
-import com.project.schoolmanagment.entity.enums.Gender;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import javax.persistence.*;
-import java.time.LocalDate;
+import javax.persistence.Entity;
 
 @Entity
 @Getter
@@ -14,4 +15,5 @@ import java.time.LocalDate;
 @SuperBuilder
 public class Admin extends User {
 
+    private boolean built_in;
 }
