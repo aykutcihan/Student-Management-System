@@ -125,6 +125,7 @@ public class StudentInfoService {
     }
 
     public Page<StudentInfoResponse> getAllStudentInfoByStudent(String username, Pageable pageable) {
+        System.out.println(username);
         boolean student = studentService.existByUsername(username);
         if (!student) throw new ResourceNotFoundException(String.format(Messages.STUDENT_INFO_NOT_FOUND_BY_USERNAME, username));
         return studentInfoRepository.findByStudentId_UsernameEquals(username, pageable).map(this::createResponse);

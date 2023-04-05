@@ -86,7 +86,7 @@ public class StudentInfoController {
             @RequestParam(value = "size") int size
     ) {
         String username = (String) httpServletRequest.getAttribute("username");
-        Pageable pageable = PageRequest.of(page, size, Sort.by("lessonName").descending());
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
         Page<StudentInfoResponse> studentInfoResponse = studentInfoService.getAllStudentInfoByStudent(username, pageable);
         return new ResponseEntity<>(studentInfoResponse, HttpStatus.OK);
     }

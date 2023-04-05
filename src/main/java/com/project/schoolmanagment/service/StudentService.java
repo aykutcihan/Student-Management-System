@@ -207,7 +207,7 @@ public class StudentService {
     }
 
     public boolean existByUsername(String username) {
-        return studentRepository.existsBySsn(username);
+        return studentRepository.existsByUsername(username);
     }
 
     public List<StudentResponse> getAllStudentByTeacher_Username(String username) {
