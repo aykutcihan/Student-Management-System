@@ -3,7 +3,7 @@ package com.project.schoolmanagment.service;
 import com.project.schoolmanagment.Exception.ResourceNotFoundException;
 import com.project.schoolmanagment.entity.concretes.AdvisorTeacher;
 import com.project.schoolmanagment.entity.concretes.Teacher;
-import com.project.schoolmanagment.entity.enums.Role;
+import com.project.schoolmanagment.entity.enums.RoleType;
 import com.project.schoolmanagment.payload.response.AdvisorTeacherResponse;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.repository.AdvisoryTeacherRepository;
@@ -26,16 +26,16 @@ import java.util.stream.Collectors;
 public class AdvisorTeacherService {
 
     private final AdvisoryTeacherRepository advisoryTeacherRepository;
-    private final UserRoleService userRoleService;
+    private final RoleService roleService;
 
     public void saveAdvisorTeacher(Teacher teacher) {
-        AdvisorTeacher advisorTeacherBuilder = AdvisorTeacher.builder().teacher(teacher).userRole(userRoleService.getUserRole(Role.ADVISORTEACHER)).build();
+        AdvisorTeacher advisorTeacherBuilder = AdvisorTeacher.builder().teacher(teacher).role(roleService.getUserRole(RoleType.ADVISORTEACHER)).build();
         advisoryTeacherRepository.save(advisorTeacherBuilder);
     }
 
     public void updateAdvisorTeacher(boolean status, Teacher teacher) {
         Optional<AdvisorTeacher> advisorTeacher = advisoryTeacherRepository.getAdvisorTeacherByTeacher_Id(teacher.getId());
-        AdvisorTeacher.AdvisorTeacherBuilder advisorTeacherBuilder = AdvisorTeacher.builder().teacher(teacher).userRole(userRoleService.getUserRole(Role.ADVISORTEACHER));
+        AdvisorTeacher.AdvisorTeacherBuilder advisorTeacherBuilder = AdvisorTeacher.builder().teacher(teacher).role(roleService.getUserRole(RoleType.ADVISORTEACHER));
         if (advisorTeacher.isPresent()) {
             if (status) {
                 advisorTeacherBuilder.id(advisorTeacher.get().getId());

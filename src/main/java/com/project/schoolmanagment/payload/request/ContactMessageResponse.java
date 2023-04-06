@@ -20,19 +20,21 @@ import java.time.LocalDate;
 public class ContactMessageResponse implements Serializable {
 
 
-    @NotNull
+    @NotNull(message = "Please enter name")
     private String name;
+
     @Email(message = "Please enter valid email")
     @Size(min = 5, max = 80)
     @NotNull(message = "Please enter your email")
     @Column(nullable = false, unique = true, length = 80)
     private String email;
-    @NotNull
+
+    @NotNull(message = "Please enter subject")
     private String subject;
-    @NotNull
+    @NotNull(message = "Please enter your message")
     private String message;
 
-    @NotNull
+    @NotNull(message = "Please enter date")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate date;
 }

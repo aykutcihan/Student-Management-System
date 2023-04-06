@@ -1,9 +1,8 @@
 package com.project.schoolmanagment.service;
 
-import com.project.schoolmanagment.Exception.ConflictException;
 import com.project.schoolmanagment.Exception.ResourceNotFoundException;
 import com.project.schoolmanagment.entity.concretes.Dean;
-import com.project.schoolmanagment.entity.enums.Role;
+import com.project.schoolmanagment.entity.enums.RoleType;
 import com.project.schoolmanagment.payload.Dto.DeanDto;
 import com.project.schoolmanagment.payload.request.DeanRequest;
 import com.project.schoolmanagment.payload.response.DeanResponse;
@@ -30,7 +29,7 @@ import java.util.stream.Collectors;
 public class DeanService {
     private final DeanRepository deanRepository;
 
-    private final UserRoleService userRoleService;
+    private final RoleService roleService;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -42,7 +41,7 @@ public class DeanService {
         adminService. checkDuplicate(deanRequest.getUsername(), deanRequest.getSsn(), deanRequest.getPhoneNumber());
 
         Dean dean = createDtoForDean(deanRequest);
-        dean.setUserRole(userRoleService.getUserRole(Role.MANAGER));
+        dean.setRole(roleService.getUserRole(RoleType.MANAGER));
         dean.setPassword(passwordEncoder.encode(dean.getPassword()));
         Dean savedDean = deanRepository.save(dean);
         return ResponseMessage.<DeanResponse>builder()
@@ -109,7 +108,7 @@ public class DeanService {
                 .birthDay(deanRequest.getBirthDay())
                 .phoneNumber(deanRequest.getPhoneNumber())
                 .gender(deanRequest.getGender())
-                .userRole(userRoleService.getUserRole(Role.MANAGER))
+                .role(roleService.getUserRole(RoleType.MANAGER))
                 .build();
 
     }

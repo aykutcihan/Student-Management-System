@@ -1,10 +1,10 @@
 package com.project.schoolmanagment;
 
 import com.project.schoolmanagment.entity.enums.Gender;
-import com.project.schoolmanagment.entity.enums.Role;
+import com.project.schoolmanagment.entity.enums.RoleType;
 import com.project.schoolmanagment.payload.request.AdminRequest;
 import com.project.schoolmanagment.service.AdminService;
-import com.project.schoolmanagment.service.UserRoleService;
+import com.project.schoolmanagment.service.RoleService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -15,12 +15,12 @@ import java.time.LocalDate;
 public class SchoolManagementApplication implements CommandLineRunner {
 
     private final AdminService adminService;
-    private final UserRoleService userRoleService;
+    private final RoleService roleService;
 
-    public SchoolManagementApplication(AdminService adminService, UserRoleService userRoleService) {
+    public SchoolManagementApplication(AdminService adminService, RoleService roleService) {
 
         this.adminService = adminService;
-        this.userRoleService = userRoleService;
+        this.roleService = roleService;
     }
 
     public static void main(String[] args) {
@@ -30,14 +30,14 @@ public class SchoolManagementApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        if (userRoleService.getAllUserRole().size() == 0) {
-            userRoleService.save(Role.ADMIN);
-            userRoleService.save(Role.MANAGER);
-            userRoleService.save(Role.ASSISTANTMANAGER);
-            userRoleService.save(Role.TEACHER);
-            userRoleService.save(Role.STUDENT);
-            userRoleService.save(Role.ADVISORTEACHER);
-            userRoleService.save(Role.GUESTUSER);
+        if (roleService.getAllUserRole().size() == 0) {
+            roleService.save(RoleType.ADMIN);
+            roleService.save(RoleType.MANAGER);
+            roleService.save(RoleType.ASSISTANTMANAGER);
+            roleService.save(RoleType.TEACHER);
+            roleService.save(RoleType.STUDENT);
+            roleService.save(RoleType.ADVISORTEACHER);
+            roleService.save(RoleType.GUESTUSER);
         }
         if (adminService.countAllAdmin() == 0) {
             AdminRequest admin = new AdminRequest();

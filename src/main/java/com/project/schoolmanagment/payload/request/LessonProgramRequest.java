@@ -22,7 +22,7 @@ public class LessonProgramRequest implements Serializable {
 
     @NotNull(message = "Please enter day")
     @DayType(message = "Invalid day!")
-    private Day day;
+    private Day Day;
     @NotNull(message = "Please enter start time")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "US")
     private LocalTime startTime;

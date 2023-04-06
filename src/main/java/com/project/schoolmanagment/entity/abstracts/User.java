@@ -2,7 +2,7 @@ package com.project.schoolmanagment.entity.abstracts;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.project.schoolmanagment.entity.concretes.UserRole;
+import com.project.schoolmanagment.entity.concretes.Role;
 import com.project.schoolmanagment.entity.enums.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -43,7 +43,7 @@ public abstract class User implements Serializable {
 
     @OneToOne
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private UserRole userRole;
+    private Role role;
 
 
     private String phoneNumber;

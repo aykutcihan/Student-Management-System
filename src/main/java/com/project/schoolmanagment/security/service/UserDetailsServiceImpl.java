@@ -2,7 +2,7 @@ package com.project.schoolmanagment.security.service;
 
 
 import com.project.schoolmanagment.entity.concretes.*;
-import com.project.schoolmanagment.entity.enums.Role;
+import com.project.schoolmanagment.entity.enums.RoleType;
 import com.project.schoolmanagment.repository.*;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -31,15 +31,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         Admin admin = adminRepository.findByUsernameEquals(username);
 
         if (student != null) {
-            return new UserDetailsImpl(student.getUsername(), student.getPassword(), student.getUserRole().getRole().name(), false, student.getName());
+            return new UserDetailsImpl(student.getId(), student.getUsername(), student.getPassword(), student.getRole().getRoleType().name(), false, student.getName());
         } else if (teacher != null) {
-            return new UserDetailsImpl(teacher.getUsername(), teacher.getPassword(), teacher.getUserRole().getRole().name(), teacher.getIsAdvisor(), teacher.getName());
+            return new UserDetailsImpl(teacher.getId(), teacher.getUsername(), teacher.getPassword(), teacher.getRole().getRoleType().name(), teacher.getIsAdvisor(), teacher.getName());
         } else if (dean != null) {
-            return new UserDetailsImpl(dean.getUsername(), dean.getPassword(), dean.getUserRole().getRole().name(), false, dean.getName());
+            return new UserDetailsImpl(dean.getId(), dean.getUsername(), dean.getPassword(), dean.getRole().getRoleType().name(), false, dean.getName());
         } else if (viceDean != null) {
-            return new UserDetailsImpl(viceDean.getUsername(), viceDean.getPassword(), viceDean.getUserRole().getRole().name(), false, viceDean.getName());
+            return new UserDetailsImpl(viceDean.getId(), viceDean.getUsername(), viceDean.getPassword(), viceDean.getRole().getRoleType().name(), false, viceDean.getName());
         } else if (admin != null) {
-            return new UserDetailsImpl(admin.getUsername(), admin.getPassword(), Role.ADMIN.name(), false, admin.getName());
+            return new UserDetailsImpl(admin.getId(), admin.getUsername(), admin.getPassword(), RoleType.ADMIN.name(), false, admin.getName());
         }
 
         throw new UsernameNotFoundException("User '" + username + "' not found");

@@ -1,28 +1,28 @@
 package com.project.schoolmanagment.entity.concretes;
 
-import com.project.schoolmanagment.entity.enums.Role;
+import com.project.schoolmanagment.entity.enums.RoleType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import java.io.Serializable;
+
 
 @Entity
+@Table(name = "roles")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserRole implements Serializable {
-
+public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
-    @NotNull
     @Enumerated(EnumType.STRING)
-    private Role role;
+    @Column(length = 20)
+    private RoleType roleType;
+
 
 }

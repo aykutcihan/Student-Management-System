@@ -1,11 +1,10 @@
 package com.project.schoolmanagment.service;
 
 import com.project.schoolmanagment.Exception.BadRequestException;
-import com.project.schoolmanagment.Exception.ConflictException;
 import com.project.schoolmanagment.Exception.ResourceNotFoundException;
 import com.project.schoolmanagment.entity.concretes.LessonProgram;
 import com.project.schoolmanagment.entity.concretes.Teacher;
-import com.project.schoolmanagment.entity.enums.Role;
+import com.project.schoolmanagment.entity.enums.RoleType;
 import com.project.schoolmanagment.payload.Dto.TeacherRequestDto;
 import com.project.schoolmanagment.payload.request.ChooseLessonTeacherRequest;
 import com.project.schoolmanagment.payload.request.TeacherRequest;
@@ -38,7 +37,7 @@ public class TeacherService {
     private final TeacherRepository teacherRepository;
     private final LessonProgramService lessonProgramService;
     private final TeacherRequestDto teacherRequestDto;
-    private final UserRoleService userRoleService;
+    private final RoleService roleService;
 
     private final AdvisorTeacherService advisorTeacherService;
 
@@ -55,7 +54,7 @@ public class TeacherService {
             adminService.checkDuplicateWithEmail(teacherRequest.getUsername(), teacherRequest.getSsn(), teacherRequest.getPhoneNumber(), teacherRequest.getEmail());
 
         Teacher teacher = teacherRequestToDto(teacherRequest);
-        teacher.setUserRole(userRoleService.getUserRole(Role.TEACHER));
+        teacher.setRole(roleService.getUserRole(RoleType.TEACHER));
         teacher.setLessonsProgramList(lessons);
         teacher.setPassword(passwordEncoder.encode(teacherRequest.getPassword()));
         Teacher savedTeacher = teacherRepository.save(teacher);
@@ -132,7 +131,7 @@ public class TeacherService {
                 .birthPlace(teacher.getBirthPlace())
                 .phoneNumber(teacher.getPhoneNumber())
                 .isAdvisor(teacher.isAdvisorTeacher())
-                .userRole(userRoleService.getUserRole(Role.TEACHER))
+                .role(roleService.getUserRole(RoleType.TEACHER))
                 .gender(teacher.getGender())
                 .email(teacher.getEmail())
                 .build();

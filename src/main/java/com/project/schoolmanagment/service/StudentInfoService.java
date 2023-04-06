@@ -54,8 +54,8 @@ public class StudentInfoService {
             throw new ConflictException(String.format(Messages.ALREADY_REGISTER_LESSON_NAME, lesson.getLessonName()));
 
         Double noteAverage = calculateExamAverage(studentInfoRequest.getMidtermExam(), studentInfoRequest.getFinalExam(), lesson.isCompulsory());
-        Note note = checkLetterGrade(noteAverage);
-        StudentInfo studentInfo = createDto(studentInfoRequest, note, noteAverage);
+        Note Note = checkLetterGrade(noteAverage);
+        StudentInfo studentInfo = createDto(studentInfoRequest, Note, noteAverage);
         studentInfo.setStudent(student);
         studentInfo.setEducationTerm(educationTerm);
         studentInfo.setTeacher(teacher);
@@ -76,13 +76,13 @@ public class StudentInfoService {
         EducationTerm educationTerm = educationTermService.getById(studentInfoRequest.getEducationTermId());
 
         Double noteAverage = calculateExamAverage(studentInfoRequest.getMidtermExam(), studentInfoRequest.getFinalExam(), lesson.isCompulsory());
-        Note note = checkLetterGrade(noteAverage);
+        Note Note = checkLetterGrade(noteAverage);
         StudentInfo studentInfo = createUpdatedStudent(
                 studentInfoRequest,
                 studentInfoId,
                 lesson,
                 educationTerm,
-                note,
+                Note,
                 noteAverage
         );
 
@@ -159,13 +159,13 @@ public class StudentInfoService {
     }
 
 
-    private StudentInfo createDto(StudentInfoRequestWithoutTeacherId studentInfoRequest, Note note, Double average) {
+    private StudentInfo createDto(StudentInfoRequestWithoutTeacherId studentInfoRequest, Note Note, Double average) {
         return StudentInfo.builder().infoNote(studentInfoRequest.getInfoNote())
                 .absentee(studentInfoRequest.getAbsentee())
                 .midtermExam(studentInfoRequest.getMidtermExam())
                 .finalExam(studentInfoRequest.getFinalExam())
                 .examAverage(average)
-                .letterGrade(note)
+                .letterGrade(Note)
                 .build();
     }
 
@@ -180,7 +180,7 @@ public class StudentInfoService {
                 .midtermExam(studentInfo.getMidtermExam())
                 .infoNote(studentInfo.getInfoNote())
                 .finalExam(studentInfo.getFinalExam())
-                .note(studentInfo.getLetterGrade())
+                .Note(studentInfo.getLetterGrade())
                 .average(studentInfo.getExamAverage())
                 .studentResponse(createResponseObjectService.createStudentResponse(studentInfo.getStudent())).build();
     }
@@ -189,7 +189,7 @@ public class StudentInfoService {
                                              Long studentInfoRequestId,
                                              Lesson lesson,
                                              EducationTerm educationTerm,
-                                             Note note,
+                                             Note Note,
                                              Double average) {
         return StudentInfo.builder()
                 .id(studentInfoRequestId)
@@ -200,7 +200,7 @@ public class StudentInfoService {
                 .lesson(lesson)
                 .educationTerm(educationTerm)
                 .examAverage(average)
-                .letterGrade(note)
+                .letterGrade(Note)
                 .build();
     }
 

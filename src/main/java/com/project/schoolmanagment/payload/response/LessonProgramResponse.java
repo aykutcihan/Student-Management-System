@@ -23,7 +23,7 @@ public class LessonProgramResponse {
 
     private Long lessonProgramId;
 
-    private Day day;
+    private Day Day;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "US")
     private LocalTime startTime;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "US")

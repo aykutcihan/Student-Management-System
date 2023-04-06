@@ -32,7 +32,7 @@ public class StudentInfoResponse {
 
     private Double average;
 
-    private Note note;
+    private Note Note;
 
     private StudentResponse studentResponse;
 

@@ -6,10 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AdminRepository extends JpaRepository<Admin,Long> {
     Admin findByUsernameEquals(String username);
-    Admin findBySsnEquals(String ssn);
-
-
-
 
     boolean existsByPhoneNumber(String phoneNumber);
 

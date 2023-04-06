@@ -7,8 +7,10 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "admins")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -16,4 +18,6 @@ import javax.persistence.Entity;
 public class Admin extends User {
 
     private boolean built_in;
+
+
 }

@@ -4,7 +4,7 @@ import com.project.schoolmanagment.Exception.ResourceNotFoundException;
 import com.project.schoolmanagment.entity.concretes.AdvisorTeacher;
 import com.project.schoolmanagment.entity.concretes.LessonProgram;
 import com.project.schoolmanagment.entity.concretes.Student;
-import com.project.schoolmanagment.entity.enums.Role;
+import com.project.schoolmanagment.entity.enums.RoleType;
 import com.project.schoolmanagment.payload.Dto.StudentRequestDto;
 import com.project.schoolmanagment.payload.request.ChooseLessonRequestWithoutId;
 import com.project.schoolmanagment.payload.request.StudentRequest;
@@ -36,7 +36,7 @@ public class StudentService {
     private final StudentRepository studentRepository;
     private final StudentRequestDto studentRequestDto;
 
-    private final UserRoleService userRoleService;
+    private final RoleService roleService;
 
     private final AdvisorTeacherService advisorTeacherService;
 
@@ -57,7 +57,7 @@ public class StudentService {
 
         Student student = studentRequestToDto(studentRequest);
         student.setAdvisorTeacher(advisorTeacher.get());
-        student.setUserRole(userRoleService.getUserRole(Role.STUDENT));
+        student.setRole(roleService.getUserRole(RoleType.STUDENT));
         student.setPassword(passwordEncoder.encode(studentRequest.getPassword()));
         student.setActive(true);
         return responseMessageBuilder.object(responseObjectService.createStudentResponse(studentRepository.save(student)))
@@ -131,7 +131,7 @@ public class StudentService {
                 .phoneNumber(studentRequest.getPhoneNumber())
                 .gender(studentRequest.getGender())
                 .email(studentRequest.getEmail())
-                .userRole(userRoleService.getUserRole(Role.STUDENT))
+                .role(roleService.getUserRole(RoleType.STUDENT))
                 .build();
     }
 

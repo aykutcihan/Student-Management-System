@@ -2,7 +2,7 @@ package com.project.schoolmanagment.service;
 
 import com.project.schoolmanagment.Exception.ConflictException;
 import com.project.schoolmanagment.entity.concretes.Admin;
-import com.project.schoolmanagment.entity.enums.Role;
+import com.project.schoolmanagment.entity.enums.RoleType;
 import com.project.schoolmanagment.payload.request.AdminRequest;
 import com.project.schoolmanagment.payload.response.AdminResponse;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
@@ -26,7 +26,8 @@ public class AdminService {
     private final DeanRepository deanRepository;
     private final AdminRepository adminRepository;
     private final TeacherRepository teacherRepository;
-    private final UserRoleService userRoleService;
+    private final GuestUserRepository guestUserRepository;
+    private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
 
 
@@ -41,7 +42,7 @@ public class AdminService {
         admin.setBuilt_in(false);
         if (request.getUsername() == "Admin") admin.setBuilt_in(true);
 
-        admin.setUserRole(userRoleService.getUserRole(Role.ADMIN));
+        admin.setRole(roleService.getUserRole(RoleType.ADMIN));
         admin.setPassword(passwordEncoder.encode(admin.getPassword()));
         Admin savedData = adminRepository.save(admin);
 
@@ -75,7 +76,6 @@ public class AdminService {
     }
 
 
-
     private AdminResponse createResponse(Admin admin) {
         return AdminResponse.builder().userId(admin.getId()).username(admin.getUsername()).name(admin.getName()).surname(admin.getSurname()).phoneNumber(admin.getPhoneNumber()).gender(admin.getGender()).ssn(admin.getSsn()).build();
 
@@ -84,24 +84,23 @@ public class AdminService {
 
     public void checkDuplicateWithEmail(String username, String ssn, String phone, String email) {
 
-        if (adminRepository.existsByUsername(username) || deanRepository.existsByUsername(username) || studentRepository.existsByUsername(username) || teacherRepository.existsByUsername(username) || viceDeanRepository.existsByUsername(username)) {
+        if (adminRepository.existsByUsername(username) || deanRepository.existsByUsername(username) || studentRepository.existsByUsername(username) || teacherRepository.existsByUsername(username) || viceDeanRepository.existsByUsername(username) || guestUserRepository.existsByUsername(username)) {
             throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_USERNAME, username));
-        } else if (adminRepository.existsBySsn(ssn) || deanRepository.existsBySsn(ssn) || studentRepository.existsBySsn(ssn) || teacherRepository.existsBySsn(ssn) || viceDeanRepository.existsBySsn(ssn)) {
+        } else if (adminRepository.existsBySsn(ssn) || deanRepository.existsBySsn(ssn) || studentRepository.existsBySsn(ssn) || teacherRepository.existsBySsn(ssn) || viceDeanRepository.existsBySsn(ssn) || guestUserRepository.existsBySsn(ssn)) {
             throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_SSN, ssn));
-        } else if (adminRepository.existsByPhoneNumber(phone) || deanRepository.existsByPhoneNumber(phone) || studentRepository.existsByPhoneNumber(phone) || teacherRepository.existsByPhoneNumber(phone) || viceDeanRepository.existsByPhoneNumber(phone)) {
+        } else if (adminRepository.existsByPhoneNumber(phone) || deanRepository.existsByPhoneNumber(phone) || studentRepository.existsByPhoneNumber(phone) || teacherRepository.existsByPhoneNumber(phone) || viceDeanRepository.existsByPhoneNumber(phone) || guestUserRepository.existsByPhoneNumber(phone)) {
             throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_PHONE_NUMBER, phone));
-        } else if (studentRepository.existsByEmail(phone) || teacherRepository.existsByEmail(phone)) {
+        } else if (studentRepository.existsByEmail(email) || teacherRepository.existsByEmail(email)) {
             throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_SSN, email));
         }
     }
 
     public void checkDuplicate(String username, String ssn, String phone) {
-
-        if (adminRepository.existsByUsername(username) || deanRepository.existsByUsername(username) || studentRepository.existsByUsername(username) || teacherRepository.existsByUsername(username) || viceDeanRepository.existsByUsername(username)) {
+        if (adminRepository.existsByUsername(username) || deanRepository.existsByUsername(username) || studentRepository.existsByUsername(username) || teacherRepository.existsByUsername(username) || viceDeanRepository.existsByUsername(username) || guestUserRepository.existsByUsername(username)) {
             throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_USERNAME, username));
-        } else if (adminRepository.existsBySsn(ssn) || deanRepository.existsBySsn(ssn) || studentRepository.existsBySsn(ssn) || teacherRepository.existsBySsn(ssn) || viceDeanRepository.existsBySsn(ssn)) {
+        } else if (adminRepository.existsBySsn(ssn) || deanRepository.existsBySsn(ssn) || studentRepository.existsBySsn(ssn) || teacherRepository.existsBySsn(ssn) || viceDeanRepository.existsBySsn(ssn)|| guestUserRepository.existsBySsn(ssn)) {
             throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_SSN, ssn));
-        } else if (adminRepository.existsByPhoneNumber(phone) || deanRepository.existsByPhoneNumber(phone) || studentRepository.existsByPhoneNumber(phone) || teacherRepository.existsByPhoneNumber(phone) || viceDeanRepository.existsByPhoneNumber(phone)) {
+        } else if (adminRepository.existsByPhoneNumber(phone) || deanRepository.existsByPhoneNumber(phone) || studentRepository.existsByPhoneNumber(phone) || teacherRepository.existsByPhoneNumber(phone) || viceDeanRepository.existsByPhoneNumber(phone)|| guestUserRepository.existsByPhoneNumber(phone)) {
             throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_PHONE_NUMBER, phone));
         }
     }

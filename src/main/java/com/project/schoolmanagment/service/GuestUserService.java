@@ -2,7 +2,7 @@ package com.project.schoolmanagment.service;
 
 import com.project.schoolmanagment.Exception.ConflictException;
 import com.project.schoolmanagment.entity.concretes.GuestUser;
-import com.project.schoolmanagment.entity.enums.Role;
+import com.project.schoolmanagment.entity.enums.RoleType;
 import com.project.schoolmanagment.payload.request.GuestUserRequest;
 import com.project.schoolmanagment.payload.response.GuestUserResponse;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
@@ -19,20 +19,15 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class GuestUserService {
     private final GuestUserRepository repository;
-    private final UserRoleService userRoleService;
+    private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
-
+    private final AdminService adminService;
 
     public ResponseMessage register(GuestUserRequest request) {
-        if (repository.existsByUsername(request.getUsername())) {
-            throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_USERNAME, request.getUsername()));
-        } else if (repository.existsBySsn(request.getSsn())) {
-            throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_PHONE_NUMBER, request.getSsn()));
-        } else if (repository.existsByPhoneNumber(request.getPhoneNumber())) {
-            throw new ConflictException(String.format(Messages.ALREADY_REGISTER_MESSAGE_PHONE_NUMBER, request.getPhoneNumber()));
-        }
+        adminService. checkDuplicate(request.getUsername(), request.getSsn(), request.getPhoneNumber());
+
         GuestUser guest = createGuest(request);
-        guest.setUserRole(userRoleService.getUserRole(Role.GUESTUSER));
+        guest.setRole(roleService.getUserRole(RoleType.GUESTUSER));
         guest.setPassword(passwordEncoder.encode(guest.getPassword()));
         GuestUser savedData = repository.save(guest);
         return ResponseMessage.<GuestUserResponse>builder()

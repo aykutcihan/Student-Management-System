@@ -1,7 +1,10 @@
 package com.project.schoolmanagment.controller;
 
+import com.project.schoolmanagment.Exception.BadRequestException;
 import com.project.schoolmanagment.entity.concretes.GuestUser;
 import com.project.schoolmanagment.payload.request.GuestUserRequest;
+import com.project.schoolmanagment.payload.response.GuestUserResponse;
+import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.service.GuestUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -11,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -25,7 +29,8 @@ public class GuestUserController {
     private final GuestUserService guestUserService;
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody @Valid GuestUserRequest guestUserRequest) {
+    public ResponseEntity<ResponseMessage> register(@RequestBody @Valid GuestUserRequest guestUserRequest ) {
+
         return ResponseEntity.ok(guestUserService.register(guestUserRequest));
     }
 

@@ -105,7 +105,7 @@ public class LessonProgramService {
 
     public LessonProgramResponse createLessonProgramResponseForSaveMethod(LessonProgram lessonProgram) {
         return LessonProgramResponse.builder()
-                .day(lessonProgram.getDay())
+                .Day(lessonProgram.getDay())
                 .startTime(lessonProgram.getStartTime())
                 .stopTime(lessonProgram.getStopTime())
                 .lessonProgramId(lessonProgram.getId())
@@ -115,7 +115,7 @@ public class LessonProgramService {
 
     public LessonProgramResponse createLessonProgramResponse(LessonProgram lessonProgram) {
         return LessonProgramResponse.builder()
-                .day(lessonProgram.getDay())
+                .Day(lessonProgram.getDay())
                 .startTime(lessonProgram.getStartTime())
                 .stopTime(lessonProgram.getStopTime())
                 .lessonProgramId(lessonProgram.getId())
@@ -127,7 +127,7 @@ public class LessonProgramService {
 
     public LessonProgramResponse createLessonProgramResponseForTeacher(LessonProgram lessonProgram) {
         return LessonProgramResponse.builder()
-                .day(lessonProgram.getDay())
+                .Day(lessonProgram.getDay())
                 .startTime(lessonProgram.getStartTime())
                 .stopTime(lessonProgram.getStopTime())
                 .lessonProgramId(lessonProgram.getId())
@@ -138,7 +138,7 @@ public class LessonProgramService {
 
     public LessonProgramResponse createLessonProgramResponseForStudent(LessonProgram lessonProgram) {
         return LessonProgramResponse.builder()
-                .day(lessonProgram.getDay())
+                .Day(lessonProgram.getDay())
                 .startTime(lessonProgram.getStartTime())
                 .stopTime(lessonProgram.getStopTime())
                 .lessonProgramId(lessonProgram.getId())

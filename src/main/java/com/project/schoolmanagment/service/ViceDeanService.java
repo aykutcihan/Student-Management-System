@@ -3,7 +3,7 @@ package com.project.schoolmanagment.service;
 import com.project.schoolmanagment.Exception.BadRequestException;
 import com.project.schoolmanagment.Exception.ResourceNotFoundException;
 import com.project.schoolmanagment.entity.concretes.ViceDean;
-import com.project.schoolmanagment.entity.enums.Role;
+import com.project.schoolmanagment.entity.enums.RoleType;
 import com.project.schoolmanagment.payload.Dto.ViceDeanDto;
 import com.project.schoolmanagment.payload.request.ViceDeanRequest;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
@@ -31,7 +31,7 @@ public class ViceDeanService {
     private final AdminService adminService;
 
     private final ViceDeanRepository viceDeanRepository;
-    private final UserRoleService userRoleService;
+    private final RoleService roleService;
     private final ViceDeanDto viceDeanDto;
 
     private final PasswordEncoder passwordEncoder;
@@ -40,7 +40,7 @@ public class ViceDeanService {
 
         adminService.checkDuplicate(viceDeanRequest.getUsername(), viceDeanRequest.getSsn(), viceDeanRequest.getPhoneNumber());
         ViceDean viceDean = createDtoForViceDean(viceDeanRequest);
-        viceDean.setUserRole(userRoleService.getUserRole(Role.ASSISTANTMANAGER));
+        viceDean.setRole(roleService.getUserRole(RoleType.ASSISTANTMANAGER));
         viceDean.setPassword(passwordEncoder.encode(viceDeanRequest.getPassword()));
         viceDeanRepository.save(viceDean);
         return ResponseMessage.<ViceDeanResponse>builder()
@@ -108,7 +108,7 @@ public class ViceDeanService {
                 .birthDay(viceDeanRequest.getBirthDay())
                 .phoneNumber(viceDeanRequest.getPhoneNumber())
                 .gender(viceDeanRequest.getGender())
-                .userRole(userRoleService.getUserRole(Role.ASSISTANTMANAGER))
+                .role(roleService.getUserRole(RoleType.ASSISTANTMANAGER))
                 .build();
 
     }
