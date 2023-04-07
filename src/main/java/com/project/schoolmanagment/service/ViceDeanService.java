@@ -31,7 +31,7 @@ public class ViceDeanService {
     private final AdminService adminService;
 
     private final ViceDeanRepository viceDeanRepository;
-    private final RoleService roleService;
+    private final UserRoleService userRoleService;
     private final ViceDeanDto viceDeanDto;
 
     private final PasswordEncoder passwordEncoder;
@@ -40,7 +40,7 @@ public class ViceDeanService {
 
         adminService.checkDuplicate(viceDeanRequest.getUsername(), viceDeanRequest.getSsn(), viceDeanRequest.getPhoneNumber());
         ViceDean viceDean = createDtoForViceDean(viceDeanRequest);
-        viceDean.setRole(roleService.getUserRole(RoleType.ASSISTANTMANAGER));
+        viceDean.setUserRole(userRoleService.getUserRole(RoleType.ASSISTANTMANAGER));
         viceDean.setPassword(passwordEncoder.encode(viceDeanRequest.getPassword()));
         viceDeanRepository.save(viceDean);
         return ResponseMessage.<ViceDeanResponse>builder()
@@ -108,7 +108,7 @@ public class ViceDeanService {
                 .birthDay(viceDeanRequest.getBirthDay())
                 .phoneNumber(viceDeanRequest.getPhoneNumber())
                 .gender(viceDeanRequest.getGender())
-                .role(roleService.getUserRole(RoleType.ASSISTANTMANAGER))
+                .userRole(userRoleService.getUserRole(RoleType.ASSISTANTMANAGER))
                 .build();
 
     }

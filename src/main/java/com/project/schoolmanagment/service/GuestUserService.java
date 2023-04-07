@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class GuestUserService {
     private final GuestUserRepository repository;
-    private final RoleService roleService;
+    private final UserRoleService userRoleService;
     private final PasswordEncoder passwordEncoder;
     private final AdminService adminService;
 
@@ -27,7 +27,7 @@ public class GuestUserService {
         adminService. checkDuplicate(request.getUsername(), request.getSsn(), request.getPhoneNumber());
 
         GuestUser guest = createGuest(request);
-        guest.setRole(roleService.getUserRole(RoleType.GUESTUSER));
+        guest.setUserRole(userRoleService.getUserRole(RoleType.GUESTUSER));
         guest.setPassword(passwordEncoder.encode(guest.getPassword()));
         GuestUser savedData = repository.save(guest);
         return ResponseMessage.<GuestUserResponse>builder()

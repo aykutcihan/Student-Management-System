@@ -36,7 +36,7 @@ public class StudentService {
     private final StudentRepository studentRepository;
     private final StudentRequestDto studentRequestDto;
 
-    private final RoleService roleService;
+    private final UserRoleService userRoleService;
 
     private final AdvisorTeacherService advisorTeacherService;
 
@@ -57,7 +57,7 @@ public class StudentService {
 
         Student student = studentRequestToDto(studentRequest);
         student.setAdvisorTeacher(advisorTeacher.get());
-        student.setRole(roleService.getUserRole(RoleType.STUDENT));
+        student.setUserRole(userRoleService.getUserRole(RoleType.STUDENT));
         student.setPassword(passwordEncoder.encode(studentRequest.getPassword()));
         student.setActive(true);
         return responseMessageBuilder.object(responseObjectService.createStudentResponse(studentRepository.save(student)))
@@ -131,7 +131,7 @@ public class StudentService {
                 .phoneNumber(studentRequest.getPhoneNumber())
                 .gender(studentRequest.getGender())
                 .email(studentRequest.getEmail())
-                .role(roleService.getUserRole(RoleType.STUDENT))
+                .userRole(userRoleService.getUserRole(RoleType.STUDENT))
                 .build();
     }
 

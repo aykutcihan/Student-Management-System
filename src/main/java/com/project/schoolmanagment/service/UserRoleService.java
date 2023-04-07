@@ -1,8 +1,8 @@
 package com.project.schoolmanagment.service;
 
 import com.project.schoolmanagment.Exception.ConflictException;
-import com.project.schoolmanagment.entity.enums.Role;
 import com.project.schoolmanagment.entity.concretes.UserRole;
+import com.project.schoolmanagment.entity.enums.RoleType;
 import com.project.schoolmanagment.repository.UserRoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,20 +15,21 @@ import java.util.Optional;
 public class UserRoleService {
 
     private final UserRoleRepository userRoleRepository;
-    public UserRole save(Role role) {
-        if (userRoleRepository.existsByRole(role)) {
-            throw new ConflictException("This role already register");
+    public UserRole save(RoleType roleType) {
+        if (userRoleRepository.existsByERoleEquals(roleType)) {
+            throw new ConflictException("This role already register ");
         }
-        UserRole userRole = UserRole.builder().role(role).build();
+        UserRole userRole = UserRole.builder().roleType(roleType).build();
         return userRoleRepository.save(userRole);
     }
 
-    public UserRole getUserRole(Role role) {
-        Optional<UserRole> userRole = userRoleRepository.getUserRoleByRole(role);
+    public UserRole getUserRole(RoleType roleType) {
+        Optional<UserRole> userRole = userRoleRepository.findByERoleEquals(roleType);
         return userRole.orElse(null);
     }
 
     public List<UserRole> getAllUserRole() {
         return userRoleRepository.findAll();
     }
+
 }

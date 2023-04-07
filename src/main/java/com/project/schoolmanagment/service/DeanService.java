@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 public class DeanService {
     private final DeanRepository deanRepository;
 
-    private final RoleService roleService;
+    private final UserRoleService userRoleService;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -41,7 +41,7 @@ public class DeanService {
         adminService. checkDuplicate(deanRequest.getUsername(), deanRequest.getSsn(), deanRequest.getPhoneNumber());
 
         Dean dean = createDtoForDean(deanRequest);
-        dean.setRole(roleService.getUserRole(RoleType.MANAGER));
+        dean.setUserRole(userRoleService.getUserRole(RoleType.MANAGER));
         dean.setPassword(passwordEncoder.encode(dean.getPassword()));
         Dean savedDean = deanRepository.save(dean);
         return ResponseMessage.<DeanResponse>builder()
@@ -108,7 +108,7 @@ public class DeanService {
                 .birthDay(deanRequest.getBirthDay())
                 .phoneNumber(deanRequest.getPhoneNumber())
                 .gender(deanRequest.getGender())
-                .role(roleService.getUserRole(RoleType.MANAGER))
+                .userRole(userRoleService.getUserRole(RoleType.MANAGER))
                 .build();
 
     }

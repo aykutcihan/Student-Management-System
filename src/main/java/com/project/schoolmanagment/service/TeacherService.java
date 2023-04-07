@@ -37,7 +37,7 @@ public class TeacherService {
     private final TeacherRepository teacherRepository;
     private final LessonProgramService lessonProgramService;
     private final TeacherRequestDto teacherRequestDto;
-    private final RoleService roleService;
+    private final UserRoleService userRoleService;
 
     private final AdvisorTeacherService advisorTeacherService;
 
@@ -54,7 +54,7 @@ public class TeacherService {
             adminService.checkDuplicateWithEmail(teacherRequest.getUsername(), teacherRequest.getSsn(), teacherRequest.getPhoneNumber(), teacherRequest.getEmail());
 
         Teacher teacher = teacherRequestToDto(teacherRequest);
-        teacher.setRole(roleService.getUserRole(RoleType.TEACHER));
+        teacher.setUserRole(userRoleService.getUserRole(RoleType.TEACHER));
         teacher.setLessonsProgramList(lessons);
         teacher.setPassword(passwordEncoder.encode(teacherRequest.getPassword()));
         Teacher savedTeacher = teacherRepository.save(teacher);
@@ -131,7 +131,7 @@ public class TeacherService {
                 .birthPlace(teacher.getBirthPlace())
                 .phoneNumber(teacher.getPhoneNumber())
                 .isAdvisor(teacher.isAdvisorTeacher())
-                .role(roleService.getUserRole(RoleType.TEACHER))
+                .userRole(userRoleService.getUserRole(RoleType.TEACHER))
                 .gender(teacher.getGender())
                 .email(teacher.getEmail())
                 .build();

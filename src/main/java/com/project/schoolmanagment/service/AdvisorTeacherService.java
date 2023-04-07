@@ -26,16 +26,16 @@ import java.util.stream.Collectors;
 public class AdvisorTeacherService {
 
     private final AdvisoryTeacherRepository advisoryTeacherRepository;
-    private final RoleService roleService;
+    private final UserRoleService userRoleService;
 
     public void saveAdvisorTeacher(Teacher teacher) {
-        AdvisorTeacher advisorTeacherBuilder = AdvisorTeacher.builder().teacher(teacher).role(roleService.getUserRole(RoleType.ADVISORTEACHER)).build();
+        AdvisorTeacher advisorTeacherBuilder = AdvisorTeacher.builder().teacher(teacher).userRole(userRoleService.getUserRole(RoleType.ADVISORTEACHER)).build();
         advisoryTeacherRepository.save(advisorTeacherBuilder);
     }
 
     public void updateAdvisorTeacher(boolean status, Teacher teacher) {
         Optional<AdvisorTeacher> advisorTeacher = advisoryTeacherRepository.getAdvisorTeacherByTeacher_Id(teacher.getId());
-        AdvisorTeacher.AdvisorTeacherBuilder advisorTeacherBuilder = AdvisorTeacher.builder().teacher(teacher).role(roleService.getUserRole(RoleType.ADVISORTEACHER));
+        AdvisorTeacher.AdvisorTeacherBuilder advisorTeacherBuilder = AdvisorTeacher.builder().teacher(teacher).userRole(userRoleService.getUserRole(RoleType.ADVISORTEACHER));
         if (advisorTeacher.isPresent()) {
             if (status) {
                 advisorTeacherBuilder.id(advisorTeacher.get().getId());

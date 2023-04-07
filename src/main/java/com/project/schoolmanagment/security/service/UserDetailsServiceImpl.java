@@ -31,13 +31,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         Admin admin = adminRepository.findByUsernameEquals(username);
 
         if (student != null) {
-            return new UserDetailsImpl(student.getId(), student.getUsername(), student.getPassword(), student.getRole().getRoleType().name(), false, student.getName());
+            return new UserDetailsImpl(student.getId(), student.getUsername(), student.getPassword(), student.getUserRole().getRoleType().name(), false, student.getName());
         } else if (teacher != null) {
-            return new UserDetailsImpl(teacher.getId(), teacher.getUsername(), teacher.getPassword(), teacher.getRole().getRoleType().name(), teacher.getIsAdvisor(), teacher.getName());
+            return new UserDetailsImpl(teacher.getId(), teacher.getUsername(), teacher.getPassword(), teacher.getUserRole().getRoleType().name(), teacher.getIsAdvisor(), teacher.getName());
         } else if (dean != null) {
-            return new UserDetailsImpl(dean.getId(), dean.getUsername(), dean.getPassword(), dean.getRole().getRoleType().name(), false, dean.getName());
+            return new UserDetailsImpl(dean.getId(), dean.getUsername(), dean.getPassword(), dean.getUserRole().getRoleType().name(), false, dean.getName());
         } else if (viceDean != null) {
-            return new UserDetailsImpl(viceDean.getId(), viceDean.getUsername(), viceDean.getPassword(), viceDean.getRole().getRoleType().name(), false, viceDean.getName());
+            return new UserDetailsImpl(viceDean.getId(), viceDean.getUsername(), viceDean.getPassword(), viceDean.getUserRole().getRoleType().name(), false, viceDean.getName());
         } else if (admin != null) {
             return new UserDetailsImpl(admin.getId(), admin.getUsername(), admin.getPassword(), RoleType.ADMIN.name(), false, admin.getName());
         }

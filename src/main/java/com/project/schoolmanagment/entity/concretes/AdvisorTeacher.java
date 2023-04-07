@@ -29,7 +29,7 @@ public class AdvisorTeacher implements Serializable {
 
     @OneToOne
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private Role role;
+    private UserRole userRole;
 
     @OneToMany(mappedBy = "advisorTeacher",cascade = CascadeType.ALL)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)

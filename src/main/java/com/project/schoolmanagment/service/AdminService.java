@@ -27,7 +27,7 @@ public class AdminService {
     private final AdminRepository adminRepository;
     private final TeacherRepository teacherRepository;
     private final GuestUserRepository guestUserRepository;
-    private final RoleService roleService;
+    private final UserRoleService userRoleService;
     private final PasswordEncoder passwordEncoder;
 
 
@@ -42,7 +42,7 @@ public class AdminService {
         admin.setBuilt_in(false);
         if (request.getUsername() == "Admin") admin.setBuilt_in(true);
 
-        admin.setRole(roleService.getUserRole(RoleType.ADMIN));
+        admin.setUserRole(userRoleService.getUserRole(RoleType.ADMIN));
         admin.setPassword(passwordEncoder.encode(admin.getPassword()));
         Admin savedData = adminRepository.save(admin);
 
