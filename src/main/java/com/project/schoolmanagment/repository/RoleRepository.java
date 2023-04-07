@@ -14,8 +14,4 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
     boolean existsByERoleEquals(RoleType roleType);
     @Query("select r from Role r where r.roleType = ?1")
     Optional<Role> findByERoleEquals(RoleType roleType);
-
-
-
-
 }
