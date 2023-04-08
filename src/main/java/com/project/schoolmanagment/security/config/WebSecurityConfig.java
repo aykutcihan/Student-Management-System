@@ -59,10 +59,17 @@ public class WebSecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
     private static final String AUTH_WHITE_LIST[] = {
             "/auth/login",
             "/contactMessages/save",
-            "/guestUser/register"
+            "/guestUser/register",
+            "/api/auth/**",
+            "/v2/api-docs/**",
+            "configuration/**",
+            "/swagger*/**",
+            "/webjars/**",
+            "/swagger-ui/**"
 
     };
 
@@ -72,7 +79,7 @@ public class WebSecurityConfig {
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests().antMatchers(AUTH_WHITE_LIST).permitAll()
-            //    .antMatchers("/api/test/**").permitAll()
+                //    .antMatchers("/api/test/**").permitAll()
                 .anyRequest().authenticated();
 
         http.headers().frameOptions().sameOrigin();
