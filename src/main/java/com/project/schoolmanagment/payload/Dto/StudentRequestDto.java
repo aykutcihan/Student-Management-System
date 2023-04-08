@@ -8,7 +8,6 @@ public class StudentRequestDto {
 
     public Student dtoStudent(StudentRequest studentRequest) {
         return Student.builder().fatherName(studentRequest.getFatherName())
-                .studentNumber(studentRequest.getStudentNumber())
                 .birthDay(studentRequest.getBirthDay())
                 .name(studentRequest.getName())
                 .surname(studentRequest.getSurname())

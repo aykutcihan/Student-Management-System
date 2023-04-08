@@ -24,9 +24,6 @@ public class StudentRequest extends BaseUserRequest {
     @NotNull(message = "Please enter father name")
     private String fatherName;
 
-    @NotNull(message = "Please enter student number ")
-    private int studentNumber;
-
     @Email(message = "Please enter valid email")
     @Size(min = 5, max = 80)
     @NotNull(message = "Please enter your email")

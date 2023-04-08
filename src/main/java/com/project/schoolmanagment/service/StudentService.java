@@ -56,6 +56,7 @@ public class StudentService {
 
 
         Student student = studentRequestToDto(studentRequest);
+        student.setStudentNumber(lastNumber());
         student.setAdvisorTeacher(advisorTeacher.get());
         student.setUserRole(userRoleService.getUserRole(RoleType.STUDENT));
         student.setPassword(passwordEncoder.encode(studentRequest.getPassword()));
@@ -109,29 +110,6 @@ public class StudentService {
         studentRepository.deleteById(studentId);
         return ResponseMessage.builder().message("Student Deleted")
                 .httpStatus(HttpStatus.OK)
-                .build();
-    }
-
-    private Student studentRequestToDto(StudentRequest studentRequest) {
-        return studentRequestDto.dtoStudent(studentRequest);
-    }
-
-
-    private Student createUpdatedStudent(StudentRequest studentRequest, Long userId) {
-        return Student.builder().id(userId)
-                .username(studentRequest.getUsername())
-                .name(studentRequest.getName())
-                .surname(studentRequest.getSurname())
-                .ssn(studentRequest.getSsn())
-                .birthDay(studentRequest.getBirthDay())
-                .birthPlace(studentRequest.getBirthPlace())
-                .motherName(studentRequest.getMotherName())
-                .fatherName(studentRequest.getFatherName())
-                .studentNumber(studentRequest.getStudentNumber())
-                .phoneNumber(studentRequest.getPhoneNumber())
-                .gender(studentRequest.getGender())
-                .email(studentRequest.getEmail())
-                .userRole(userRoleService.getUserRole(RoleType.STUDENT))
                 .build();
     }
 
@@ -202,8 +180,7 @@ public class StudentService {
     private boolean checkParameterForUpdateMethod(Student student, StudentRequest newStudentRequest) {
         return student.getSsn().equalsIgnoreCase(newStudentRequest.getSsn())
                 || student.getPhoneNumber().equalsIgnoreCase(newStudentRequest.getPhoneNumber())
-                || student.getEmail().equalsIgnoreCase(newStudentRequest.getEmail())
-                || student.getStudentNumber() == newStudentRequest.getStudentNumber();
+                || student.getEmail().equalsIgnoreCase(newStudentRequest.getEmail());
     }
 
     public boolean existByUsername(String username) {
@@ -226,4 +203,28 @@ public class StudentService {
             return 1000;
         return studentRepository.getMaxStudentNumber() + 1;
     }
+
+
+    private Student studentRequestToDto(StudentRequest studentRequest) {
+        return studentRequestDto.dtoStudent(studentRequest);
+    }
+
+
+    private Student createUpdatedStudent(StudentRequest studentRequest, Long userId ) {
+        return Student.builder().id(userId)
+                .username(studentRequest.getUsername())
+                .name(studentRequest.getName())
+                .surname(studentRequest.getSurname())
+                .ssn(studentRequest.getSsn())
+                .birthDay(studentRequest.getBirthDay())
+                .birthPlace(studentRequest.getBirthPlace())
+                .motherName(studentRequest.getMotherName())
+                .fatherName(studentRequest.getFatherName())
+                .phoneNumber(studentRequest.getPhoneNumber())
+                .gender(studentRequest.getGender())
+                .email(studentRequest.getEmail())
+                .userRole(userRoleService.getUserRole(RoleType.STUDENT))
+                .build();
+    }
+
 }
