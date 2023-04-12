@@ -5,10 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.DecimalMax;
-import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 
 @Data
 @AllArgsConstructor
@@ -28,6 +25,7 @@ public class UpdateStudentInfoRequest {
     private Integer absentee;
 
     @NotNull(message = "Please enter extra info  ")
+    @Size( min = 6 , max = 250 ,message = "Extra Info should be at least 4 characters ")
     private String infoNote;
 
     @NotNull(message = "Please select lesson ")

@@ -3,7 +3,7 @@ package com.project.schoolmanagment.service;
 import com.project.schoolmanagment.Exception.ConflictException;
 import com.project.schoolmanagment.entity.concretes.ContactMessage;
 import com.project.schoolmanagment.payload.request.ContactMessageRequest;
-import com.project.schoolmanagment.payload.request.ContactMessageResponse;
+import com.project.schoolmanagment.payload.response.ContactMessageResponse;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.repository.ContactMessageRepository;
 import lombok.RequiredArgsConstructor;

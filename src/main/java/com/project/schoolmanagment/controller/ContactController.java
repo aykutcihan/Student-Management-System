@@ -1,7 +1,7 @@
 package com.project.schoolmanagment.controller;
 
 import com.project.schoolmanagment.payload.request.ContactMessageRequest;
-import com.project.schoolmanagment.payload.request.ContactMessageResponse;
+import com.project.schoolmanagment.payload.response.ContactMessageResponse;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.service.ContactMessageService;
 import lombok.RequiredArgsConstructor;

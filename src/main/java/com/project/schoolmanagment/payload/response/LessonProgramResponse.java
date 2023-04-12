@@ -24,9 +24,7 @@ public class LessonProgramResponse {
     private Long lessonProgramId;
 
     private Day Day;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "US")
     private LocalTime startTime;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "US")
     private LocalTime stopTime;
 
     private Set<Lesson> lessonName;

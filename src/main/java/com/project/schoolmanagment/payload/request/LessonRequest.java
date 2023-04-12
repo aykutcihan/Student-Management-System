@@ -3,6 +3,7 @@ package com.project.schoolmanagment.payload.request;
  import lombok.*;
 
  import javax.validation.constraints.NotNull;
+ import javax.validation.constraints.Size;
  import java.io.Serializable;
 
 @Data
@@ -12,6 +13,7 @@ package com.project.schoolmanagment.payload.request;
 public class LessonRequest implements Serializable {
 
     @NotNull(message = "Please enter lesson ")
+    @Size(min = 2, max = 16, message = "Lesson name should be at least 2 characters")
     private String lessonName;
     @NotNull(message = "Please enter credit score")
     private int creditScore;

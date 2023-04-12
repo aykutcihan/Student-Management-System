@@ -21,12 +21,15 @@ import java.time.LocalDate;
 public abstract class BaseUserRequest implements Serializable {
 
     @NotNull(message = "Please enter your  username")
+    @Size(min = 4, max = 16, message = "Your username should be at least 4 characters")
     private String username;
 
     @NotNull(message = "Please enter your name")
+    @Size(min = 2, max = 16, message = "Your name should be at least 2 characters")
     private String name;
 
     @NotNull(message = "Please enter your surname")
+    @Size(min = 2, max = 16, message = "Your surname should be at least 2 characters")
     private String surname;
 
     @NotNull(message = "Please enter your birthday")
@@ -40,6 +43,7 @@ public abstract class BaseUserRequest implements Serializable {
     private String ssn;
 
     @NotNull(message = "Please enter your birth place")
+    @Size(min = 2, max = 16, message = "Your birth place should be at least 2 characters")
     private String birthPlace;
 
 

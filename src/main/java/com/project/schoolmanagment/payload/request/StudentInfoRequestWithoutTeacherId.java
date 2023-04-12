@@ -6,10 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.DecimalMax;
-import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 
 @Data
 @AllArgsConstructor
@@ -36,6 +33,7 @@ public class StudentInfoRequestWithoutTeacherId {
     private Integer absentee;
 
     @NotNull(message = "Please enter info")
+    @Size(min = 10, max = 200, message = "Info should be at least 10 characters")
     private String infoNote;
 
     @NotNull(message = "Please select lesson")
