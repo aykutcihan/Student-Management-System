@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Column;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -21,6 +22,8 @@ public class ContactMessageRequest implements Serializable {
 
 
     @NotNull(message = "Please enter name")
+    @Size(min = 4, max = 16, message = "Your name should be at least 4 characters")
+    @Pattern(regexp = "\\A(?!\\s*\\Z).+" ,message="Your message must consist of the characters .")
     private String name;
 
     @Email(message = "Please enter valid email")
@@ -30,9 +33,13 @@ public class ContactMessageRequest implements Serializable {
     private String email;
 
     @NotNull(message = "Please enter subject")
+    @Size(min = 4, max = 50, message = "Your subject should be at least 4 characters")
+    @Pattern(regexp = "\\A(?!\\s*\\Z).+" ,message="Your message must consist of the characters .")
     private String subject;
 
     @NotNull(message = "Please enter message ")
+    @Size(min = 4, max = 50, message = "Your subject should be at least 16 characters")
+    @Pattern(regexp = "\\A(?!\\s*\\Z).+" ,message="Your message must consist of the characters .")
     private String message;
 
 

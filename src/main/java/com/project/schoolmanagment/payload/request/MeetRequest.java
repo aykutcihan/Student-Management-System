@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -18,7 +20,9 @@ import java.time.LocalTime;
 @Builder(toBuilder = true)
 public class MeetRequest implements Serializable {
 
-    @NotNull(message = "Please enter day")
+    @NotNull(message = "Please enter description")
+    @Size(min = 2, max = 16, message = "Description should be at least 2 characters")
+    @Pattern(regexp = "\\A(?!\\s*\\Z).+" ,message="Description must consist of the characters .")
     private String description;
 
     @NotNull(message = "Please enter date")

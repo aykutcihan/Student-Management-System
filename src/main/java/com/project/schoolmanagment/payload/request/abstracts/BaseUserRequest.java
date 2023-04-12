@@ -22,14 +22,17 @@ public abstract class BaseUserRequest implements Serializable {
 
     @NotNull(message = "Please enter your  username")
     @Size(min = 4, max = 16, message = "Your username should be at least 4 characters")
+    @Pattern(regexp = "\\A(?!\\s*\\Z).+" ,message="Your username must consist of the characters .")
     private String username;
 
     @NotNull(message = "Please enter your name")
     @Size(min = 2, max = 16, message = "Your name should be at least 2 characters")
+    @Pattern(regexp = "\\A(?!\\s*\\Z).+" ,message="Your name must consist of the characters .")
     private String name;
 
     @NotNull(message = "Please enter your surname")
     @Size(min = 2, max = 16, message = "Your surname should be at least 2 characters")
+    @Pattern(regexp = "\\A(?!\\s*\\Z).+" ,message="Your surname must consist of the characters .")
     private String surname;
 
     @NotNull(message = "Please enter your birthday")
@@ -44,6 +47,8 @@ public abstract class BaseUserRequest implements Serializable {
 
     @NotNull(message = "Please enter your birth place")
     @Size(min = 2, max = 16, message = "Your birth place should be at least 2 characters")
+    @Pattern(regexp = "\\A(?!\\s*\\Z).+" ,message="Your birth place must consist of the characters .")
+
     private String birthPlace;
 
 

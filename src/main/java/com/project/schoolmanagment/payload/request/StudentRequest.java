@@ -9,6 +9,7 @@ import lombok.experimental.SuperBuilder;
 import javax.persistence.Column;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 
@@ -20,10 +21,14 @@ public class StudentRequest extends BaseUserRequest {
 
     @NotNull(message = "Please enter mother name")
     @Size(min = 2, max = 16, message = "Your mother name should be at least 2 characters")
+    @Pattern(regexp="\\A(?!\\s*\\Z).+",message="Your mother name must consist of the characters a-z and 0-9.")
+
     private String motherName;
 
     @NotNull(message = "Please enter father name")
     @Size(min = 2, max = 16, message = "Your father name should be at least 2 characters")
+    @Pattern(regexp="\\A(?!\\s*\\Z).+",message="Your father name must consist of the characters a-z and 0-9.")
+
     private String fatherName;
 
     @Email(message = "Please enter valid email")

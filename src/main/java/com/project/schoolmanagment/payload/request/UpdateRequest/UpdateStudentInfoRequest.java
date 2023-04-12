@@ -26,6 +26,7 @@ public class UpdateStudentInfoRequest {
 
     @NotNull(message = "Please enter extra info  ")
     @Size( min = 6 , max = 250 ,message = "Extra Info should be at least 4 characters ")
+    @Pattern(regexp = "\\A(?!\\s*\\Z).+" ,message="Info must consist of the characters .")
     private String infoNote;
 
     @NotNull(message = "Please select lesson ")

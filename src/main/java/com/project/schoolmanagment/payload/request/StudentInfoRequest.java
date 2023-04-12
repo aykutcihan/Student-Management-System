@@ -5,10 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.DecimalMax;
-import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 @Data
 @AllArgsConstructor
@@ -32,6 +29,7 @@ public class StudentInfoRequest {
 
     @NotNull(message = "Please enter info")
     @Size(min = 10, max = 200, message = "Info should be at least 10 characters")
+    @Pattern(regexp = "\\A(?!\\s*\\Z).+" ,message="Info must consist of the characters .")
     private String infoNote;
 
     @NotNull(message = "Please select lesson")
