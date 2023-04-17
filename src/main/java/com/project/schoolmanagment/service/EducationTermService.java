@@ -89,7 +89,7 @@ public class EducationTermService {
     }
 
 
-    public EducationTerm createUpdatedEducationTerm(Long id, EducationTermRequest request) {
+    private EducationTerm createUpdatedEducationTerm(Long id, EducationTermRequest request) {
         return EducationTerm.builder()
                 .id(id)
                 .term(request.getTerm())
@@ -99,7 +99,7 @@ public class EducationTermService {
                 .build();
     }
 
-    public EducationTerm createEducationTerm(EducationTermRequest request) {
+    private EducationTerm createEducationTerm(EducationTermRequest request) {
         return EducationTerm.builder()
                 .term(request.getTerm())
                 .startDate(request.getStartDate())
@@ -108,7 +108,7 @@ public class EducationTermService {
                 .build();
     }
 
-    public EducationTermResponse createEducationTermResponse(EducationTerm response) {
+    private EducationTermResponse createEducationTermResponse(EducationTerm response) {
         return EducationTermResponse.builder()
                 .id(response.getId())
                 .term(response.getTerm())
@@ -117,7 +117,7 @@ public class EducationTermService {
                 .lastRegistrationDate(response.getLastRegistrationDate())
                 .build();
     }
-    public EducationTermResponse createEducationTermResponseWithId(EducationTerm response) {
+    private EducationTermResponse createEducationTermResponseWithId(EducationTerm response) {
         return EducationTermResponse.builder()
                 .id(response.getId())
                 .term(response.getTerm())
