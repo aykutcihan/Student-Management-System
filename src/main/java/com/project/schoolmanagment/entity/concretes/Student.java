@@ -39,6 +39,7 @@ public class Student extends User {
     @JsonIgnore //https://www.baeldung.com/jackson-bidirectional-relationships-and-infinite-recursion
     @ManyToMany()
     @JoinTable(
+            name = "meet_student_table",
             joinColumns = @JoinColumn(name = "student_id"),
             inverseJoinColumns = @JoinColumn(name = "meet_id"))
     private List<Meet> meetList;

@@ -41,6 +41,7 @@ public class Meet implements Serializable {
     @JsonIgnore //https://www.baeldung.com/jackson-bidirectional-relationships-and-infinite-recursion
     @ManyToMany()
     @JoinTable(
+            name = "meet_student_table",
             joinColumns = @JoinColumn(name = "meet_id"),
             inverseJoinColumns = @JoinColumn(name = "student_id"))
     private List<Student> studentList;
