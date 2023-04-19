@@ -3,9 +3,9 @@ services:
   spring-boot-car-rental:
     container_name: spring-boot-school-management
     image: app.jar
-    build: ./
+    build: docker
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/school-management
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/school_management
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=1234
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update

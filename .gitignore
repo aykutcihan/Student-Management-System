@@ -3,6 +3,10 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+**/logging-linnbank.log
+**/Test Results - ParalelTestExecutionTest.html
+
+.greenrent.log
 
 ### STS ###
 .apt_generated
@@ -14,10 +18,13 @@ target/
 .sts4-cache
 
 ### IntelliJ IDEA ###
+/logs
 .idea
 *.iws
 *.iml
 *.ipr
+*.gz
+.mvn
 
 ### NetBeans ###
 /nbproject/private/
@@ -31,3 +38,5 @@ build/
 
 ### VS Code ###
 .vscode/
+/logs/
+/.idea/
