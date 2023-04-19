@@ -66,6 +66,7 @@ public class AdminService {
 
         if (admin.isPresent()) {
             adminRepository.deleteById(id);
+
             return "Admin deleted Successful";
         }
         return Messages.NOT_FOUND_USER_MESSAGE;
