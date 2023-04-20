@@ -1,15 +1,16 @@
 version: '3.7'
 
-
 services:
-  spring-boot-car-rental:
-    container_name: spring-boot-school-management
-    image: app.jar
-    build: docker
+  school-management:
+    container_name: school-management
+    image: sametyaprak/vision_rent_v1
+    build: ./
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/school_management
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=changeme
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
     ports:
-      - "8080:8080"
+      - "8181:8181"
+
+
