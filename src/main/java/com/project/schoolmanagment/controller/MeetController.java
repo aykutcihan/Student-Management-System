@@ -23,7 +23,7 @@ import java.util.List;
 @RestController
 @RequestMapping("meet")
 @RequiredArgsConstructor
-@CrossOrigin
+
 public class MeetController {
 
     private final MeetService meetService;

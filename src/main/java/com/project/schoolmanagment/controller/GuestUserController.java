@@ -23,7 +23,7 @@ import java.util.Objects;
 @RestController
 @RequestMapping("guestUser")
 @RequiredArgsConstructor
-@CrossOrigin
+
 public class GuestUserController {
 
     private final GuestUserService guestUserService;

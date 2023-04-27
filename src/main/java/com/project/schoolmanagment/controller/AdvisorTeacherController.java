@@ -13,7 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("advisorTeacher")
 @RequiredArgsConstructor
-@CrossOrigin
+
 public class AdvisorTeacherController {
 
     private final AdvisorTeacherService advisorTeacherService;

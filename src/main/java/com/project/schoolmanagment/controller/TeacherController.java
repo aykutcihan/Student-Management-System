@@ -20,7 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping("teachers")
 @RequiredArgsConstructor
-@CrossOrigin
+
 public class TeacherController {
 
     private final TeacherService teacherService;

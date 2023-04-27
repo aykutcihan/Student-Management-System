@@ -14,7 +14,7 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("contactMessages")
 @RequiredArgsConstructor
-@CrossOrigin
+
 public class ContactController {
 
     private final ContactMessageService contactMessageService;

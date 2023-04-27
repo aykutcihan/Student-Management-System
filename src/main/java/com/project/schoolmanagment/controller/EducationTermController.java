@@ -15,7 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("educationTerms")
 @RequiredArgsConstructor
-@CrossOrigin
+
 public class EducationTermController {
 
     private final EducationTermService educationTermService;

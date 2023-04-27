@@ -22,7 +22,7 @@ import java.util.List;
 @RestController
 @RequestMapping("studentInfo")
 @RequiredArgsConstructor
-@CrossOrigin
+
 public class StudentInfoController {
 
     private final StudentInfoService studentInfoService;

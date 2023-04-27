@@ -17,7 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("vicedean")
 @RequiredArgsConstructor
-@CrossOrigin
+
 public class ViceDeanController {
 
     private final ViceDeanService viceDeanService;

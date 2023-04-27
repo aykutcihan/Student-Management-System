@@ -3,7 +3,7 @@ version: '3.7'
 services:
   school-management:
     container_name: school-management
-    image: sametyaprak/vision_rent_v1
+    image: sametyaprak/student_management_back_end:latest
     build: ./
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/school_management
