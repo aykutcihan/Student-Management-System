@@ -67,7 +67,7 @@ public abstract class BaseUserRequest implements Serializable {
     private String phoneNumber;
 
 
-    @NotNull(message = "Please enter your phone number")
+    @NotNull(message = "Please enter your gender")
     private Gender gender;
 
 
