@@ -68,12 +68,14 @@ public class LessonProgramService {
                 .map(this::createLessonProgramResponse)
                 .collect(Collectors.toList());
     }
+
     public List<LessonProgramResponse> getAllLessonProgramUnassigned() {
         return lessonProgramRepository.findByTeachers_IdNull()
                 .stream()
                 .map(this::createLessonProgramResponse)
                 .collect(Collectors.toList());
     }
+
     public List<LessonProgramResponse> getAllLessonProgramAssigned() {
         return lessonProgramRepository.findByTeachers_IdNotNull()
                 .stream()
@@ -168,5 +170,13 @@ public class LessonProgramService {
     }
 
 
+    public LessonProgramResponse getByLessonProgramId(Long id) {
+        Optional<LessonProgram> lessonProgram = lessonProgramRepository.findById(id);
+        if (!lessonProgram.isPresent()) {
+            throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_LESSON_MESSAGE, id));
+        }
 
+        return lessonProgramRepository.findById(id).map(this::createLessonProgramResponse).get();
+
+    }
 }
