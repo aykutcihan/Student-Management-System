@@ -31,7 +31,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebSecurityConfig {
 
 
-    private final AuthTokenFilter authTokenFilter;
+
 
     private final UserDetailsServiceImpl userDetailsService;
 
@@ -63,6 +63,12 @@ public class WebSecurityConfig {
     }
 
     private static final String AUTH_WHITE_LIST[] = {
+            "/",
+            "/index*",
+            "/static/**",
+            "/*.js",
+            "/*.json",
+            "/*.ico",
             "/auth/login",
             "/contactMessages/save",
             "/guestUser/register",
@@ -72,7 +78,6 @@ public class WebSecurityConfig {
             "/swagger*/**",
             "/webjars/**",
             "/swagger-ui/**"
-
     };
 
     @Bean
@@ -81,7 +86,7 @@ public class WebSecurityConfig {
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests().antMatchers(AUTH_WHITE_LIST).permitAll()
-                //    .antMatchers("/api/test/**").permitAll()
+               // .antMatchers("/api/test/**").permitAll()
                 .anyRequest().authenticated();
 
         http.headers().frameOptions().sameOrigin();
