@@ -22,19 +22,18 @@ public class StudentRequest extends BaseUserRequest {
     @NotNull(message = "Please enter mother name")
     @Size(min = 2, max = 16, message = "Your mother name should be at least 2 characters")
     @Pattern(regexp="\\A(?!\\s*\\Z).+",message="Your mother name must consist of the characters a-z and 0-9.")
-
     private String motherName;
 
     @NotNull(message = "Please enter father name")
     @Size(min = 2, max = 16, message = "Your father name should be at least 2 characters")
     @Pattern(regexp="\\A(?!\\s*\\Z).+",message="Your father name must consist of the characters a-z and 0-9.")
-
     private String fatherName;
 
-    @Email(message = "Please enter valid email")
+
     @NotNull(message = "Please enter your email")
     @Size(min = 5, max = 20, message = "Your email should be at least 5 characters")
     @Column(nullable = false, unique = true, length = 20)
+    @Email(message = "Please enter valid email")
     private String email;
 
     @NotNull(message = "Please select advisor teacher")
