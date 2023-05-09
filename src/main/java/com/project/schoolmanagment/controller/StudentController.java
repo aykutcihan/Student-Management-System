@@ -34,13 +34,13 @@ public class StudentController {
     @GetMapping("/changeStatus")
     public ResponseMessage changeStatus(
             @RequestParam Long id,
-            @RequestParam  boolean status
+            @RequestParam boolean status
     ) {
         return studentService.changeStatus(id, status);
     }
 
     @GetMapping("/lastNumber")
-    public int lastNumber( ) {
+    public int lastNumber() {
         return studentService.lastNumber();
     }
 
@@ -74,6 +74,22 @@ public class StudentController {
         return studentService.getStudentByIdForResponse(id);
     }
 
+
+    @GetMapping("/search")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANTMANAGER')")
+    public Page<StudentResponse> search(
+            @RequestParam(value = "page") int page,
+            @RequestParam(value = "size") int size,
+            @RequestParam(value = "sort") String sort,
+            @RequestParam(value = "type") String type
+    ) {
+        return studentService.search(page, size, sort, type);
+    }
+
+
+    /*----------------------------------------------------
+     * bu endpointler lessan islemlerinden sonra yazilacak
+     */
     @PostMapping("/chooseLesson")
     @PreAuthorize("hasAnyAuthority('STUDENT')")
     public ResponseMessage<StudentResponse> chooseLesson(
@@ -93,14 +109,6 @@ public class StudentController {
         return studentService.getAllStudentByTeacher_Username(username);
     }
 
-    @GetMapping("/search")
-    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANTMANAGER')")
-    public Page<StudentResponse> search(
-            @RequestParam(value = "page") int page,
-            @RequestParam(value = "size") int size,
-            @RequestParam(value = "sort") String sort,
-            @RequestParam(value = "type") String type
-    ) {
-        return studentService.search(page, size, sort, type);
-    }
+    /* ---------------------------------------------------- */
+
 }
