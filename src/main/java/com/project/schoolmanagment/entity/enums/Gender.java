@@ -1,6 +1,8 @@
 package com.project.schoolmanagment.entity.enums;
 
-public enum Gender {
+import java.lang.annotation.Annotation;
+
+public enum Gender   {
     MALE,
-    FEMALE
+    FEMALE;
 }
