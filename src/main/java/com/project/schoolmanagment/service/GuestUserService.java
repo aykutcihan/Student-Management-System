@@ -43,6 +43,8 @@ public class GuestUserService {
                 .name(user.getName())
                 .surname(user.getSurname())
                 .phoneNumber(user.getPhoneNumber())
+                .birthDay(user.getBirthDay())
+                .birthPlace(user.getBirthPlace())
                 .gender(user.getGender())
                 .ssn(user.getSsn()).build();
     }
