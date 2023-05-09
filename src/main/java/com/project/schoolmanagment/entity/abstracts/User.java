@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.project.schoolmanagment.entity.concretes.UserRole;
 import com.project.schoolmanagment.entity.enums.Gender;
-import lombok.AllArgsConstructor;
+ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -45,10 +45,8 @@ public abstract class User implements Serializable {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private UserRole userRole;
 
-
     private String phoneNumber;
 
-    @Enumerated(EnumType.STRING)
     private Gender gender;
 
 
