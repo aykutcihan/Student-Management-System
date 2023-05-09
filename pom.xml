@@ -11,8 +11,8 @@
     <groupId>com.project</groupId>
     <artifactId>school-managment</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>school-managment</name>
-    <description>school-managment</description>
+    <name>school-management</name>
+    <description>school-management</description>
     <properties>
         <java.version>1.8</java.version>
     </properties>
