@@ -31,6 +31,7 @@ public class Teacher extends User {
     @Column(name = "isAdvisor")
     private Boolean isAdvisor;
 
+    @Column(unique = true)
     private String email;
 
     @OneToMany(mappedBy = "teacher",cascade = CascadeType.REMOVE)

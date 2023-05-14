@@ -44,7 +44,9 @@ public class Student extends User {
             inverseJoinColumns = @JoinColumn(name = "meet_id"))
     private List<Meet> meetList;
 
+    @Column(unique = true)
     private String email;
+
     @JsonIgnore //https://www.baeldung.com/jackson-bidirectional-relationships-and-infinite-recursion
     @OneToMany(mappedBy = "student", cascade = CascadeType.REMOVE)
     private List<StudentInfo> studentInfos;

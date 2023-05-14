@@ -24,10 +24,11 @@ public abstract class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     private String username;
-
+    @Column(unique = true)
     private String ssn;
-
+    @Column(unique = true)
     private String name;
 
     private String surname;
@@ -45,6 +46,7 @@ public abstract class User implements Serializable {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private UserRole userRole;
 
+    @Column(unique = true)
     private String phoneNumber;
 
     private Gender gender;
