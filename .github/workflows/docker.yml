@@ -15,7 +15,12 @@ jobs:
       - name: Set up JDK 8
         uses: actions/setup-java@v2
         with:
-          java-version: 8
+          distribution: 'adopt'
+          java-version: '8'
+          server-id: 'github'
+          server-username: ${{ github.actor }}
+          server-password: ${{ secrets.GITHUB_TOKEN }}
+          architecture: 'x64'
 
 
       - name: Build and push Docker image
