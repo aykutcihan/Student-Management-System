@@ -5,6 +5,7 @@ COPY pom.xml .
 COPY src src
 RUN mvn clean package
 
+
 # PostgreSQL Veritabanı
 FROM postgres:13.2
 

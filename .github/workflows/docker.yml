@@ -17,6 +17,7 @@ jobs:
         with:
           java-version: 8
 
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
         with:
