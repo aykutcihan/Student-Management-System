@@ -1,13 +1,16 @@
-FROM openjdk:11-jdk
-
+# Java Uygulaması
+FROM maven:3.8.3-openjdk-11 AS build
 WORKDIR /app
+COPY pom.xml .
+COPY src src
+RUN mvn clean package
 
-ARG JAR_FILE=target/*.jar
+# PostgreSQL Veritabanı
+FROM postgres:13.2
 
-COPY ${JAR_FILE} app.jar
-
-EXPOSE 8181
-
-ENTRYPOINT ["java", "-jar", "/app/app.jar"]
-
-#docker build -t student_management_back_end .
+# Uygulama ve Veritabanı Docker konteynerlarını birleştirme
+FROM openjdk:11-jre-slim
+WORKDIR /app
+COPY --from=build /app/target/sm-app-1.jar .
+COPY --from=postgres /docker-entrypoint-initdb.d /docker-entrypoint-initdb.d
+CMD ["java", "-jar", "sm-app-1.jar"]
