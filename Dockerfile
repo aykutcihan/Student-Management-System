@@ -1,5 +1,5 @@
 # Java Uygulaması
-FROM maven:3.8.3-openjdk-11 AS build
+FROM maven:3.8.3-openjdk-8 AS build
 WORKDIR /app
 COPY pom.xml .
 COPY src src
@@ -9,7 +9,7 @@ RUN mvn clean package
 FROM postgres:13.2
 
 # Uygulama ve Veritabanı Docker konteynerlarını birleştirme
-FROM openjdk:11-jre-slim
+FROM openjdk:8-jre-slim
 WORKDIR /app
 COPY --from=build /app/target/sm-app-1.jar .
 COPY --from=postgres /docker-entrypoint-initdb.d /docker-entrypoint-initdb.d
