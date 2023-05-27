@@ -1,6 +1,0 @@
-FROM postgres:13.2
-ENV POSTGRES_USER postgres
-ENV POSTGRES_PASSWORD 465edc45
-ENV POSTGRES_DB school_management
-COPY init.sql /docker-entrypoint-initdb.d/
-EXPOSE 5432
