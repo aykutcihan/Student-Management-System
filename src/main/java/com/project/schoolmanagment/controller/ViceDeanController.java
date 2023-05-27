@@ -1,7 +1,5 @@
 package com.project.schoolmanagment.controller;
 
-import com.project.schoolmanagment.entity.concretes.Teacher;
-import com.project.schoolmanagment.entity.concretes.ViceDean;
 import com.project.schoolmanagment.payload.request.ViceDeanRequest;
 import com.project.schoolmanagment.payload.response.ViceDeanResponse;
 import com.project.schoolmanagment.payload.response.ResponseMessage;

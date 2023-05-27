@@ -15,7 +15,7 @@ import javax.validation.Valid;
 @RequestMapping("contactMessages")
 @RequiredArgsConstructor
 
-public class ContactController {
+public class ContactMessageController {
 
     private final ContactMessageService contactMessageService;
 

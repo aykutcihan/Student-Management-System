@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class DeanService {
+
     private final DeanRepository deanRepository;
 
     private final UserRoleService userRoleService;
@@ -34,6 +35,7 @@ public class DeanService {
     private final PasswordEncoder passwordEncoder;
 
     private final DeanDto deanDto;
+
     private final AdminService adminService;
 
 
@@ -114,6 +116,10 @@ public class DeanService {
     }
 
     public Page<DeanResponse> search(int page, int size, String sort, String type) {
+        // -> dogru uygulama
+        //****
+        Pageable pageableNew = PageRequest.of(page, size, Sort.by(sort,type).ascending());
+        //****
         Pageable pageable = PageRequest.of(page, size, Sort.by(sort).ascending());
         if (Objects.equals(type, "desc")) {
             pageable = PageRequest.of(page, size, Sort.by(sort).descending());

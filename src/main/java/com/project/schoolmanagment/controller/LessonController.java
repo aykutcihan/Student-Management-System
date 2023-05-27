@@ -50,6 +50,7 @@ public class LessonController {
 
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANTMANAGER')")
     @GetMapping("/getAllLessonByLessonId")
+
     public Set<Lesson> getAllLessonByLessonId(
             @RequestParam(name = "lessonId") Set<Long> idList
     ) {

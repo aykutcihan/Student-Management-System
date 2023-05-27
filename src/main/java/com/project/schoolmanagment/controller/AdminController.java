@@ -2,6 +2,7 @@ package com.project.schoolmanagment.controller;
 
 import com.project.schoolmanagment.entity.concretes.Admin;
 import com.project.schoolmanagment.payload.request.AdminRequest;
+import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -26,7 +27,7 @@ public class AdminController {
 
     @PostMapping("/save")
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public ResponseEntity<?> save(@RequestBody @Valid AdminRequest adminRequest) {
+    public ResponseEntity<ResponseMessage> save(@RequestBody @Valid AdminRequest adminRequest) {
         return ResponseEntity.ok(adminService.save(adminRequest));
     }
 

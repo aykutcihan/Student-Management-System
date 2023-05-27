@@ -15,6 +15,11 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The purpose of this class is to handle authentication exceptions and provide a standardized response format
+ * for unauthorized access. It logs the error, sets the appropriate HTTP status code,
+ * and returns a JSON response containing information about the unauthorized request.
+ */
 @Component
 public class AuthEntryPointJwt implements AuthenticationEntryPoint {
 

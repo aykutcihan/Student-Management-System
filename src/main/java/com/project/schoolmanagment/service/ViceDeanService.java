@@ -108,6 +108,7 @@ public class ViceDeanService {
                 .birthDay(viceDeanRequest.getBirthDay())
                 .phoneNumber(viceDeanRequest.getPhoneNumber())
                 .gender(viceDeanRequest.getGender())
+                //ASSISTANTMANAGER -> viceDean
                 .userRole(userRoleService.getUserRole(RoleType.ASSISTANTMANAGER))
                 .build();
 

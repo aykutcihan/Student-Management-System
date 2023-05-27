@@ -30,7 +30,7 @@ public class ContactMessageService {
         boolean isSameMessageWithSameEmailForToday = contactMessageRepository.existsByEmailEqualsAndDateEquals(contactMessageRequest.getEmail(), LocalDate.now());
         if (isSameMessageWithSameEmailForToday) throw new ConflictException(String.format(ALREADY_SEND_A_MESSAGE_TODAY));
 
-        ContactMessage contactMessage = createObject(contactMessageRequest);
+        ContactMessage contactMessage = createContactMessageObject(contactMessageRequest);
         ContactMessage savedData = contactMessageRepository.save(contactMessage);
         return ResponseMessage.<ContactMessageResponse>builder()
                 .message("Contact Message Created Successfully")
@@ -47,6 +47,7 @@ public class ContactMessageService {
         return contactMessageRepository.findByEmailEquals(email, pageable).map(this::createResponse);
     }
 
+    //TODO it would be better to use contains instead of equals
     public Page<ContactMessageResponse> searchBySubject(String subject, int page, int size, String sort, String type) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sort).ascending());
         if (Objects.equals(type, "desc")) {
@@ -64,7 +65,7 @@ public class ContactMessageService {
     }
 
 
-    private ContactMessage createObject(ContactMessageRequest contactMessageRequest) {
+    private ContactMessage createContactMessageObject(ContactMessageRequest contactMessageRequest) {
         return ContactMessage.builder()
                 .name(contactMessageRequest.getName())
                 .subject(contactMessageRequest.getSubject())

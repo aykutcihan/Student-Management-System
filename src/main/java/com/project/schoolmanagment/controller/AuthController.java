@@ -27,11 +27,6 @@ import java.util.stream.Collectors;
 public class AuthController {
 
     public final AuthenticationManager authenticationManager;
-    private final StudentRepository studentRepository;
-    private final TeacherRepository teacherRepository;
-    private final DeanRepository deanRepository;
-    private final ViceDeanRepository viceDeanRepository;
-    private final AdminRepository adminRepository;
     public final JwtUtils jwtUtils;
 
 

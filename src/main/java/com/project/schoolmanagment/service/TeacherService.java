@@ -160,7 +160,7 @@ public class TeacherService {
         Set<LessonProgram> lessonPrograms = lessonProgramService.getLessonProgramById(chooseLessonRequest.getLessonProgramId());
         if (!teacher.isPresent()) {
             throw new ResourceNotFoundException(String.format(Messages.NOT_FOUND_USER_MESSAGE, chooseLessonRequest.getTeacherId()));
-        } else if (lessonPrograms.size() == 0) {
+        } else if (lessonPrograms.isEmpty()) {
             throw new ResourceNotFoundException(Messages.LESSON_PROGRAM_NOT_FOUND_MESSAGE);
         }
         Set<LessonProgram> existLessonProgram = teacher.get().getLessonsProgramList();

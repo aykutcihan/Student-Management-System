@@ -10,7 +10,7 @@ import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.payload.response.StudentInfoResponse;
 import com.project.schoolmanagment.repository.StudentInfoRepository;
 import com.project.schoolmanagment.utils.Messages;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -69,20 +69,18 @@ public class StudentInfoService {
     }
 
     public ResponseMessage<StudentInfoResponse> update(UpdateStudentInfoRequest studentInfoRequest, Long studentInfoId) {
-
-        System.out.println("studentInfoRequest.getLessonId()" + studentInfoRequest.getLessonId());
         Lesson lesson = lessonService.getLessonById(studentInfoRequest.getLessonId());
         StudentInfo getStudentInfo = getStudentInfoById(studentInfoId);
         EducationTerm educationTerm = educationTermService.getById(studentInfoRequest.getEducationTermId());
 
         Double noteAverage = calculateExamAverage(studentInfoRequest.getMidtermExam(), studentInfoRequest.getFinalExam(), lesson.isCompulsory());
-        Note Note = checkLetterGrade(noteAverage);
+        Note note = checkLetterGrade(noteAverage);
         StudentInfo studentInfo = createUpdatedStudent(
                 studentInfoRequest,
                 studentInfoId,
                 lesson,
                 educationTerm,
-                Note,
+                note,
                 noteAverage
         );
 
@@ -125,7 +123,6 @@ public class StudentInfoService {
     }
 
     public Page<StudentInfoResponse> getAllStudentInfoByStudent(String username, Pageable pageable) {
-        System.out.println(username);
         boolean student = studentService.existByUsername(username);
         if (!student) throw new ResourceNotFoundException(String.format(Messages.STUDENT_INFO_NOT_FOUND_BY_USERNAME, username));
         return studentInfoRepository.findByStudentId_UsernameEquals(username, pageable).map(this::createResponse);
