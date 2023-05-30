@@ -12,6 +12,7 @@ public class SchoolManagementApplication {
 
 
         //first line of my code
+        //second line of my code
 
     }
 
