@@ -1,33 +1,41 @@
-// COLOR PALETTES
-$color1: #abc4aa;
-$color1-opacity-9: rgba(171, 196, 170, 0.9);
-$color2: #685e51;
-$color2-opacity-40: rgba(104, 94, 81, 0.4);
-$color3: #9b9b9b;
-$color4: #f6f6f6;
-$color5: #4dd0e1;
-$color6: #f9c832;
-$color-bg-transparent: rgba(249, 102, 102, 0.155);
+// ── Color Palette ─────────────────────────────────────────
+$primary:           #1e40af;
+$primary-dark:      #1e3a8a;
+$primary-light:     #3b82f6;
+$secondary:         #475569;
+$success:           #16a34a;
+$danger:            #dc2626;
+$warning:           #d97706;
+$info:              #0891b2;
 
-/* BOOTSTRAP */
-$primary: $color1;
-$secondary: $color2;
-$success: $color3;
-$info: $color4;
-$warning: $color6;
-$danger: $color2;
-$font-family-sans-serif: "Poppins";
-$navbar-light-color: $color1;
-$navbar-light-hover-color: $color2;
-$navbar-light-active-color: $color2;
-$nav-link-font-weight: 600;
-$border-radius: 5px;
-$form-feedback-valid-color: $color1;
-$nav-tabs-link-active-color: $color2;
-$border-radius: 0;
-$border-radius-lg: 0;
+$dark:              #0f172a;
+$dark-secondary:    #1e293b;
+$body-bg:           #f1f5f9;
+$border-color:      #e2e8f0;
+$text-muted-color:  #64748b;
 
-/* SWEETALERT */
-$swal2-confirm-button-background-color: $color1;
-$swal2-cancel-button-background-color: $color2;
-$swal2-success: $color1;
+// ── Bootstrap Variable Overrides ──────────────────────────
+$font-family-sans-serif:    "Poppins", system-ui, -apple-system, sans-serif;
+$font-size-base:            0.9rem;
+$border-radius:             0.5rem;
+$border-radius-lg:          0.75rem;
+$border-radius-sm:          0.375rem;
+
+$navbar-dark-color:         rgba(255,255,255,.85);
+$navbar-dark-hover-color:   #ffffff;
+$navbar-dark-active-color:  #ffffff;
+$nav-link-font-weight:      500;
+$navbar-padding-y:          0.85rem;
+
+$btn-border-radius:         0.4rem;
+$btn-font-weight:           500;
+$input-border-radius:       0.4rem;
+$input-focus-border-color:  $primary-light;
+
+$card-border-radius:        0.75rem;
+$card-border-color:         $border-color;
+
+// ── SweetAlert2 ───────────────────────────────────────────
+$swal2-confirm-button-background-color: $primary;
+$swal2-cancel-button-background-color:  $secondary;
+$swal2-success:                         $success;

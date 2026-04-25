@@ -1,42 +1,54 @@
-import React from "react";
-import { Link, NavLink } from "react-router-dom";
+import React, { useState } from "react";
+import { NavLink, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { FiGrid } from "react-icons/fi";
 
-const navLinks = [
-    { to: "/", label: "Ana Sayfa" },
-    { to: "/about", label: "Hakkımızda" },
-    { to: "/courses", label: "Dersler" },
-    { to: "/events", label: "Etkinlikler" },
-    { to: "/contact", label: "İletişim" },
+const links = [
+    { to: "/", label: "Home", end: true },
+    { to: "/about", label: "About" },
+    { to: "/courses", label: "Courses" },
+    { to: "/events", label: "Events" },
+    { to: "/contact", label: "Contact" },
 ];
 
 const Menubar = () => {
-    const { isLoggedIn } = useSelector((state) => state.auth);
+    const { isLoggedIn } = useSelector((s) => s.auth);
+    const [open, setOpen] = useState(false);
 
     return (
-        <nav className="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+        <nav className="navbar navbar-expand-lg main-navbar">
             <div className="container">
-                <Link className="navbar-brand fw-bold" to="/">
-                    SMS
+                <Link className="navbar-brand d-flex align-items-center gap-2" to="/">
+                    <div
+                        style={{
+                            width: 32, height: 32, borderRadius: 8,
+                            background: "rgba(255,255,255,.2)",
+                            display: "flex", alignItems: "center", justifyContent: "center",
+                            fontWeight: 700, fontSize: "1rem",
+                        }}
+                    >S</div>
+                    CampusMS
                 </Link>
+
                 <button
-                    className="navbar-toggler"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#mainNav"
+                    className="navbar-toggler border-0"
+                    onClick={() => setOpen(!open)}
+                    aria-label="Toggle navigation"
                 >
-                    <span className="navbar-toggler-icon" />
+                    <span className="navbar-toggler-icon" style={{ filter: "invert(1)" }} />
                 </button>
-                <div className="collapse navbar-collapse" id="mainNav">
+
+                <div className={`collapse navbar-collapse ${open ? "show" : ""}`}>
                     <ul className="navbar-nav me-auto">
-                        {navLinks.map(({ to, label }) => (
+                        {links.map(({ to, label, end }) => (
                             <li className="nav-item" key={to}>
                                 <NavLink
                                     to={to}
-                                    end={to === "/"}
+                                    end={end}
                                     className={({ isActive }) =>
-                                        "nav-link" + (isActive ? " active fw-semibold" : "")
+                                        "nav-link" + (isActive ? " active" : "")
                                     }
+                                    onClick={() => setOpen(false)}
                                 >
                                     {label}
                                 </NavLink>
@@ -46,15 +58,32 @@ const Menubar = () => {
                     <ul className="navbar-nav ms-auto">
                         {isLoggedIn ? (
                             <li className="nav-item">
-                                <NavLink to="/dashboard" className="nav-link">
-                                    Dashboard
+                                <NavLink
+                                    to="/dashboard"
+                                    className={({ isActive }) =>
+                                        "nav-link d-flex align-items-center gap-1" + (isActive ? " active" : "")
+                                    }
+                                    onClick={() => setOpen(false)}
+                                >
+                                    <FiGrid size={14} /> Dashboard
                                 </NavLink>
                             </li>
                         ) : (
                             <li className="nav-item">
-                                <NavLink to="/login" className="nav-link">
-                                    Giriş Yap
-                                </NavLink>
+                                <Link
+                                    to="/login"
+                                    className="btn btn-sm ms-2"
+                                    style={{
+                                        background: "rgba(255,255,255,.15)",
+                                        color: "#fff",
+                                        border: "1px solid rgba(255,255,255,.3)",
+                                        borderRadius: ".4rem",
+                                        fontWeight: 500,
+                                    }}
+                                    onClick={() => setOpen(false)}
+                                >
+                                    Sign In
+                                </Link>
                             </li>
                         )}
                     </ul>
