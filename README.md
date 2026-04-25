@@ -1,5 +1,7 @@
 # CampusMS — School Management System
 
+![CampusMS Demo](docs/demo.gif)
+
 A full-stack school management platform built with Spring Boot and React.
 
 ## Tech Stack
