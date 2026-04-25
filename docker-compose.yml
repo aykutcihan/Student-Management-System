@@ -1,13 +1,42 @@
 services:
+  db:
+    image: postgres:16-alpine
+    container_name: school-db
+    environment:
+      POSTGRES_DB: school_management
+      POSTGRES_USER: dev_user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5435:5432"
+    volumes:
+      - school_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dev_user -d school_management"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   backend:
     build: ./backend
     container_name: school-backend
     ports:
       - "8081:8081"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://host.docker.internal:5432/school_management
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/school_management
       SPRING_DATASOURCE_USERNAME: dev_user
       SPRING_DATASOURCE_PASSWORD: password
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+    depends_on:
+      db:
+        condition: service_healthy
     restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    container_name: school-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+volumes:
+  school_db_data:
