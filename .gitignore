@@ -1,42 +1,15 @@
-HELP.md
+# Frontend
+frontend/node_modules/
+frontend/build/
+frontend/.env.local
+frontend/.env.*.local
+
+# Backend
+backend/target/
+backend/.mvn/
+backend/*.log
+
+# Root
 target/
-!.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
-**/logging-linnbank.log
-**/Test Results - ParalelTestExecutionTest.html
-
-.greenrent.log
-
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-
-### IntelliJ IDEA ###
-/logs
-.idea
-*.iws
-*.iml
-*.ipr
-*.gz
-.mvn
-
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
-
-### VS Code ###
-.vscode/
-/logs/
-/.idea/
+.DS_Store
+*.log

@@ -1,0 +1,13 @@
+services:
+  backend:
+    build: ./backend
+    container_name: school-backend
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://host.docker.internal:5432/school_management
+      SPRING_DATASOURCE_USERNAME: dev_user
+      SPRING_DATASOURCE_PASSWORD: password
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped

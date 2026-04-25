@@ -1,0 +1,33 @@
+// COLOR PALETTES
+$color1: #abc4aa;
+$color1-opacity-9: rgba(171, 196, 170, 0.9);
+$color2: #685e51;
+$color2-opacity-40: rgba(104, 94, 81, 0.4);
+$color3: #9b9b9b;
+$color4: #f6f6f6;
+$color5: #4dd0e1;
+$color6: #f9c832;
+$color-bg-transparent: rgba(249, 102, 102, 0.155);
+
+/* BOOTSTRAP */
+$primary: $color1;
+$secondary: $color2;
+$success: $color3;
+$info: $color4;
+$warning: $color6;
+$danger: $color2;
+$font-family-sans-serif: "Poppins";
+$navbar-light-color: $color1;
+$navbar-light-hover-color: $color2;
+$navbar-light-active-color: $color2;
+$nav-link-font-weight: 600;
+$border-radius: 5px;
+$form-feedback-valid-color: $color1;
+$nav-tabs-link-active-color: $color2;
+$border-radius: 0;
+$border-radius-lg: 0;
+
+/* SWEETALERT */
+$swal2-confirm-button-background-color: $color1;
+$swal2-cancel-button-background-color: $color2;
+$swal2-success: $color1;
